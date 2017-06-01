@@ -7,6 +7,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,12 +20,24 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void LogLine(QString arg);
+    void ParseTelemetry(QString teleStr);
+    void ParseCommandResp(QString respStr);
+
 private slots:
-    void on_start_bt_clicked();
+    void on_scan_bt_clicked();
+    void acceptCliTelemetry(void);
+    void acceptCliCommands(void);
+    void readDataTelemetry(void);
+    void readDataCommands(void);
+    void on_clrLog_clicked();
 
 private:
     Ui::MainWindow *ui;
-    QTcpServer tcpServer;
+    QTcpServer tcpStelemetry;
+    QTcpServer tcpScommands;
+    QTcpSocket* tcpCliTelemetry;
+    QTcpSocket* tcpCliCommands;
     QTcpSocket *tcpServerConnection;
 };
 

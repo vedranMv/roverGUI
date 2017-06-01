@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DISABLE_DEPRECATED_BEFORE=0x000000 -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../roverGUI -I. -I../../../../Qt5.7.0/5.7/gcc_64/include -I../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../roverGUI -I. -I/opt/ros/kinetic/include/opencv-3.2.0-dev -I../../../../Qt5.7.0/5.7/gcc_64/include -I../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/v125/Qt5.7.0/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = roverGUI1.0.0
 DISTDIR = /home/v125/Documents/git/roverGUI/build-roverGUI-Desktop_Qt_5_7_0_GCC_64bit-Debug/.tmp/roverGUI1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/v125/Qt5.7.0/5.7/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/v125/Qt5.7.0/5.7/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/opt/ros/kinetic/lib -lopencv_stitching3 -lopencv_superres3 -lopencv_videostab3 -lopencv_aruco3 -lopencv_bgsegm3 -lopencv_bioinspired3 -lopencv_ccalib3 -lopencv_cvv3 -lopencv_datasets3 -lopencv_dpm3 -lopencv_face3 -lopencv_fuzzy3 -lopencv_hdf3 -lopencv_line_descriptor3 -lopencv_optflow3 -lopencv_plot3 -lopencv_reg3 -lopencv_saliency3 -lopencv_stereo3 -lopencv_structured_light3 -lopencv_phase_unwrapping3 -lopencv_rgbd3 -lopencv_viz3 -lopencv_surface_matching3 -lopencv_text3 -lopencv_xfeatures2d3 -lopencv_shape3 -lopencv_video3 -lopencv_ximgproc3 -lopencv_calib3d3 -lopencv_features2d3 -lopencv_flann3 -lopencv_xobjdetect3 -lopencv_objdetect3 -lopencv_ml3 -lopencv_xphoto3 -lopencv_highgui3 -lopencv_videoio3 -lopencv_imgcodecs3 -lopencv_photo3 -lopencv_imgproc3 -lopencv_core3 -L/home/v125/Qt5.7.0/5.7/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -49,10 +49,16 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../roverGUI/main.cpp \
-		../roverGUI/mainwindow.cpp moc_mainwindow.cpp
+		../roverGUI/mainwindow.cpp \
+		../roverGUI/cqtopencvviewergl.cpp \
+		../roverGUI/ocvgraph.cpp moc_mainwindow.cpp \
+		moc_cqtopencvviewergl.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		moc_mainwindow.o
+		cqtopencvviewergl.o \
+		ocvgraph.o \
+		moc_mainwindow.o \
+		moc_cqtopencvviewergl.o
 DIST          = ../../../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.7.0/5.7/gcc_64/mkspecs/common/unix.conf \
 		../../../../Qt5.7.0/5.7/gcc_64/mkspecs/common/linux.conf \
@@ -204,8 +210,13 @@ DIST          = ../../../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.7.0/5.7/gcc_64/mkspecs/features/exceptions.prf \
 		../../../../Qt5.7.0/5.7/gcc_64/mkspecs/features/yacc.prf \
 		../../../../Qt5.7.0/5.7/gcc_64/mkspecs/features/lex.prf \
-		../roverGUI/roverGUI.pro ../roverGUI/mainwindow.h ../roverGUI/main.cpp \
-		../roverGUI/mainwindow.cpp
+		../roverGUI/roverGUI.pro ../roverGUI/mainwindow.h \
+		../roverGUI/roverinterface.h \
+		../roverGUI/cqtopencvviewergl.h \
+		../roverGUI/ocvgraph.h ../roverGUI/main.cpp \
+		../roverGUI/mainwindow.cpp \
+		../roverGUI/cqtopencvviewergl.cpp \
+		../roverGUI/ocvgraph.cpp
 QMAKE_TARGET  = roverGUI
 DESTDIR       = 
 TARGET        = roverGUI
@@ -544,8 +555,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../roverGUI/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../roverGUI/main.cpp ../roverGUI/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../roverGUI/mainwindow.h ../roverGUI/roverinterface.h ../roverGUI/cqtopencvviewergl.h ../roverGUI/ocvgraph.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../roverGUI/main.cpp ../roverGUI/mainwindow.cpp ../roverGUI/cqtopencvviewergl.cpp ../roverGUI/ocvgraph.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../roverGUI/mainwindow.ui $(DISTDIR)/
 
 
@@ -572,9 +583,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_cqtopencvviewergl.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_cqtopencvviewergl.cpp
 moc_mainwindow.cpp: ../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qwidget.h \
@@ -840,7 +851,149 @@ moc_mainwindow.cpp: ../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
 		../roverGUI/mainwindow.h \
 		../../../../Qt5.7.0/5.7/gcc_64/bin/moc
-	/home/v125/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/v125/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/v125/Documents/git/roverGUI/roverGUI -I/home/v125/Qt5.7.0/5.7/gcc_64/include -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../roverGUI/mainwindow.h -o moc_mainwindow.cpp
+	/home/v125/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/v125/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/v125/Documents/git/roverGUI/roverGUI -I/opt/ros/kinetic/include/opencv-3.2.0-dev -I/home/v125/Qt5.7.0/5.7/gcc_64/include -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../roverGUI/mainwindow.h -o moc_mainwindow.cpp
+
+moc_cqtopencvviewergl.cpp: ../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QOpenGLWidget \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qopenglwidget.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qline.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QSurfaceFormat \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qt_windows.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengles2ext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLFunctions_2_0 \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglfunctions_2_0.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLVersionFunctions \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglcontext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QScopedPointer \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvdef.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/hal/interface.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/version.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv_modules.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ptr.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/neon_utils.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/traits.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/matx.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/saturate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/fast_math.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/bufferpool.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/persistence.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/operations.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/utility.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/optim.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ovx.hpp \
+		../roverGUI/cqtopencvviewergl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/bin/moc
+	/home/v125/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/v125/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/v125/Documents/git/roverGUI/roverGUI -I/opt/ros/kinetic/include/opencv-3.2.0-dev -I/home/v125/Qt5.7.0/5.7/gcc_64/include -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/v125/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../roverGUI/cqtopencvviewergl.h -o moc_cqtopencvviewergl.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1407,11 +1560,13 @@ mainwindow.o: ../roverGUI/mainwindow.cpp ../roverGUI/mainwindow.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qinputmethod.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QButtonGroup \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGroupBox \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgroupbox.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHeaderView \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qheaderview.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemview.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyleoption.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractspinbox.h \
@@ -1421,18 +1576,555 @@ mainwindow.o: ../roverGUI/mainwindow.cpp ../roverGUI/mainwindow.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyle.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabbar.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qrubberband.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLineEdit \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlineedit.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextcursor.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMenu \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenu.h \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMenuBar \
 		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenubar.h \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenu.h \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QStatusBar \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstatusbar.h \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QToolBar \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtoolbar.h \
-		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPlainTextEdit \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qplaintextedit.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtextedit.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextdocument.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qabstracttextdocumentlayout.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextlayout.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qglyphrun.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrawfont.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontdatabase.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget \
+		../roverGUI/cqtopencvviewergl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QOpenGLWidget \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qopenglwidget.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QSurfaceFormat \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qt_windows.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengles2ext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLFunctions_2_0 \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglfunctions_2_0.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLVersionFunctions \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglcontext.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvdef.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/hal/interface.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/version.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv_modules.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ptr.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/neon_utils.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/traits.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/matx.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/saturate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/fast_math.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/bufferpool.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/persistence.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/operations.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/utility.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/optim.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ovx.hpp \
+		../roverGUI/roverinterface.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/features2d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/miniflann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/defines.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/config.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/affine.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d/calib3d_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/flann_base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/general.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/matrix.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/params.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/any.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/saving.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/nn_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/result_set.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/all_indices.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dynamic_bitset.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dist.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/heap.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/allocator.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/random.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_single_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kmeans_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/logger.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/composite_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/linear_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/hierarchical_clustering_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_table.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/autotuned_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/ground_truth.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/index_testing.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/timer.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/sampling.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui/highgui_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/imgproc_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs/imgcodecs_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio/videoio_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/ml.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/detection_based_tracker.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/objdetect_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo/photo_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/emdL1.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_transformer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/hist_cost.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_distance.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda_types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/matchers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/xfeatures2d/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/motion_estimators.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/camera.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/exposure_compensate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/seam_finders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/blenders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/background_segm.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/stabilizer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/global_motion.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/outlier_rejection.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_stabilizing.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/frame_source.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/log.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/inpainting.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/deblurring.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/wobble_suppression.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/ring_buffer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/widgets.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/viz3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/vizcore.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/imgproc.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui/highgui.hpp \
+		../roverGUI/ocvgraph.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QChar \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../roverGUI/mainwindow.cpp
+
+cqtopencvviewergl.o: ../roverGUI/cqtopencvviewergl.cpp ../roverGUI/cqtopencvviewergl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QOpenGLWidget \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qopenglwidget.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qline.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QSurfaceFormat \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengl.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/qt_windows.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopengles2ext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLFunctions_2_0 \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglfunctions_2_0.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLVersionFunctions \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglcontext.h \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QObject \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtCore/QScopedPointer \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvdef.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/hal/interface.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/version.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv_modules.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ptr.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/neon_utils.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/traits.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/matx.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/saturate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/fast_math.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/bufferpool.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/persistence.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/operations.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/utility.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/optim.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ovx.hpp \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../../../Qt5.7.0/5.7/gcc_64/include/QtGui/qopenglfunctions.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/features2d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/miniflann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/defines.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/config.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/affine.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d/calib3d_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/flann_base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/general.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/matrix.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/params.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/any.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/saving.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/nn_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/result_set.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/all_indices.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dynamic_bitset.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dist.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/heap.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/allocator.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/random.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_single_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kmeans_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/logger.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/composite_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/linear_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/hierarchical_clustering_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_table.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/autotuned_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/ground_truth.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/index_testing.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/timer.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/sampling.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui/highgui_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/imgproc_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs/imgcodecs_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio/videoio_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/ml.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/detection_based_tracker.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/objdetect_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo/photo_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/emdL1.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_transformer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/hist_cost.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_distance.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda_types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/matchers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/xfeatures2d/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/motion_estimators.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/camera.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/exposure_compensate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/seam_finders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/blenders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/background_segm.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/stabilizer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/global_motion.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/outlier_rejection.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_stabilizing.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/frame_source.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/log.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/inpainting.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/deblurring.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/wobble_suppression.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/ring_buffer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/widgets.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/viz3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/vizcore.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cqtopencvviewergl.o ../roverGUI/cqtopencvviewergl.cpp
+
+ocvgraph.o: ../roverGUI/ocvgraph.cpp ../roverGUI/ocvgraph.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/opencv_modules.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvdef.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/hal/interface.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/version.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ptr.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/neon_utils.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/traits.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/matx.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/saturate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/fast_math.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/bufferpool.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/mat.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/persistence.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/operations.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cvstd.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/utility.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/optim.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/ovx.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/features2d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/miniflann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/defines.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/config.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/affine.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/calib3d/calib3d_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/flann_base.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/general.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/matrix.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/params.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/any.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/saving.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/nn_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/result_set.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/all_indices.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dynamic_bitset.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/dist.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/heap.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/allocator.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/random.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kdtree_single_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/kmeans_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/logger.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/composite_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/linear_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/hierarchical_clustering_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/lsh_table.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/autotuned_index.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/ground_truth.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/index_testing.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/timer.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/flann/sampling.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui/highgui_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/imgproc_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/types_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgcodecs/imgcodecs_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videoio/videoio_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/ml.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/detection_based_tracker.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/objdetect/objdetect_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/photo/photo_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/emdL1.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_transformer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/hist_cost.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/shape/shape_distance.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda_types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/cuda.inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/warpers_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/matchers.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/xfeatures2d/cuda.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/motion_estimators.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/util_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/camera.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/exposure_compensate.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/seam_finders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/stitching/detail/blenders.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/superres/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/background_segm.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/video/tracking_c.h \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/stabilizer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/global_motion.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/optical_flow.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/outlier_rejection.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/motion_stabilizing.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/frame_source.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/log.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/inpainting.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/fast_marching_inl.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/deblurring.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/wobble_suppression.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/videostab/ring_buffer.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/types.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/widgets.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/viz3d.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/viz/vizcore.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/core/core.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/imgproc/imgproc.hpp \
+		/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv2/highgui/highgui.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ocvgraph.o ../roverGUI/ocvgraph.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_cqtopencvviewergl.o: moc_cqtopencvviewergl.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cqtopencvviewergl.o moc_cqtopencvviewergl.cpp
 
 ####### Install
 

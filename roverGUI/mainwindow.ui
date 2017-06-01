@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>708</width>
+    <width>595</width>
     <height>388</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Rover control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="start_bt">
+   <widget class="QPushButton" name="scan_bt">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -24,20 +24,182 @@
      </rect>
     </property>
     <property name="text">
-     <string>Start</string>
+     <string>Scan</string>
     </property>
    </widget>
-   <widget class="QLabel" name="log">
+   <widget class="QGroupBox" name="logBox">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>441</width>
-      <height>111</height>
+      <x>0</x>
+      <y>240</y>
+      <width>421</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Log</string>
+    </property>
+    <widget class="QPushButton" name="clrLog">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>20</y>
+       <width>80</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="log">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>421</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="centerOnScroll">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <zorder>log</zorder>
+    <zorder>clrLog</zorder>
+   </widget>
+   <widget class="CQtOpenCVViewerGl" name="radarPlot">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>400</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="orientationGB">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>30</y>
+      <width>131</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Orienatation</string>
+    </property>
+    <widget class="QLineEdit" name="roll_LE">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="roll_L">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>59</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>R</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="pitch_LE">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="pitch_L">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>59</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>P</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="yaw_L">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>59</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Y</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="yaw_LE">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>60</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="utime_L">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>130</y>
+      <width>59</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>Up-time</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="utime_LE">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>150</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ms_L">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>150</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>s</string>
     </property>
    </widget>
   </widget>
@@ -46,20 +208,26 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>708</width>
+     <width>595</width>
      <height>19</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
+   <property name="nativeMenuBar">
     <bool>false</bool>
-   </attribute>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
