@@ -77,8 +77,8 @@ QString AssembleRequest(uint8_t libUID, uint8_t serviceID)
 {
     QString retVal;
 
-    retVal[0] = RADAR_UID;
-    retVal[1] = RADAR_SCAN;
+    retVal[0] = libUID;
+    retVal[1] = serviceID;
 
     return retVal;
 }

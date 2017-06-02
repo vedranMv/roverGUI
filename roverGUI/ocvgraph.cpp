@@ -4,12 +4,30 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+///-----------------------------------------------------------------------------
+///                      Class constructor & destructor                 [PUBLIC]
+///-----------------------------------------------------------------------------
+
+OCVGraph::OCVGraph(OCVGraph &graph)
+    : _graphHolder(graph._graphHolder), _center(graph._center)
+{
+
+}
+
+OCVGraph::OCVGraph(cv::Mat &graphplot)
+    : _graphHolder(graphplot), _center(graphplot.cols/2, graphplot.rows/2)
+{
+
+}
 
 OCVGraph::OCVGraph(int height, int width, int type, const cv::Scalar& s)
     : _graphHolder(height+1, width+1, type, s), _center(width/2, height/2)
 {
 
 }
+
+OCVGraph::~OCVGraph()
+{}
 
 /**
  * @brief Set center of a graph in image coordinate (which pixel corresponds to 0,0)
@@ -18,7 +36,7 @@ OCVGraph::OCVGraph(int height, int width, int type, const cv::Scalar& s)
  */
 void OCVGraph::SetCenter(int uc, int vc)
 {
-    _center = cv::Point2i(uc, uc);
+    _center = cv::Point2i(uc, vc);
 }
 void OCVGraph::SetCenter(cv::Point2i center)
 {
@@ -59,7 +77,7 @@ void OCVGraph::LinePolar(double angle, double rad, cv::Point2i p1, cv::Scalar co
     cv::Point2i p2(rad * cos(angle) + p1.x, rad * sin(angle) + p1.y);
 
     //  Plot line in cartesian coordinate
-    LineCartesian(p1, p2);
+    LineCartesian(p1, p2, color);
 }
 
 /**
@@ -81,6 +99,11 @@ void OCVGraph::Circle(double rad, cv::Scalar color, cv::Point2i p1)
 void OCVGraph::Text(std::string txt, cv::Point2i p1)
 {
     cv::putText(_graphHolder, txt, _XYtoUV(p1), 2, 0.3, cv::Scalar::all(128));
+}
+
+void OCVGraph::SaveToFile(std::string path)
+{
+    cv::imwrite(path, _graphHolder);
 }
 
 /**
@@ -110,4 +133,18 @@ cv::Point2i OCVGraph::_UVtoXY(cv::Point2i &imageCoord)
 cv::Point2i OCVGraph::_XYtoUV(cv::Point2i &graphCoord)
 {
     return cv::Point2i(graphCoord.x+_center.x, _center.y-graphCoord.y);
+}
+
+OCVGraph& OCVGraph::operator=(OCVGraph& arg)
+{
+    _graphHolder = arg._graphHolder;
+    _center = arg._center;
+    return *this;
+}
+
+OCVGraph& OCVGraph::operator=(OCVGraph arg)
+{
+    _graphHolder = arg._graphHolder;
+    _center = arg._center;
+    return *this;
 }

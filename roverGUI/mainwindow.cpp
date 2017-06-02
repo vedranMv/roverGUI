@@ -9,9 +9,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "ocvgraph.h"
 #include <QChar>
 #include <QDebug>
+
 
 /**
  *  Parse incoming telemetry frame. Format is:
@@ -21,7 +21,7 @@
  */
 void MainWindow::ParseTelemetry(QString teleStr)
 {
-    uint16_t i = 0, ti = 0;
+    uint16_t i = 0;
     QString tmpStr;
     //  Find beginning
     while(teleStr[i++] != '[');
@@ -54,19 +54,15 @@ void MainWindow::ParseTelemetry(QString teleStr)
 
 }
 
+/**
+ * @brief Parse response on a give command (such as radar scan)
+ * @param respStr
+ */
 void MainWindow::ParseCommandResp(QString respStr)
 {
-    double scale = 2.5;
-    OCVGraph image(200, 400);
-    image.SetCenter(200, 200);
-    image.Circle(30*scale);
-    image.Text("30cm", cv::Point2i(30*scale-20,2));
-    image.Circle(60*scale);
-    image.Text("60cm", cv::Point2i(60*scale-20,2));
-    image.Circle(80*scale);
-    image.Text("80cm", cv::Point2i(80*scale-20,2));
+    //  Setup graph background
+    OCVGraph image(blank);
 
-    //std::cout<<respStr.toStdString();
     uint16_t it = 0;
     //while (respStr[it++] != ':');
 //it=7;
@@ -80,25 +76,36 @@ void MainWindow::ParseCommandResp(QString respStr)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    blank(200, 400)
 {
     ui->setupUi(this);
 
-    //  Allows to execute custom routine when new clients connects
+    //  Allows to execute custom routine when new client connects to telemetry socket
     connect(&tcpStelemetry, SIGNAL(newConnection()),
             this, SLOT(acceptCliTelemetry()));
     tcpStelemetry.listen(QHostAddress::Any, P_TELEMETRY);
     LogLine("Listening on telemetry socket " + QString::number(P_TELEMETRY) + "\n");
     tcpCliTelemetry = NULL;
 
-    //  Allows to execute custom routine when new clients connects
+    //  Allows to execute custom routine when new clients client connects to command socket
     connect(&tcpScommands, SIGNAL(newConnection()),
             this, SLOT(acceptCliCommands()));
     tcpScommands.listen(QHostAddress::Any, P_COMMANDS);
     LogLine("Listening on commands socket " + QString::number(P_COMMANDS) + "\n");
     tcpCliCommands = NULL;
 
-    std::srand(50);
+    //  Add basic lines to the plot - constructs background
+    blank.SetCenter(200, 200);
+    blank.Circle(30*scale);
+    blank.Text("30cm", cv::Point2i(30*scale-20,2));
+    blank.Circle(60*scale);
+    blank.Text("60cm", cv::Point2i(60*scale-20,2));
+    blank.Circle(80*scale);
+    blank.Text("80cm", cv::Point2i(80*scale-20,2));
+
+    // Show the image
+    ui->radarPlot->showImage( blank.GetMatImg() );
 }
 
 void MainWindow::LogLine(QString arg)
@@ -117,8 +124,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/**
+ * @brief Handles "clicked" event for "Scan" button
+ * Sends 'radar scan' command to the "command stream"; if opened
+ */
 void MainWindow::on_scan_bt_clicked()
 {
+    //  Check if there ary any client connected
     if (tcpCliCommands != NULL)
     {
         char command[50] = {};
@@ -129,6 +141,9 @@ void MainWindow::on_scan_bt_clicked()
     }
 }
 
+/**
+ * @brief Accept new connection on 'telemery' socket
+ */
 void MainWindow::acceptCliTelemetry(void)
 {
     tcpCliTelemetry = tcpStelemetry.nextPendingConnection();
@@ -138,6 +153,9 @@ void MainWindow::acceptCliTelemetry(void)
             this, SLOT(readDataTelemetry()));
 }
 
+/**
+ * @brief Accept new connection on 'commands' socket
+ */
 void MainWindow::acceptCliCommands(void)
 {
     tcpCliCommands = tcpScommands.nextPendingConnection();
@@ -147,7 +165,10 @@ void MainWindow::acceptCliCommands(void)
             this, SLOT(readDataCommands()));
 }
 
-
+/**
+ * @brief Called every time new data comes on the 'telemetry' socket. Function
+ * logs data and calls parser to update UI elements with new telemetry data.
+ */
 void MainWindow::readDataTelemetry(void)
 {
   char buffer[1024] = {0};
@@ -156,6 +177,10 @@ void MainWindow::readDataTelemetry(void)
   ParseTelemetry(QString(buffer));
 }
 
+/**
+ * @brief Called every time new data comes on the 'commands' socket. Functions
+ * calls parser to interpret incoming data and update UI elements with it.
+ */
 void MainWindow::readDataCommands(void)
 {
   char buffer[1024] = {0};
@@ -165,7 +190,8 @@ void MainWindow::readDataCommands(void)
 }
 
 /**
- * @brief Clear log window
+ * @brief Handles "clicked" event for "Clear" button
+ * Clear log window
  */
 void MainWindow::on_clrLog_clicked()
 {

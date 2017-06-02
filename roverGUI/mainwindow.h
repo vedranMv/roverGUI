@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include "ocvgraph.h"
 
 
 namespace Ui {
@@ -39,6 +40,9 @@ private:
     QTcpSocket* tcpCliTelemetry;
     QTcpSocket* tcpCliCommands;
     QTcpSocket *tcpServerConnection;
+    //  Setting up graph plotting in openCV
+    double scale = 2.5;
+    OCVGraph blank;
 };
 
 #endif // MAINWINDOW_H
