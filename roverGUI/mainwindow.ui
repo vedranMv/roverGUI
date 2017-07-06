@@ -6,230 +6,966 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>595</width>
-    <height>388</height>
+    <width>751</width>
+    <height>408</height>
    </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>Rover control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="scan_bt">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>80</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Scan</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="logBox">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>240</y>
-      <width>421</width>
-      <height>131</height>
+      <y>20</y>
+      <width>751</width>
+      <height>391</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Log</string>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
-    <widget class="QPushButton" name="clrLog">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>20</y>
-       <width>80</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Clear</string>
-     </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Overview</string>
+     </attribute>
+     <widget class="QPushButton" name="reboot_BT">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>0</y>
+        <width>80</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reboot</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="uptime_GB">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>260</y>
+        <width>131</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Up-time</string>
+      </property>
+      <widget class="QLabel" name="deltams_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>16</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Δ </string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ms_L">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>30</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>s</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ms_L_2">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>60</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>s</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="utime_LE">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="deltams_LE">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="orientation_GB">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>260</y>
+        <width>131</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Orienatation</string>
+      </property>
+      <widget class="QLineEdit" name="roll_LE">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>20</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="roll_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>59</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>R</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="pitch_LE">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>40</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="pitch_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>59</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="yaw_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>59</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Y</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="yaw_LE">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>60</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="status_GB">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>0</y>
+        <width>151</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Status</string>
+      </property>
+      <widget class="QLabel" name="platform_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Platform</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="engines_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Engines</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="comm_L">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Comm</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="radar_L">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>30</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Radar</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inertial_L">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>50</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Inertial</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="hardware_L">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>70</y>
+         <width>59</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(126, 189, 189);</string>
+       </property>
+       <property name="text">
+        <string>Hardware</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="scan_bt">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>80</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Scan</string>
+      </property>
+     </widget>
+     <widget class="CQtOpenCVViewerGl" name="radarPlot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>400</width>
+        <height>200</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="steering">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>0</y>
+        <width>141</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Steering</string>
+      </property>
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>30</y>
+         <width>31</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>^</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>31</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>60</y>
+         <width>31</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTabWidget" name="log_TW">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>100</y>
+        <width>331</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="guilog_TAB">
+       <attribute name="title">
+        <string>GUI log</string>
+       </attribute>
+       <widget class="QPushButton" name="clrLog">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>0</y>
+          <width>80</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+       <widget class="QPlainTextEdit" name="log">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>331</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustIgnored</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="centerOnScroll">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <zorder>log</zorder>
+       <zorder>clrLog</zorder>
+      </widget>
+      <widget class="QWidget" name="vel_TAB">
+       <attribute name="title">
+        <string>Vehicle event log</string>
+       </attribute>
+       <widget class="QPlainTextEdit" name="vel_TE">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>331</width>
+          <height>231</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="clrVel_PB">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>0</y>
+          <width>80</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="latency_GB">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>260</y>
+        <width>101</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Latency (ms)</string>
+      </property>
+      <widget class="CQtOpenCVViewerGl" name="latencyPlot" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>100</width>
+         <height>50</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QDoubleSpinBox" name="updateTime_SB">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>0</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <double>0.500000000000000</double>
+      </property>
+      <property name="value">
+       <double>1.500000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="updateTime_L">
+      <property name="geometry">
+       <rect>
+        <x>248</x>
+        <y>0</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Refresh rate(s)</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QPlainTextEdit" name="log">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>421</width>
-       <height>111</height>
-      </rect>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustIgnored</enum>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="centerOnScroll">
-      <bool>false</bool>
-     </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Instruments</string>
+     </attribute>
+     <widget class="QToolBox" name="toolBox">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>751</width>
+        <height>361</height>
+       </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="inertial_TB">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>751</width>
+         <height>249</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>MPU9250</string>
+       </attribute>
+       <widget class="QLabel" name="inertial_L_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>2</y>
+          <width>150</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(126, 189, 189);</string>
+        </property>
+        <property name="text">
+         <string>Inertial</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="inReb_PB">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>0</y>
+          <width>80</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reboot</string>
+        </property>
+       </widget>
+       <widget class="QTabWidget" name="tabWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>401</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>Roll</string>
+         </attribute>
+         <widget class="CQtOpenCVViewerGl" name="rollPlot" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>189</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tab_5">
+         <attribute name="title">
+          <string>Pitch</string>
+         </attribute>
+         <widget class="CQtOpenCVViewerGl" name="pitchPlot" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>189</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tab_6">
+         <attribute name="title">
+          <string>Yaw</string>
+         </attribute>
+         <widget class="CQtOpenCVViewerGl" name="yawPlot" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>189</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QCheckBox" name="imuSamp_CB">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>2</y>
+          <width>131</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Enable sampling</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QGraphicsView" name="inerPinv_GV">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>18</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string extracomment="Priority inversion event: Module emitted a lower-priority event after prevoiusly emitting a higher priority one. This doesn't necessarily points to module malfunctioning but it be an indicator. Try to reboot the module."/>
+        </property>
+        <property name="toolTipDuration">
+         <number>10</number>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="platform_TB">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>751</width>
+         <height>249</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Platform</string>
+       </attribute>
+       <widget class="QLabel" name="platform_L_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>2</y>
+          <width>150</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(126, 189, 189);</string>
+        </property>
+        <property name="text">
+         <string>Platform</string>
+        </property>
+       </widget>
+       <widget class="QGraphicsView" name="platPinv_GV">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>18</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="radar_TB">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>751</width>
+         <height>249</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Radar</string>
+       </attribute>
+       <widget class="QLabel" name="radar_L_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>2</y>
+          <width>150</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(126, 189, 189);</string>
+        </property>
+        <property name="text">
+         <string>Radar</string>
+        </property>
+       </widget>
+       <widget class="QGraphicsView" name="radPinv_GV">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>18</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="engines_TB">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>751</width>
+         <height>249</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Engines</string>
+       </attribute>
+       <widget class="QLabel" name="engines_L_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>2</y>
+          <width>150</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(126, 189, 189);</string>
+        </property>
+        <property name="text">
+         <string>Engines</string>
+        </property>
+       </widget>
+       <widget class="QGraphicsView" name="engPinv_GV">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>18</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
+      </widget>
+     </widget>
     </widget>
-    <zorder>log</zorder>
-    <zorder>clrLog</zorder>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Mission planner</string>
+     </attribute>
+     <widget class="QLabel" name="mStart_L">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mission starting time T=                                ms</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="mUtime_L">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>10</y>
+        <width>271</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current vehice time T=                            ms</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="mStart_LE">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>10</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="mUtime_LE">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>10</y>
+        <width>91</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <widget class="CQtOpenCVViewerGl" name="radarPlot">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>400</width>
-      <height>200</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="orientationGB">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>30</y>
-      <width>131</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Orienatation</string>
-    </property>
-    <widget class="QLineEdit" name="roll_LE">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>101</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="roll_L">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>59</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>R</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="pitch_LE">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>40</y>
-       <width>101</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="pitch_L">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>59</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>P</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="yaw_L">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>59</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Y</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="yaw_LE">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>60</y>
-       <width>101</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QLabel" name="utime_L">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>130</y>
-      <width>59</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Up-time</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="utime_LE">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>150</y>
-      <width>113</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ms_L">
+   <widget class="QLabel" name="telemetry_L">
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>150</y>
-      <width>21</width>
-      <height>21</height>
+      <y>10</y>
+      <width>71</width>
+      <height>20</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(255, 0, 4);</string>
+    </property>
     <property name="text">
-     <string>s</string>
+     <string>Telemetry</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>595</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="nativeMenuBar">
-    <bool>false</bool>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
+   <widget class="QLabel" name="commands_L">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>10</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(255, 0, 4);</string>
+    </property>
+    <property name="text">
+     <string>Commands</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CQtOpenCVViewerGl</class>
+   <extends>QWidget</extends>
+   <header>cqtopencvviewergl.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

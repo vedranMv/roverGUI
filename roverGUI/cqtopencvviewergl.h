@@ -16,6 +16,7 @@ signals:
 
 public slots:
     bool    showImage(const cv::Mat& image); /// Used to set the image to be viewed
+    cv::Mat getImage();
 
 protected:
     void 	initializeGL(); /// OpenGL initialization

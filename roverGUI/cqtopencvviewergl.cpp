@@ -127,3 +127,12 @@ bool CQtOpenCVViewerGl::showImage(const cv::Mat& image)
 
     return true;
 }
+
+cv::Mat CQtOpenCVViewerGl::getImage()
+{
+    cv::Mat retVal;
+
+    cv::cvtColor(mOrigImage, retVal, CV_RGBA2BGR);
+
+    return retVal;
+}
