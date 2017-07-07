@@ -59,6 +59,9 @@ const char DEVICE_ID[] = {"V125"};
 //  Close socket with specific ID
 //  Args: socketID(1B)
 #define ESP_T_CLOSETCP      4
+//  Reboot ESP module and UART bus
+//  Args: 0x17
+#define ESP_T_REBOOT    5
 
 ///-----------------------------------------------------------------------------
 ///         Radar task IDs

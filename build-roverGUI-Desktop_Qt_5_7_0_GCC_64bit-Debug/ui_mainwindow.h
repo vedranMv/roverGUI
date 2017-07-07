@@ -92,6 +92,14 @@ public:
     QWidget *platform_TB;
     QLabel *platform_L_2;
     QGraphicsView *platPinv_GV;
+    QGroupBox *commI_GB;
+    QPushButton *commReb_PB;
+    QGraphicsView *commPinv_GV;
+    QLabel *comm_L_2;
+    QGroupBox *tsI_GB;
+    QPushButton *tsReb_PB;
+    QGraphicsView *tsPinv_GV;
+    QLabel *ts_L_2;
     QWidget *radar_TB;
     QLabel *radar_L_2;
     QGraphicsView *radPinv_GV;
@@ -324,10 +332,42 @@ public:
         platPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         platPinv_GV->setFrameShape(QFrame::NoFrame);
+        commI_GB = new QGroupBox(platform_TB);
+        commI_GB->setObjectName(QStringLiteral("commI_GB"));
+        commI_GB->setGeometry(QRect(10, 30, 211, 181));
+        commReb_PB = new QPushButton(commI_GB);
+        commReb_PB->setObjectName(QStringLiteral("commReb_PB"));
+        commReb_PB->setGeometry(QRect(130, 40, 80, 22));
+        commPinv_GV = new QGraphicsView(commI_GB);
+        commPinv_GV->setObjectName(QStringLiteral("commPinv_GV"));
+        commPinv_GV->setGeometry(QRect(10, 20, 18, 18));
+        commPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
+"background-repeat:no-repeat;"));
+        commPinv_GV->setFrameShape(QFrame::NoFrame);
+        comm_L_2 = new QLabel(commI_GB);
+        comm_L_2->setObjectName(QStringLiteral("comm_L_2"));
+        comm_L_2->setGeometry(QRect(30, 22, 150, 14));
+        comm_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        tsI_GB = new QGroupBox(platform_TB);
+        tsI_GB->setObjectName(QStringLiteral("tsI_GB"));
+        tsI_GB->setGeometry(QRect(240, 30, 211, 181));
+        tsReb_PB = new QPushButton(tsI_GB);
+        tsReb_PB->setObjectName(QStringLiteral("tsReb_PB"));
+        tsReb_PB->setGeometry(QRect(130, 40, 80, 22));
+        tsPinv_GV = new QGraphicsView(tsI_GB);
+        tsPinv_GV->setObjectName(QStringLiteral("tsPinv_GV"));
+        tsPinv_GV->setGeometry(QRect(10, 20, 18, 18));
+        tsPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
+"background-repeat:no-repeat;"));
+        tsPinv_GV->setFrameShape(QFrame::NoFrame);
+        ts_L_2 = new QLabel(tsI_GB);
+        ts_L_2->setObjectName(QStringLiteral("ts_L_2"));
+        ts_L_2->setGeometry(QRect(30, 22, 150, 14));
+        ts_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
         toolBox->addItem(platform_TB, QStringLiteral("Platform"));
         radar_TB = new QWidget();
         radar_TB->setObjectName(QStringLiteral("radar_TB"));
-        radar_TB->setGeometry(QRect(0, 0, 751, 249));
+        radar_TB->setGeometry(QRect(0, 0, 100, 30));
         radar_L_2 = new QLabel(radar_TB);
         radar_L_2->setObjectName(QStringLiteral("radar_L_2"));
         radar_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -341,7 +381,7 @@ public:
         toolBox->addItem(radar_TB, QStringLiteral("Radar"));
         engines_TB = new QWidget();
         engines_TB->setObjectName(QStringLiteral("engines_TB"));
-        engines_TB->setGeometry(QRect(0, 0, 751, 249));
+        engines_TB->setGeometry(QRect(0, 0, 100, 30));
         engines_L_2 = new QLabel(engines_TB);
         engines_L_2->setObjectName(QStringLiteral("engines_L_2"));
         engines_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -385,9 +425,9 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         log_TW->setCurrentIndex(0);
-        toolBox->setCurrentIndex(0);
+        toolBox->setCurrentIndex(1);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -436,6 +476,12 @@ public:
 #endif // QT_NO_TOOLTIP
         toolBox->setItemText(toolBox->indexOf(inertial_TB), QApplication::translate("MainWindow", "MPU9250", 0));
         platform_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+        commI_GB->setTitle(QApplication::translate("MainWindow", "Communication", 0));
+        commReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+        comm_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+        tsI_GB->setTitle(QApplication::translate("MainWindow", "Task scheduler", 0));
+        tsReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+        ts_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
         toolBox->setItemText(toolBox->indexOf(platform_TB), QApplication::translate("MainWindow", "Platform", 0));
         radar_L_2->setText(QApplication::translate("MainWindow", "Radar", 0));
         toolBox->setItemText(toolBox->indexOf(radar_TB), QApplication::translate("MainWindow", "Radar", 0));

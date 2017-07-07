@@ -12,6 +12,9 @@
 #include <QChar>
 #include <QDebug>
 
+///-----------------------------------------------------------------------------
+///        GUI constructor & destructor                                    [GUI]
+///-----------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -58,21 +61,41 @@ MainWindow::MainWindow(QWidget *parent) :
     pitchGraph.SetXRangeKeepAspectR(-359, 40, true);
     yawGraph.SetXRangeKeepAspectR(-359, 40, true);
 
-    //  Hide warning images for priority inversion
-    pinv[ESP_UID] = NULL;
+    //  Put all labels from 'Overview' tab to a single list, idexed by kernel module ID
+    labOverview[ESP_UID] = ui->comm_L;
+    labOverview[RADAR_UID] = ui->radar_L;
+    labOverview[ENGINES_UID] = ui->engines_L;
+    labOverview[MPU_UID] = ui->inertial_L;
+    labOverview[DATAS_UID] = NULL;
+    labOverview[PLAT_UID] = ui->platform_L;
+    labOverview[EVLOG_UID] = NULL;
+    labOverview[TASKSCHED_UID] = NULL;
+
+    //  Put all labels from 'Instruments' tab to a single list, idexed by kernel module ID
+    labInstruments[ESP_UID] = ui->comm_L_2;
+    labInstruments[RADAR_UID] = ui->radar_L_2;
+    labInstruments[ENGINES_UID] = ui->engines_L_2;
+    labInstruments[MPU_UID] = ui->inertial_L_2;
+    labInstruments[DATAS_UID] = NULL;
+    labInstruments[PLAT_UID] = ui->platform_L_2;
+    labInstruments[EVLOG_UID] = NULL;
+    labInstruments[TASKSCHED_UID] = ui->ts_L_2;
+
+    //  Put all warning images into a single list
+    pinv[ESP_UID] = ui->commPinv_GV;
     pinv[RADAR_UID] = ui->radPinv_GV;
     pinv[ENGINES_UID] = ui->engPinv_GV;
     pinv[MPU_UID] = ui->inerPinv_GV;
     pinv[DATAS_UID] = NULL;
     pinv[PLAT_UID] = ui->platPinv_GV;
     pinv[EVLOG_UID] = NULL;
-    pinv[TASKSCHED_UID] = NULL;
+    pinv[TASKSCHED_UID] = ui->tsPinv_GV;
 
-    for (int i = 0; i < 6; i++)
+    //  Hide warning images for priority inversion
+    for (int i = 0; i < 8; i++)
         if (pinv[i] != NULL)
             pinv[i]->setVisible(false);
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -87,11 +110,197 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+///-----------------------------------------------------------------------------
+///        GUI constructor & destructor                                    [GUI]
+///-----------------------------------------------------------------------------
+
+
+
+
+
+bool MainWindow::SendCommand(char *command, uint16_t commandLen)
+{
+    //  Check if there ary any client connected
+    if (tcpCliCommands == NULL)
+        return false;
+
+    tcpCliCommands->write(command,commandLen);
+    LogLine("Sent command:> " + QString(command));
+
+    return true;
+}
+
+///-----------------------------------------------------------------------------
+///        Functions for refreshing GUI elements                           [GUI]
+///-----------------------------------------------------------------------------
 /**
- *  Parse incoming telemetry frame. Format is:
+ * @brief Update certain GUI lables with new status and color based on the event
+ * which occurrd in specified module
+ * @param event
+ * @param libUID
+ */
+void MainWindow::EventUpdateGUI(Events event, uint8_t libUID)
+{
+    QString lable = QString(events[event]);
+    QString styleSheet;
+
+    //  Select color based on event
+    switch(event)
+    {
+    case EVENT_ERROR:
+        {
+            styleSheet = "background-color:rgb(255, 0, 4);";
+        }
+        break;
+    case EVENT_UNINITIALIZED:
+        {
+            styleSheet = "background-color:rgb(126, 189, 189);";
+        }
+        break;
+    case EVENT_STARTUP:
+        {
+            styleSheet = "background-color:rgb(177, 255, 134);";
+            if (pinv[libUID] != 0)
+                pinv[libUID]->setVisible(false);
+        }
+        break;
+    case EVENT_INITIALIZED:
+        {
+            styleSheet = "background-color:rgb(170, 255, 0);";
+        }
+        break;
+    case EVENT_OK:
+        {
+            styleSheet = "background-color:rgb(0, 255, 29);";
+        }
+        break;
+    case EVENT_HANG:
+        {
+            styleSheet = "background-color:rgb(255, 167, 14);";
+        }
+        break;
+    case EVENT_PRIOINV:
+        {
+            if (pinv[libUID] != 0)
+                pinv[libUID]->setVisible(true);
+        }
+        break;
+    }
+
+    //  Update labeles with new text and color
+    if (labOverview[libUID] != 0)
+        labOverview[libUID]->setStyleSheet(styleSheet);
+    if (labInstruments[libUID] != 0)
+    {
+        labInstruments[libUID]->setStyleSheet(styleSheet);
+        labInstruments[libUID]->setText(lable);
+    }
+}
+/**
+ * @brief Append new measurement to one of realtime-graphs in GUI
+ * @param graph Reference to the realtime-graph
+ * @param old Last value plotted in graph
+ * @param val New value being appended to graph
+ * @param renderer Pointer to OpenGL graph holder
+ */
+void MainWindow::AppendToGraph(OCVGraph &graph, double old, double val, CQtOpenCVViewerGl *renderer)
+{
+    //  Update latency plot with delta value
+    cv::Point2d endP(0, val);
+    graph.LineCartesian(endP, cv::Point2d(0, old));
+
+    //  Shift data in latency plot one column to the left
+    cv::Mat &shiftPlot = graph.GetMatImg();
+    cv::Mat out(shiftPlot.size(), shiftPlot.type(), cv::Scalar::all(255));
+    shiftPlot(cv::Rect(1,0, shiftPlot.cols-1,shiftPlot.rows)).copyTo(out(cv::Rect(0,0,shiftPlot.cols-1,shiftPlot.rows)));
+    out.copyTo(shiftPlot);
+
+    //  Copy graph into new holder to be able to apply axes
+    OCVGraph temp(graph);
+
+    //  Draw axes and horizontal lines for every 10ms
+    temp.AddAxes(20, 10, 2, 2);
+
+    renderer->showImage( temp.GetMatImg() );
+}
+/**
+ * @brief Add line of text to one of log text fields in GUI
+ * @param arg Line of text to add
+ * @param holder Pointer to text field element in which to add line
+ */
+void MainWindow::LogLine(QString arg, QPlainTextEdit *holder)
+{
+    //  Add text to 'GUI log' if holder is NULL pointer
+    //  Else add to the specified text field
+    if (holder == NULL)
+        ui->log->setPlainText(ui->log->toPlainText() + arg + '\n');
+    else
+        holder->setPlainText(holder->toPlainText() + arg + '\n');
+}
+
+///-----------------------------------------------------------------------------
+///         Miscelaneous event functions(clicked, checked...) for GUI elements
+///-----------------------------------------------------------------------------
+/**
+ * @brief Toggle sampling of IMU data (Instruments->MPU9250)
+ * @param checked If true turns on sampling of IMU on vehcile,
+ *                if false sampling inhibited
+ */
+void MainWindow::on_imuSamp_CB_toggled(bool checked)
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[2] = {(char)checked, 0};
+
+    MakeRequest((uint8_t*)command, MPU_UID, MPU_LISTEN, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+/**
+ * @brief Changes time-period for sending telemetry data, default 1.5s
+ */
+void MainWindow::on_updateTime_SB_editingFinished()
+{
+    static double oldVal = 0;
+
+    //  Refresh update interval for telemetry only if spinBox value has changed
+    if (oldVal != ui->updateTime_SB->value())
+    {
+        LogLine("Changing update time to " + QString::number(ui->updateTime_SB->value()));
+        oldVal = ui->updateTime_SB->value();
+    }
+}
+
+///-----------------------------------------------------------------------------
+///         Stream data parsers                           [TELEMETRY & COMMANDS]
+///-----------------------------------------------------------------------------
+/**
+ * @brief Parse response on a give command (such as radar scan)
+ * @param respStr Response from vehicle to a sent command
+ */
+void MainWindow::ParseCommandResp(QString respStr)
+{
+    //  Setup graph background
+    OCVGraph image(blank);
+
+    uint16_t it = 0;
+
+    if(respStr.length() < 100)
+        return;
+    for (uint16_t i = 10; i <170; i++)
+        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()));
+
+    // Show the image
+    ui->radarPlot->showImage( image.GetMatImg() );
+}
+
+/**
+ *  @brief Parse incoming telemetry frame. Format is:
  *  [uptimeMS]:Roll|Pitch|Yaw\n
- * @brief ParseTelemetry
- * @param teleStr
+ *  ParseTelemetry
+ *  @param teleStr
  */
 void MainWindow::ParseTelemetry(QString teleStr)
 {
@@ -183,8 +392,8 @@ void MainWindow::ParseEventLog(QString teleStr)
             continue;
 
         QString msg;
-        msg = parts[1] + ": " + QString(events[parts[4].toInt()]) + " in module "
-              + QString(libName[parts[2].toInt()]) + " during task " +
+        msg = parts[1] + ": " + QString(events[parts[4].toInt()]) + " in "
+              + QString(libName[parts[2].toInt()]) + " on task " +
                QString(parts[3]);
         LogLine(msg, ui->vel_TE);
 
@@ -219,163 +428,9 @@ void MainWindow::ParseEventLog(QString teleStr)
     }
 }
 
-void MainWindow::EventUpdateGUI(Events event, uint8_t libUID)
-{
-    QString lable = QString(events[event]);
-    QString styleSheet;
-
-    switch(event)
-    {
-    case EVENT_ERROR:
-        {
-            styleSheet = "background-color:rgb(255, 0, 4);";
-        }
-        break;
-    case EVENT_UNINITIALIZED:
-        {
-            styleSheet = "background-color:rgb(126, 189, 189);";
-        }
-        break;
-    case EVENT_STARTUP:
-        {
-            styleSheet = "background-color:rgb(177, 255, 134);";
-            if (pinv[libUID] != 0)
-                pinv[libUID]->setVisible(false);
-        }
-        break;
-    case EVENT_INITIALIZED:
-        {
-            styleSheet = "background-color:rgb(170, 255, 0);";
-        }
-        break;
-    case EVENT_OK:
-        {
-            styleSheet = "background-color:rgb(0, 255, 29);";
-        }
-        break;
-    case EVENT_HANG:
-        {
-            styleSheet = "background-color:rgb(255, 167, 14);";
-        }
-        break;
-    case EVENT_PRIOINV:
-        {
-            if (pinv[libUID] != 0)
-                pinv[libUID]->setVisible(true);
-        }
-        break;
-    }
-
-    switch(libUID)
-    {
-    case ESP_UID:
-        {
-            ui->comm_L->setStyleSheet(styleSheet);
-
-        }
-        break;
-    case RADAR_UID:
-        {
-            ui->radar_L->setStyleSheet(styleSheet);
-            ui->radar_L_2->setStyleSheet(styleSheet);
-            ui->radar_L_2->setText(lable);
-        }
-        break;
-    case ENGINES_UID:
-        {
-            ui->engines_L->setStyleSheet(styleSheet);
-            ui->engines_L_2->setStyleSheet(styleSheet);
-            ui->engines_L_2->setText(lable);
-        }
-        break;
-    case MPU_UID:
-        {
-            ui->inertial_L->setStyleSheet(styleSheet);
-            ui->inertial_L_2->setStyleSheet(styleSheet);
-            ui->inertial_L_2->setText(lable);
-        }
-        break;
-    case PLAT_UID:
-        {
-            ui->platform_L->setStyleSheet(styleSheet);
-            ui->platform_L_2->setStyleSheet(styleSheet);
-            ui->platform_L_2->setText(lable);
-        }
-        break;
-    case EVLOG_UID:
-        {
-
-        }
-        break;
-    }
-}
-
-/**
- * @brief Parse response on a give command (such as radar scan)
- * @param respStr
- */
-void MainWindow::ParseCommandResp(QString respStr)
-{
-    //  Setup graph background
-    OCVGraph image(blank);
-
-    uint16_t it = 0;
-
-    if(respStr.length() < 100)
-        return;
-    for (uint16_t i = 10; i <170; i++)
-        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()));
-
-    // Show the image
-    ui->radarPlot->showImage( image.GetMatImg() );
-}
-
-
-void MainWindow::AppendToGraph(OCVGraph &graph, double old, double val, CQtOpenCVViewerGl *renderer)
-{
-    //  Update latency plot with delta value
-    cv::Point2d endP(0, val);
-    graph.LineCartesian(endP, cv::Point2d(0, old));
-
-    //  Shift data in latency plot one column to the left
-    cv::Mat &shiftPlot = graph.GetMatImg();
-    cv::Mat out(shiftPlot.size(), shiftPlot.type(), cv::Scalar::all(255));
-    shiftPlot(cv::Rect(1,0, shiftPlot.cols-1,shiftPlot.rows)).copyTo(out(cv::Rect(0,0,shiftPlot.cols-1,shiftPlot.rows)));
-    out.copyTo(shiftPlot);
-
-    //  Copy graph into new holder to be able to apply axes
-    OCVGraph temp(graph);
-
-    //  Draw axes and horizontal lines for every 10ms
-    temp.AddAxes(20, 10, 2, 2);
-
-    renderer->showImage( temp.GetMatImg() );
-}
-
-void MainWindow::LogLine(QString arg, QPlainTextEdit *holder)
-{
-    if (holder == 0)
-        ui->log->setPlainText(ui->log->toPlainText() + arg + '\n');
-    else
-        holder->setPlainText(holder->toPlainText() + arg + '\n');
-}
-
-/**
- * @brief Handles "clicked" event for "Scan" button
- * Sends 'radar scan' command to the "command stream"; if opened
- */
-void MainWindow::on_scan_bt_clicked()
-{
-    uint16_t commandLen = 0;
-    char command[50] = {0};
-    char args[] = {"\x00"};
-
-    MakeRequest((uint8_t*)command, RADAR_UID, RADAR_SCAN, -3000, 0);
-    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
-
-    SendCommand(command, commandLen);
-}
-
+///-----------------------------------------------------------------------------
+///         TCP telemetry stream                                     [TELEMETRY]
+///-----------------------------------------------------------------------------
 /**
  * @brief Accept new connection on 'telemery' socket
  */
@@ -388,7 +443,32 @@ void MainWindow::acceptCliTelemetry(void)
             this, SLOT(readDataTelemetry()));
     connect(tcpCliTelemetry, SIGNAL(aboutToClose()), this, SLOT(sockTelClose()));
 }
+/**
+ * @brief Read incoming data from TCP 'commands' socket
+ */
+void MainWindow::readDataTelemetry(void)
+{
+  char buffer[1024] = {0};
+  tcpCliTelemetry->read(buffer, tcpCliTelemetry->bytesAvailable());
+  //LogLine("TELEMETRY: " + QString(buffer));
 
+  //    First two bytes determine what kind of data is in telemetry packet
+  if ((buffer[0] == '1') && (buffer[1] == '*'))
+    ParseTelemetry(QString(buffer+3));
+  else if ((buffer[0] == '2') && (buffer[1] == '*'))
+    ParseEventLog(QString(buffer)); //Leave leading 11:
+}
+/**
+ * @brief Triggered when TCP socket is closed
+ */
+void MainWindow::sockTelClose()
+{
+    ui->telemetry_L->setStyleSheet("background-color:rgb(255, 0, 4);");
+}
+
+///-----------------------------------------------------------------------------
+///         TCP command stream                                        [COMMANDS]
+///-----------------------------------------------------------------------------
 /**
  * @brief Accept new connection on 'commands' socket
  */
@@ -403,37 +483,8 @@ void MainWindow::acceptCliCommands(void)
     connect(tcpCliCommands, SIGNAL(aboutToClose()), this, SLOT(sockCommClose()));
 }
 
-void MainWindow::sockCommClose()
-{
-    LogLine("Comm closing");
-    ui->commands_L->setStyleSheet("background-color:rgb(255, 0, 4);");
-}
-
-void MainWindow::sockTelClose()
-{
-    ui->telemetry_L->setStyleSheet("background-color:rgb(255, 0, 4);");
-}
-
 /**
- * @brief Called every time new data comes on the 'telemetry' socket. Function
- * logs data and calls parser to update UI elements with new telemetry data.
- */
-void MainWindow::readDataTelemetry(void)
-{
-  char buffer[1024] = {0};
-  tcpCliTelemetry->read(buffer, tcpCliTelemetry->bytesAvailable());
-  //LogLine("TELEMETRY: " + QString(buffer));
-
-  //    First two bytes determine what kind of data is in telemetry packet
-  if ((buffer[0] == '1') && (buffer[1] == '*'))
-    ParseTelemetry(QString(buffer+3));
-  else if ((buffer[0] == '2') && (buffer[1] == '*'))
-    ParseEventLog(QString(buffer)); //Leave leading 11:
-}
-
-/**
- * @brief Called every time new data comes on the 'commands' socket. Functions
- * calls parser to interpret incoming data and update UI elements with it.
+ * @brief Read incoming data from TCP 'commands' socket
  */
 void MainWindow::readDataCommands(void)
 {
@@ -444,14 +495,51 @@ void MainWindow::readDataCommands(void)
 }
 
 /**
- * @brief Handles "clicked" event for "Clear" button
- * Clear log window
+ * @brief Triggered when TCP socket is closed
+ */
+void MainWindow::sockCommClose()
+{
+    LogLine("Comm closing");
+    ui->commands_L->setStyleSheet("background-color:rgb(255, 0, 4);");
+}
+
+///-----------------------------------------------------------------------------
+///         Push-button events                                         [CLICKED]
+///-----------------------------------------------------------------------------
+/**
+ * @brief Reset communication module (Instruments->Platform)
+ */
+void MainWindow::on_commReb_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[2] = {REBOOT_CODE, 0};
+
+    MakeRequest((uint8_t*)command, ESP_UID, ESP_T_REBOOT, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+/**
+ * @brief Clear GUI log (Overview->GUI log)
  */
 void MainWindow::on_clrLog_clicked()
 {
     ui->log->setPlainText("");
 }
 
+/**
+ * @brief Clear vehicle's event log (Overview->Vehicle event log)
+ */
+void MainWindow::on_clrVel_PB_clicked()
+{
+    ui->vel_TE->setPlainText("");
+}
+
+/**
+ * @brief Reboot whole platform (Overview)
+ */
 void MainWindow::on_reboot_BT_clicked()
 {
     uint16_t commandLen = 0;
@@ -464,6 +552,9 @@ void MainWindow::on_reboot_BT_clicked()
     SendCommand(command, commandLen);
 }
 
+/**
+ * @brief Reboot inertial unit (Instruments->MPU9250)
+ */
 void MainWindow::on_inReb_PB_clicked()
 {
     uint16_t commandLen = 0;
@@ -476,44 +567,17 @@ void MainWindow::on_inReb_PB_clicked()
     SendCommand(command, commandLen);
 }
 
-void MainWindow::on_clrVel_PB_clicked()
-{
-    ui->vel_TE->setPlainText("");
-}
-
-void MainWindow::on_updateTime_SB_editingFinished()
-{
-    static double oldVal = 0;
-
-    //  Refresh update interval for telemetry only if spinBox value has changed
-    if (oldVal != ui->updateTime_SB->value())
-    {
-        LogLine("Changing update time to " + QString::number(ui->updateTime_SB->value()));
-        oldVal = ui->updateTime_SB->value();
-    }
-}
-
-void MainWindow::on_imuSamp_CB_toggled(bool checked)
+/**
+ * @brief Initiaite radar scan (Overview->Scan)
+ */
+void MainWindow::on_scan_bt_clicked()
 {
     uint16_t commandLen = 0;
     char command[50] = {0};
-    char args[2] = {(char)checked, 0};
+    char args[] = {"\x00"};
 
-    MakeRequest((uint8_t*)command, MPU_UID, MPU_LISTEN, 0, 0);
+    MakeRequest((uint8_t*)command, RADAR_UID, RADAR_SCAN, -3000, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
 
     SendCommand(command, commandLen);
 }
-
-bool MainWindow::SendCommand(char *command, uint16_t commandLen)
-{
-    //  Check if there ary any client connected
-    if (tcpCliCommands == NULL)
-        return false;
-
-    tcpCliCommands->write(command,commandLen);
-    LogLine("Sent command:> " + QString(command));
-
-    return true;
-}
-

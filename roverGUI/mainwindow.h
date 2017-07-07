@@ -8,6 +8,7 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QGraphicsView>
+#include <QLabel>
 
 #include "ocvgraph.h"
 #include "cqtopencvviewergl.h"
@@ -59,6 +60,8 @@ private slots:
 
     void sockTelClose();
 
+    void on_commReb_PB_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *socketTimer;
@@ -75,7 +78,9 @@ private:
              pitchGraph,
              yawGraph;
 
-    QGraphicsView *pinv[10];
+    QGraphicsView   *pinv[10];
+    QLabel          *labOverview[10];
+    QLabel          *labInstruments[10];
 };
 
 #endif // MAINWINDOW_H

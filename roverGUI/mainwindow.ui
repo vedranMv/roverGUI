@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -576,7 +576,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="inertial_TB">
        <property name="geometry">
@@ -765,14 +765,132 @@ background-repeat:no-repeat;</string>
          <enum>QFrame::NoFrame</enum>
         </property>
        </widget>
+       <widget class="QGroupBox" name="commI_GB">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>211</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Communication</string>
+        </property>
+        <widget class="QPushButton" name="commReb_PB">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>40</y>
+           <width>80</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Reboot</string>
+         </property>
+        </widget>
+        <widget class="QGraphicsView" name="commPinv_GV">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>18</width>
+           <height>18</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="comm_L_2">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>22</y>
+           <width>150</width>
+           <height>14</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color:rgb(126, 189, 189);</string>
+         </property>
+         <property name="text">
+          <string>Platform</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="tsI_GB">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>30</y>
+          <width>211</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Task scheduler</string>
+        </property>
+        <widget class="QPushButton" name="tsReb_PB">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>40</y>
+           <width>80</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Reboot</string>
+         </property>
+        </widget>
+        <widget class="QGraphicsView" name="tsPinv_GV">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>18</width>
+           <height>18</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="ts_L_2">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>22</y>
+           <width>150</width>
+           <height>14</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color:rgb(126, 189, 189);</string>
+         </property>
+         <property name="text">
+          <string>Platform</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
       <widget class="QWidget" name="radar_TB">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>249</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -817,8 +935,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>249</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
