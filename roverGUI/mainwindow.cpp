@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_mainwindow.h"
 #include <cstdlib>
@@ -26,21 +26,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //  Allows to execute custom routine when new client connects to telemetry socket
+    //  Allows execution of custom routine when new client connects to 'telemetry' socket
     connect(&tcpStelemetry, SIGNAL(newConnection()),
             this, SLOT(acceptCliTelemetry()));
     tcpStelemetry.listen(QHostAddress::Any, P_TELEMETRY);
     LogLine("Listening on telemetry socket " + QString::number(P_TELEMETRY));
     tcpCliTelemetry = NULL;
 
-    //  Allows to execute custom routine when new clients client connects to command socket
+    //  Allows execution of custom routine when new clients client connects to 'command' socket
     connect(&tcpScommands, SIGNAL(newConnection()),
             this, SLOT(acceptCliCommands()));
     tcpScommands.listen(QHostAddress::Any, P_COMMANDS);
     LogLine("Listening on commands socket " + QString::number(P_COMMANDS));
     tcpCliCommands = NULL;
 
-    //  Add basic lines to the plot -> construct background
+    //  Add basic lines to the radar plot -> construct background
     blank.SetCenter(200, 200);
     blank.SetXRangeKeepAspectR(-80, 80);
     blank.Circle(30);   //  30cm range
@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pitchGraph.SetXRangeKeepAspectR(-359, 40, true);
     yawGraph.SetXRangeKeepAspectR(-359, 40, true);
 
-    //  Put all labels from 'Overview' tab to a single list, idexed by kernel module ID
+    //  Put all labels from 'Overview' tab to a single list, indexed by kernel module ID
     labOverview[ESP_UID] = ui->comm_L;
     labOverview[RADAR_UID] = ui->radar_L;
     labOverview[ENGINES_UID] = ui->engines_L;
@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
     labOverview[EVLOG_UID] = NULL;
     labOverview[TASKSCHED_UID] = NULL;
 
-    //  Put all labels from 'Instruments' tab to a single list, idexed by kernel module ID
+    //  Put all labels from 'Instruments' tab to a single list, indexed by kernel module ID
     labInstruments[ESP_UID] = ui->comm_L_2;
     labInstruments[RADAR_UID] = ui->radar_L_2;
     labInstruments[ENGINES_UID] = ui->engines_L_2;
@@ -111,13 +111,14 @@ MainWindow::~MainWindow()
 }
 
 ///-----------------------------------------------------------------------------
-///        GUI constructor & destructor                                    [GUI]
+///        Miscellaneous functions                                        [MISC]
 ///-----------------------------------------------------------------------------
-
-
-
-
-
+/**
+ * @brief Send a command from GUI through 'commands' socket (if opened)
+ * @param command
+ * @param commandLen
+ * @return true if command was sent, false if not
+ */
 bool MainWindow::SendCommand(char *command, uint16_t commandLen)
 {
     //  Check if there ary any client connected
@@ -134,8 +135,8 @@ bool MainWindow::SendCommand(char *command, uint16_t commandLen)
 ///        Functions for refreshing GUI elements                           [GUI]
 ///-----------------------------------------------------------------------------
 /**
- * @brief Update certain GUI lables with new status and color based on the event
- * which occurrd in specified module
+ * @brief Update certain GUI labels with new status and color based on the event
+ * which occurred in specified module
  * @param event
  * @param libUID
  */
@@ -187,7 +188,7 @@ void MainWindow::EventUpdateGUI(Events event, uint8_t libUID)
         break;
     }
 
-    //  Update labeles with new text and color
+    //  Update labels with new text and color
     if (labOverview[libUID] != 0)
         labOverview[libUID]->setStyleSheet(styleSheet);
     if (labInstruments[libUID] != 0)
@@ -243,7 +244,7 @@ void MainWindow::LogLine(QString arg, QPlainTextEdit *holder)
 ///-----------------------------------------------------------------------------
 /**
  * @brief Toggle sampling of IMU data (Instruments->MPU9250)
- * @param checked If true turns on sampling of IMU on vehcile,
+ * @param checked If true turns on sampling of IMU on vehicle,
  *                if false sampling inhibited
  */
 void MainWindow::on_imuSamp_CB_toggled(bool checked)
@@ -299,7 +300,6 @@ void MainWindow::ParseCommandResp(QString respStr)
 /**
  *  @brief Parse incoming telemetry frame. Format is:
  *  [uptimeMS]:Roll|Pitch|Yaw\n
- *  ParseTelemetry
  *  @param teleStr
  */
 void MainWindow::ParseTelemetry(QString teleStr)
@@ -375,12 +375,12 @@ void MainWindow::ParseTelemetry(QString teleStr)
     ui->latencyPlot->showImage( temp.GetMatImg() );
 }
 /**
- * @brief MainWindow::ParseEventLog
- * @param teleStr
+ * @brief Parse a telemetry line containing event log data
+ * @param teleStr String containing event log entri(es)
  */
 void MainWindow::ParseEventLog(QString teleStr)
 {
-    //Find '2*' sequence, start of EventLog telemetry frame
+    //  Find '2*' sequence, start of EventLog telemetry frame
     QStringList entries = teleStr.split("2*");
 
     //  Loop through all events in this list
@@ -432,7 +432,7 @@ void MainWindow::ParseEventLog(QString teleStr)
 ///         TCP telemetry stream                                     [TELEMETRY]
 ///-----------------------------------------------------------------------------
 /**
- * @brief Accept new connection on 'telemery' socket
+ * @brief Accept new connection on 'telemetry' socket
  */
 void MainWindow::acceptCliTelemetry(void)
 {
@@ -444,7 +444,7 @@ void MainWindow::acceptCliTelemetry(void)
     connect(tcpCliTelemetry, SIGNAL(aboutToClose()), this, SLOT(sockTelClose()));
 }
 /**
- * @brief Read incoming data from TCP 'commands' socket
+ * @brief Read incoming data from TCP 'telemetry' socket
  */
 void MainWindow::readDataTelemetry(void)
 {
@@ -568,7 +568,7 @@ void MainWindow::on_inReb_PB_clicked()
 }
 
 /**
- * @brief Initiaite radar scan (Overview->Scan)
+ * @brief Initiate radar scan (Overview->Scan)
  */
 void MainWindow::on_scan_bt_clicked()
 {
