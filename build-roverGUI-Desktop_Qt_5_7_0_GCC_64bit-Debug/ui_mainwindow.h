@@ -23,7 +23,9 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBox>
 #include <QtWidgets/QWidget>
@@ -97,9 +99,17 @@ public:
     QGraphicsView *commPinv_GV;
     QLabel *comm_L_2;
     QGroupBox *tsI_GB;
-    QPushButton *tsReb_PB;
+    QPushButton *tsUpd_PB;
     QGraphicsView *tsPinv_GV;
     QLabel *ts_L_2;
+    QPlainTextEdit *tsLog_TE;
+    QGroupBox *evlog_GB;
+    QPushButton *evlogReb_PB;
+    QGraphicsView *evlogPinv_GV;
+    QLabel *evlog_L_2;
+    QPushButton *evlogUpd_PB;
+    QPushButton *platReb_PB;
+    QLabel *softReb_L;
     QWidget *radar_TB;
     QLabel *radar_L_2;
     QGraphicsView *radPinv_GV;
@@ -108,23 +118,35 @@ public:
     QGraphicsView *engPinv_GV;
     QWidget *tab_3;
     QLabel *mStart_L;
-    QLabel *mUtime_L;
     QLineEdit *mStart_LE;
-    QLineEdit *mUtime_LE;
+    QGroupBox *missionT_GB;
+    QPushButton *addTask_PB;
+    QScrollArea *missionScroll_SA;
+    QWidget *scrollAreaWidgetContents;
+    QPushButton *schedMiss_PB;
+    QCheckBox *checkBox;
+    QLabel *mUtime_L_2;
+    QLineEdit *mUtime_LE_2;
     QLabel *telemetry_L;
     QLabel *commands_L;
+    QPushButton *commands_L_2;
+    QLabel *mUtime_L;
+    QLineEdit *mUtime_LE;
+    QLabel *qos_L;
+    QProgressBar *qos_PrB;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(751, 408);
+        MainWindow->resize(751, 428);
         MainWindow->setMouseTracking(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 20, 751, 391));
+        tabWidget->setGeometry(QRect(0, 40, 751, 391));
+        tabWidget->setMouseTracking(true);
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         reboot_BT = new QPushButton(tab);
@@ -133,6 +155,7 @@ public:
         uptime_GB = new QGroupBox(tab);
         uptime_GB->setObjectName(QStringLiteral("uptime_GB"));
         uptime_GB->setGeometry(QRect(140, 260, 131, 91));
+        uptime_GB->setAlignment(Qt::AlignCenter);
         deltams_L = new QLabel(uptime_GB);
         deltams_L->setObjectName(QStringLiteral("deltams_L"));
         deltams_L->setGeometry(QRect(10, 60, 16, 21));
@@ -144,25 +167,26 @@ public:
         ms_L_2->setGeometry(QRect(110, 60, 21, 21));
         utime_LE = new QLineEdit(uptime_GB);
         utime_LE->setObjectName(QStringLiteral("utime_LE"));
-        utime_LE->setEnabled(false);
+        utime_LE->setEnabled(true);
         utime_LE->setGeometry(QRect(20, 30, 81, 22));
         deltams_LE = new QLineEdit(uptime_GB);
         deltams_LE->setObjectName(QStringLiteral("deltams_LE"));
-        deltams_LE->setEnabled(false);
+        deltams_LE->setEnabled(true);
         deltams_LE->setGeometry(QRect(20, 60, 81, 22));
         orientation_GB = new QGroupBox(tab);
         orientation_GB->setObjectName(QStringLiteral("orientation_GB"));
         orientation_GB->setGeometry(QRect(0, 260, 131, 91));
+        orientation_GB->setAlignment(Qt::AlignCenter);
         roll_LE = new QLineEdit(orientation_GB);
         roll_LE->setObjectName(QStringLiteral("roll_LE"));
-        roll_LE->setEnabled(false);
+        roll_LE->setEnabled(true);
         roll_LE->setGeometry(QRect(30, 20, 101, 22));
         roll_L = new QLabel(orientation_GB);
         roll_L->setObjectName(QStringLiteral("roll_L"));
         roll_L->setGeometry(QRect(10, 20, 59, 21));
         pitch_LE = new QLineEdit(orientation_GB);
         pitch_LE->setObjectName(QStringLiteral("pitch_LE"));
-        pitch_LE->setEnabled(false);
+        pitch_LE->setEnabled(true);
         pitch_LE->setGeometry(QRect(30, 40, 101, 22));
         pitch_L = new QLabel(orientation_GB);
         pitch_L->setObjectName(QStringLiteral("pitch_L"));
@@ -172,11 +196,12 @@ public:
         yaw_L->setGeometry(QRect(10, 60, 59, 21));
         yaw_LE = new QLineEdit(orientation_GB);
         yaw_LE->setObjectName(QStringLiteral("yaw_LE"));
-        yaw_LE->setEnabled(false);
+        yaw_LE->setEnabled(true);
         yaw_LE->setGeometry(QRect(30, 60, 101, 22));
         status_GB = new QGroupBox(tab);
         status_GB->setObjectName(QStringLiteral("status_GB"));
         status_GB->setGeometry(QRect(420, 0, 151, 91));
+        status_GB->setAlignment(Qt::AlignCenter);
         platform_L = new QLabel(status_GB);
         platform_L->setObjectName(QStringLiteral("platform_L"));
         platform_L->setGeometry(QRect(10, 30, 59, 14));
@@ -216,6 +241,7 @@ public:
         steering = new QGroupBox(tab);
         steering->setObjectName(QStringLiteral("steering"));
         steering->setGeometry(QRect(580, 0, 141, 91));
+        steering->setAlignment(Qt::AlignCenter);
         pushButton = new QPushButton(steering);
         pushButton->setObjectName(QStringLiteral("pushButton"));
         pushButton->setGeometry(QRect(60, 30, 31, 22));
@@ -257,6 +283,7 @@ public:
         latency_GB = new QGroupBox(tab);
         latency_GB->setObjectName(QStringLiteral("latency_GB"));
         latency_GB->setGeometry(QRect(290, 260, 101, 91));
+        latency_GB->setAlignment(Qt::AlignCenter);
         latencyPlot = new CQtOpenCVViewerGl(latency_GB);
         latencyPlot->setObjectName(QStringLiteral("latencyPlot"));
         latencyPlot->setGeometry(QRect(0, 20, 100, 50));
@@ -314,7 +341,7 @@ public:
         inerPinv_GV->setObjectName(QStringLiteral("inerPinv_GV"));
         inerPinv_GV->setGeometry(QRect(0, 0, 18, 18));
         inerPinv_GV->setMouseTracking(true);
-        inerPinv_GV->setToolTipDuration(10);
+        inerPinv_GV->setToolTipDuration(-1);
         inerPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         inerPinv_GV->setFrameShape(QFrame::NoFrame);
@@ -329,18 +356,23 @@ public:
         platPinv_GV = new QGraphicsView(platform_TB);
         platPinv_GV->setObjectName(QStringLiteral("platPinv_GV"));
         platPinv_GV->setGeometry(QRect(0, 0, 18, 18));
+        platPinv_GV->setMouseTracking(true);
+        platPinv_GV->setToolTipDuration(-1);
         platPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         platPinv_GV->setFrameShape(QFrame::NoFrame);
         commI_GB = new QGroupBox(platform_TB);
         commI_GB->setObjectName(QStringLiteral("commI_GB"));
-        commI_GB->setGeometry(QRect(10, 30, 211, 181));
+        commI_GB->setGeometry(QRect(10, 30, 191, 181));
+        commI_GB->setAlignment(Qt::AlignCenter);
         commReb_PB = new QPushButton(commI_GB);
         commReb_PB->setObjectName(QStringLiteral("commReb_PB"));
-        commReb_PB->setGeometry(QRect(130, 40, 80, 22));
+        commReb_PB->setGeometry(QRect(90, 40, 80, 22));
         commPinv_GV = new QGraphicsView(commI_GB);
         commPinv_GV->setObjectName(QStringLiteral("commPinv_GV"));
         commPinv_GV->setGeometry(QRect(10, 20, 18, 18));
+        commPinv_GV->setMouseTracking(true);
+        commPinv_GV->setToolTipDuration(-1);
         commPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         commPinv_GV->setFrameShape(QFrame::NoFrame);
@@ -350,13 +382,16 @@ public:
         comm_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
         tsI_GB = new QGroupBox(platform_TB);
         tsI_GB->setObjectName(QStringLiteral("tsI_GB"));
-        tsI_GB->setGeometry(QRect(240, 30, 211, 181));
-        tsReb_PB = new QPushButton(tsI_GB);
-        tsReb_PB->setObjectName(QStringLiteral("tsReb_PB"));
-        tsReb_PB->setGeometry(QRect(130, 40, 80, 22));
+        tsI_GB->setGeometry(QRect(210, 30, 331, 211));
+        tsI_GB->setAlignment(Qt::AlignCenter);
+        tsUpd_PB = new QPushButton(tsI_GB);
+        tsUpd_PB->setObjectName(QStringLiteral("tsUpd_PB"));
+        tsUpd_PB->setGeometry(QRect(240, 20, 80, 22));
         tsPinv_GV = new QGraphicsView(tsI_GB);
         tsPinv_GV->setObjectName(QStringLiteral("tsPinv_GV"));
         tsPinv_GV->setGeometry(QRect(10, 20, 18, 18));
+        tsPinv_GV->setMouseTracking(true);
+        tsPinv_GV->setToolTipDuration(-1);
         tsPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         tsPinv_GV->setFrameShape(QFrame::NoFrame);
@@ -364,10 +399,42 @@ public:
         ts_L_2->setObjectName(QStringLiteral("ts_L_2"));
         ts_L_2->setGeometry(QRect(30, 22, 150, 14));
         ts_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        tsLog_TE = new QPlainTextEdit(tsI_GB);
+        tsLog_TE->setObjectName(QStringLiteral("tsLog_TE"));
+        tsLog_TE->setGeometry(QRect(0, 50, 331, 161));
+        tsLog_TE->setStyleSheet(QStringLiteral("background-color:transparent;"));
+        evlog_GB = new QGroupBox(platform_TB);
+        evlog_GB->setObjectName(QStringLiteral("evlog_GB"));
+        evlog_GB->setGeometry(QRect(550, 30, 191, 181));
+        evlog_GB->setAlignment(Qt::AlignCenter);
+        evlogReb_PB = new QPushButton(evlog_GB);
+        evlogReb_PB->setObjectName(QStringLiteral("evlogReb_PB"));
+        evlogReb_PB->setGeometry(QRect(90, 40, 80, 22));
+        evlogPinv_GV = new QGraphicsView(evlog_GB);
+        evlogPinv_GV->setObjectName(QStringLiteral("evlogPinv_GV"));
+        evlogPinv_GV->setGeometry(QRect(10, 20, 18, 18));
+        evlogPinv_GV->setMouseTracking(true);
+        evlogPinv_GV->setToolTipDuration(-1);
+        evlogPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
+"background-repeat:no-repeat;"));
+        evlogPinv_GV->setFrameShape(QFrame::NoFrame);
+        evlog_L_2 = new QLabel(evlog_GB);
+        evlog_L_2->setObjectName(QStringLiteral("evlog_L_2"));
+        evlog_L_2->setGeometry(QRect(30, 22, 150, 14));
+        evlog_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        evlogUpd_PB = new QPushButton(evlog_GB);
+        evlogUpd_PB->setObjectName(QStringLiteral("evlogUpd_PB"));
+        evlogUpd_PB->setGeometry(QRect(90, 70, 80, 22));
+        platReb_PB = new QPushButton(platform_TB);
+        platReb_PB->setObjectName(QStringLiteral("platReb_PB"));
+        platReb_PB->setGeometry(QRect(660, 0, 80, 22));
+        softReb_L = new QLabel(platform_TB);
+        softReb_L->setObjectName(QStringLiteral("softReb_L"));
+        softReb_L->setGeometry(QRect(578, 0, 71, 21));
         toolBox->addItem(platform_TB, QStringLiteral("Platform"));
         radar_TB = new QWidget();
         radar_TB->setObjectName(QStringLiteral("radar_TB"));
-        radar_TB->setGeometry(QRect(0, 0, 100, 30));
+        radar_TB->setGeometry(QRect(0, 0, 751, 249));
         radar_L_2 = new QLabel(radar_TB);
         radar_L_2->setObjectName(QStringLiteral("radar_L_2"));
         radar_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -375,13 +442,14 @@ public:
         radPinv_GV = new QGraphicsView(radar_TB);
         radPinv_GV->setObjectName(QStringLiteral("radPinv_GV"));
         radPinv_GV->setGeometry(QRect(0, 0, 18, 18));
+        radPinv_GV->setMouseTracking(true);
         radPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         radPinv_GV->setFrameShape(QFrame::NoFrame);
         toolBox->addItem(radar_TB, QStringLiteral("Radar"));
         engines_TB = new QWidget();
         engines_TB->setObjectName(QStringLiteral("engines_TB"));
-        engines_TB->setGeometry(QRect(0, 0, 100, 30));
+        engines_TB->setGeometry(QRect(0, 0, 751, 249));
         engines_L_2 = new QLabel(engines_TB);
         engines_L_2->setObjectName(QStringLiteral("engines_L_2"));
         engines_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -389,6 +457,7 @@ public:
         engPinv_GV = new QGraphicsView(engines_TB);
         engPinv_GV->setObjectName(QStringLiteral("engPinv_GV"));
         engPinv_GV->setGeometry(QRect(0, 0, 18, 18));
+        engPinv_GV->setMouseTracking(true);
         engPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         engPinv_GV->setFrameShape(QFrame::NoFrame);
@@ -399,35 +468,83 @@ public:
         mStart_L = new QLabel(tab_3);
         mStart_L->setObjectName(QStringLiteral("mStart_L"));
         mStart_L->setGeometry(QRect(10, 10, 311, 21));
-        mUtime_L = new QLabel(tab_3);
-        mUtime_L->setObjectName(QStringLiteral("mUtime_L"));
-        mUtime_L->setGeometry(QRect(470, 10, 271, 21));
+        mStart_L->setStyleSheet(QStringLiteral("color:#FF0000;"));
         mStart_LE = new QLineEdit(tab_3);
         mStart_LE->setObjectName(QStringLiteral("mStart_LE"));
         mStart_LE->setEnabled(true);
         mStart_LE->setGeometry(QRect(160, 10, 113, 22));
-        mUtime_LE = new QLineEdit(tab_3);
-        mUtime_LE->setObjectName(QStringLiteral("mUtime_LE"));
-        mUtime_LE->setEnabled(false);
-        mUtime_LE->setGeometry(QRect(620, 10, 91, 22));
+        missionT_GB = new QGroupBox(tab_3);
+        missionT_GB->setObjectName(QStringLiteral("missionT_GB"));
+        missionT_GB->setGeometry(QRect(0, 40, 741, 311));
+        missionT_GB->setStyleSheet(QStringLiteral(""));
+        addTask_PB = new QPushButton(missionT_GB);
+        addTask_PB->setObjectName(QStringLiteral("addTask_PB"));
+        addTask_PB->setGeometry(QRect(30, 270, 80, 22));
+        missionScroll_SA = new QScrollArea(missionT_GB);
+        missionScroll_SA->setObjectName(QStringLiteral("missionScroll_SA"));
+        missionScroll_SA->setGeometry(QRect(0, 20, 741, 231));
+        missionScroll_SA->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        missionScroll_SA->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 739, 229));
+        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(scrollAreaWidgetContents->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents->setSizePolicy(sizePolicy);
+        missionScroll_SA->setWidget(scrollAreaWidgetContents);
+        schedMiss_PB = new QPushButton(missionT_GB);
+        schedMiss_PB->setObjectName(QStringLiteral("schedMiss_PB"));
+        schedMiss_PB->setGeometry(QRect(620, 260, 111, 41));
+        checkBox = new QCheckBox(missionT_GB);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setGeometry(QRect(260, 270, 171, 20));
+        mUtime_L_2 = new QLabel(tab_3);
+        mUtime_L_2->setObjectName(QStringLiteral("mUtime_L_2"));
+        mUtime_L_2->setGeometry(QRect(440, 10, 291, 21));
+        mUtime_LE_2 = new QLineEdit(tab_3);
+        mUtime_LE_2->setObjectName(QStringLiteral("mUtime_LE_2"));
+        mUtime_LE_2->setEnabled(true);
+        mUtime_LE_2->setGeometry(QRect(590, 10, 111, 22));
         tabWidget->addTab(tab_3, QString());
         telemetry_L = new QLabel(centralWidget);
         telemetry_L->setObjectName(QStringLiteral("telemetry_L"));
-        telemetry_L->setGeometry(QRect(560, 10, 71, 20));
+        telemetry_L->setGeometry(QRect(580, 10, 71, 20));
         telemetry_L->setStyleSheet(QStringLiteral("background-color:rgb(255, 0, 4);"));
         telemetry_L->setAlignment(Qt::AlignCenter);
         commands_L = new QLabel(centralWidget);
         commands_L->setObjectName(QStringLiteral("commands_L"));
-        commands_L->setGeometry(QRect(640, 10, 71, 20));
+        commands_L->setGeometry(QRect(660, 10, 71, 20));
         commands_L->setStyleSheet(QStringLiteral("background-color:rgb(255, 0, 4);"));
         commands_L->setAlignment(Qt::AlignCenter);
+        commands_L_2 = new QPushButton(centralWidget);
+        commands_L_2->setObjectName(QStringLiteral("commands_L_2"));
+        commands_L_2->setGeometry(QRect(660, 10, 80, 22));
+        commands_L_2->setStyleSheet(QStringLiteral("background-color:transparent"));
+        commands_L_2->setFlat(true);
+        mUtime_L = new QLabel(centralWidget);
+        mUtime_L->setObjectName(QStringLiteral("mUtime_L"));
+        mUtime_L->setGeometry(QRect(420, 10, 21, 21));
+        mUtime_LE = new QLineEdit(centralWidget);
+        mUtime_LE->setObjectName(QStringLiteral("mUtime_LE"));
+        mUtime_LE->setEnabled(true);
+        mUtime_LE->setGeometry(QRect(440, 10, 111, 22));
+        qos_L = new QLabel(centralWidget);
+        qos_L->setObjectName(QStringLiteral("qos_L"));
+        qos_L->setGeometry(QRect(250, 10, 31, 21));
+        qos_PrB = new QProgressBar(centralWidget);
+        qos_PrB->setObjectName(QStringLiteral("qos_PrB"));
+        qos_PrB->setGeometry(QRect(280, 10, 118, 23));
+        qos_PrB->setValue(0);
+        qos_PrB->setTextVisible(true);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
         log_TW->setCurrentIndex(0);
-        toolBox->setCurrentIndex(1);
+        toolBox->setCurrentIndex(3);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -472,27 +589,62 @@ public:
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_6), QApplication::translate("MainWindow", "Yaw", 0));
         imuSamp_CB->setText(QApplication::translate("MainWindow", "Enable sampling", 0));
 #ifndef QT_NO_TOOLTIP
-        inerPinv_GV->setToolTip(QString());
+        inerPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
         toolBox->setItemText(toolBox->indexOf(inertial_TB), QApplication::translate("MainWindow", "MPU9250", 0));
         platform_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+#ifndef QT_NO_TOOLTIP
+        platPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
         commI_GB->setTitle(QApplication::translate("MainWindow", "Communication", 0));
         commReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        comm_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+#ifndef QT_NO_TOOLTIP
+        commPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        comm_L_2->setText(QApplication::translate("MainWindow", "Communication", 0));
         tsI_GB->setTitle(QApplication::translate("MainWindow", "Task scheduler", 0));
-        tsReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        ts_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+        tsUpd_PB->setText(QApplication::translate("MainWindow", "Update", 0));
+#ifndef QT_NO_TOOLTIP
+        tsPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        ts_L_2->setText(QApplication::translate("MainWindow", "Task scheduler", 0));
+        evlog_GB->setTitle(QApplication::translate("MainWindow", "Event logger", 0));
+        evlogReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+#ifndef QT_NO_TOOLTIP
+        evlogPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        evlog_L_2->setText(QApplication::translate("MainWindow", "Event logger", 0));
+        evlogUpd_PB->setText(QApplication::translate("MainWindow", "Update", 0));
+        platReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+        softReb_L->setText(QApplication::translate("MainWindow", "Soft reboot", 0));
         toolBox->setItemText(toolBox->indexOf(platform_TB), QApplication::translate("MainWindow", "Platform", 0));
         radar_L_2->setText(QApplication::translate("MainWindow", "Radar", 0));
+#ifndef QT_NO_TOOLTIP
+        radPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
         toolBox->setItemText(toolBox->indexOf(radar_TB), QApplication::translate("MainWindow", "Radar", 0));
         engines_L_2->setText(QApplication::translate("MainWindow", "Engines", 0));
+#ifndef QT_NO_TOOLTIP
+        engPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
         toolBox->setItemText(toolBox->indexOf(engines_TB), QApplication::translate("MainWindow", "Engines", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Instruments", 0));
         mStart_L->setText(QApplication::translate("MainWindow", "Mission starting time T=                                ms", 0));
-        mUtime_L->setText(QApplication::translate("MainWindow", "Current vehice time T=                            ms", 0));
+        missionT_GB->setTitle(QApplication::translate("MainWindow", "Mission tasks", 0));
+        addTask_PB->setText(QApplication::translate("MainWindow", "Add task", 0));
+        schedMiss_PB->setText(QApplication::translate("MainWindow", "Schedule\n"
+"mission", 0));
+        checkBox->setText(QApplication::translate("MainWindow", "Create periodic mission", 0));
+        mUtime_L_2->setText(QApplication::translate("MainWindow", "Current vehice time T=                                 ms", 0));
+        mUtime_LE_2->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Mission planner", 0));
         telemetry_L->setText(QApplication::translate("MainWindow", "Telemetry", 0));
         commands_L->setText(QApplication::translate("MainWindow", "Commands", 0));
+        commands_L_2->setText(QString());
+        mUtime_L->setText(QApplication::translate("MainWindow", "T=", 0));
+        mUtime_LE->setText(QString());
+        qos_L->setText(QApplication::translate("MainWindow", "QoS", 0));
+        qos_PrB->setFormat(QApplication::translate("MainWindow", "%p%", 0));
     } // retranslateUi
 
 };

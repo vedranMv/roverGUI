@@ -39,6 +39,46 @@ const char DEVICE_ID[] = {"V125"};
  */
 #define P_COMMANDS      2701
 
+const char allTasks[10][10][30] =
+{
+    {
+        {"TCP Server"},
+        {"Open TCP conn"},
+        {"Send over socket"},
+        {"Read from socket"},
+        {"Close TCP conn"},
+        {"Reboot comm"}
+    },
+    {
+        {"Radar scan"},
+        {"Set horizontal angle"},
+        {"Set vertical anglet"}
+    },
+    {
+        {"Drive direction"},
+        {"Drive arc"},
+        {"Drive at % wheel speed"}
+    },
+    {
+        {"Listen for IMU data"},
+        {"Read IMU data"},
+        {"Reboot IMU"}
+    },
+    {
+        {"Keep socket alive"}
+    },
+    {
+        {"Send telemetry"},
+        {"Reboot platform"},
+        {"Dump event log"},
+        {"Soft plat. reboot"},
+        {"Dump scheduled tasks"}
+    },
+    {
+        {"Drop log"}
+    }
+};
+
 ///-----------------------------------------------------------------------------
 ///         ESP8266 task IDs
 ///-----------------------------------------------------------------------------
@@ -63,6 +103,17 @@ const char DEVICE_ID[] = {"V125"};
 //  Args: 0x17
 #define ESP_T_REBOOT    5
 
+//  Readable names of tasks above
+const char espTasks[][20] =
+{
+    {"TCP Server"},
+    {"Open TCP conn"},
+    {"Send over socket"},
+    {"Read from socket"},
+    {"Close TCP conn"},
+    {"Reboot comm"}
+};
+
 ///-----------------------------------------------------------------------------
 ///         Radar task IDs
 ///-----------------------------------------------------------------------------
@@ -79,6 +130,14 @@ const char DEVICE_ID[] = {"V125"};
 //  Args: angle(4B)
 #define RADAR_SETV          3
 
+//  Readable names of tasks above
+const char radarTasks[][30] =
+{
+    {"Radar scan"},
+    {"Set horizontal angle"},
+    {"Set vertical anglet"}
+};
+
 ///-----------------------------------------------------------------------------
 ///         Engine task IDs
 ///-----------------------------------------------------------------------------
@@ -94,6 +153,14 @@ const char DEVICE_ID[] = {"V125"};
 //  Args: direction(uint8_t)|leftPercent(4B float)|rightPercent(4B float)
 #define ENG_MOVE_PERC       2
 
+//  Readable names of tasks above
+const char engineTasks[][30] =
+{
+    {"Drive direction"},
+    {"Drive arc"},
+    {"Drive at % wheel speed"}
+};
+
 ///-----------------------------------------------------------------------------
 ///         Inertial unit(MPU9250) task IDs
 ///-----------------------------------------------------------------------------
@@ -103,6 +170,14 @@ const char DEVICE_ID[] = {"V125"};
 #define MPU_GET_DATA        1   //  Pass sensor data to user-defined hook
 #define MPU_REBOOT          2   //  Reboot sensor moudle
 
+//  Readable names of tasks above
+const char mpuTasks[][20] =
+{
+    {"Listen for data"},
+    {"Read data"},
+    {"Reboot IMU"}
+};
+
 ///-----------------------------------------------------------------------------
 ///         Data stream task IDs
 ///-----------------------------------------------------------------------------
@@ -110,20 +185,47 @@ const char DEVICE_ID[] = {"V125"};
 //  Definitions of ServiceID for service offered by this module
 #define DATAS_T_KA      0   //  Keep alive socket
 
+//  Readable names of tasks above
+const char datasTasks[][20] =
+{
+    {"Keep socket alive"}
+};
+
 ///-----------------------------------------------------------------------------
 ///         Platform task IDs
 ///-----------------------------------------------------------------------------
 #define PLAT_UID            5
-//  Definitions of ServiceID for service offered by this module
+///  Definitions of ServiceID for service offered by this module
 #define PLAT_TEL            0   //  Send telemetry data frame
 #define PLAT_REBOOT         1   //  Reboot the system
+#define PLAT_EVLOG_DUMP     2   //  Report states saved in event log
+#define PLAT_SOFT_REBOOT    3   //  Perform soft reboot, only reset states
+#define PLAT_TS_DUMP        4   //  Report task scheduler data
+//  Readable names of tasks above
+const char platTasks[][30] =
+{
+    {"Send telemetry"},
+    {"Reboot platform"},
+    {"Dump event log"},
+    {"Soft reboot"},
+    {"Dump scheduled tasks"}
+};
 
 ///-----------------------------------------------------------------------------
 ///         EventLog task IDs
 ///-----------------------------------------------------------------------------
 #define EVLOG_UID           6
-//  Definitions of ServiceID for service offered by this module
-#define EVLOG_DROP          0   //  Drop all data in the event log
+/// Definitions of ServiceID for service offered by this module
+//  Drop all data in the event log, but keep higest-prio. event, last occurred
+//  event and existence of priority inversion
+#define EVLOG_DROP          0
+#define EVLOG_REBOOT        1   //  Reset event log; clear EVERYTHING
+
+//  Readable names of tasks above
+const char evlogTasks[][20] =
+{
+    {"Drop log"}
+};
 
 ///-----------------------------------------------------------------------------
 ///         Task scheduler task IDs
@@ -147,16 +249,6 @@ enum Events {EVENT_UNINITIALIZED,   //Module is not yet initialized
              EVENT_PRIOINV };       //Priority inversion event
 
 //  Event string description for GUI
-/*const char events[][30] =
-{
-    {"EVENT_UNINITIALIZED"},   //Module is not yet initialized
-    {"EVENT_STARTUP"},         //Module is in startup sequence
-    {"EVENT_INITIALIZED"},     //Module is fully initialized
-    {"EVENT_OK"},              //Module performed request
-    {"EVENT_HANG"},            //Module is hanging in communication with HW
-    {"EVENT_ERROR"},           //Module experienced error
-    {"EVENT_PRIOINV"}          //Priority inversion in module
-};*/
 const char events[][30] =
 {
     {"UNINITIALIZED"},   //Module is not yet initialized

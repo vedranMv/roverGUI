@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>751</width>
-    <height>408</height>
+    <height>428</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -21,13 +21,16 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>20</y>
+      <y>40</y>
       <width>751</width>
       <height>391</height>
      </rect>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -57,6 +60,9 @@
       </property>
       <property name="title">
        <string>Up-time</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
       <widget class="QLabel" name="deltams_L">
        <property name="geometry">
@@ -99,7 +105,7 @@
       </widget>
       <widget class="QLineEdit" name="utime_LE">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -112,7 +118,7 @@
       </widget>
       <widget class="QLineEdit" name="deltams_LE">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -136,9 +142,12 @@
       <property name="title">
        <string>Orienatation</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <widget class="QLineEdit" name="roll_LE">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -164,7 +173,7 @@
       </widget>
       <widget class="QLineEdit" name="pitch_LE">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -203,7 +212,7 @@
       </widget>
       <widget class="QLineEdit" name="yaw_LE">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -226,6 +235,9 @@
       </property>
       <property name="title">
        <string>Status</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
       <widget class="QLabel" name="platform_L">
        <property name="geometry">
@@ -377,6 +389,9 @@
       <property name="title">
        <string>Steering</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <widget class="QPushButton" name="pushButton">
        <property name="geometry">
         <rect>
@@ -518,6 +533,9 @@
       <property name="title">
        <string>Latency (ms)</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <widget class="CQtOpenCVViewerGl" name="latencyPlot" native="true">
        <property name="geometry">
         <rect>
@@ -576,7 +594,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="inertial_TB">
        <property name="geometry">
@@ -706,10 +724,10 @@
          <bool>true</bool>
         </property>
         <property name="toolTip">
-         <string extracomment="Priority inversion event: Module emitted a lower-priority event after prevoiusly emitting a higher priority one. This doesn't necessarily points to module malfunctioning but it be an indicator. Try to reboot the module."/>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="toolTipDuration">
-         <number>10</number>
+         <number>-1</number>
         </property>
         <property name="styleSheet">
          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
@@ -757,6 +775,15 @@ background-repeat:no-repeat;</string>
           <height>18</height>
          </rect>
         </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>-1</number>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
 background-repeat:no-repeat;</string>
@@ -770,17 +797,20 @@ background-repeat:no-repeat;</string>
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>211</width>
+          <width>191</width>
           <height>181</height>
          </rect>
         </property>
         <property name="title">
          <string>Communication</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
         <widget class="QPushButton" name="commReb_PB">
          <property name="geometry">
           <rect>
-           <x>130</x>
+           <x>90</x>
            <y>40</y>
            <width>80</width>
            <height>22</height>
@@ -798,6 +828,15 @@ background-repeat:no-repeat;</string>
            <width>18</width>
            <height>18</height>
           </rect>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>-1</number>
          </property>
          <property name="styleSheet">
           <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
@@ -820,33 +859,36 @@ background-repeat:no-repeat;</string>
           <string notr="true">background-color:rgb(126, 189, 189);</string>
          </property>
          <property name="text">
-          <string>Platform</string>
+          <string>Communication</string>
          </property>
         </widget>
        </widget>
        <widget class="QGroupBox" name="tsI_GB">
         <property name="geometry">
          <rect>
-          <x>240</x>
+          <x>210</x>
           <y>30</y>
-          <width>211</width>
-          <height>181</height>
+          <width>331</width>
+          <height>211</height>
          </rect>
         </property>
         <property name="title">
          <string>Task scheduler</string>
         </property>
-        <widget class="QPushButton" name="tsReb_PB">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QPushButton" name="tsUpd_PB">
          <property name="geometry">
           <rect>
-           <x>130</x>
-           <y>40</y>
+           <x>240</x>
+           <y>20</y>
            <width>80</width>
            <height>22</height>
           </rect>
          </property>
          <property name="text">
-          <string>Reboot</string>
+          <string>Update</string>
          </property>
         </widget>
         <widget class="QGraphicsView" name="tsPinv_GV">
@@ -857,6 +899,15 @@ background-repeat:no-repeat;</string>
            <width>18</width>
            <height>18</height>
           </rect>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>-1</number>
          </property>
          <property name="styleSheet">
           <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
@@ -879,9 +930,132 @@ background-repeat:no-repeat;</string>
           <string notr="true">background-color:rgb(126, 189, 189);</string>
          </property>
          <property name="text">
-          <string>Platform</string>
+          <string>Task scheduler</string>
          </property>
         </widget>
+        <widget class="QPlainTextEdit" name="tsLog_TE">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>50</y>
+           <width>331</width>
+           <height>161</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color:transparent;</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="evlog_GB">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>30</y>
+          <width>191</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Event logger</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QPushButton" name="evlogReb_PB">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>40</y>
+           <width>80</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Reboot</string>
+         </property>
+        </widget>
+        <widget class="QGraphicsView" name="evlogPinv_GV">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>18</width>
+           <height>18</height>
+          </rect>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>-1</number>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="evlog_L_2">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>22</y>
+           <width>150</width>
+           <height>14</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color:rgb(126, 189, 189);</string>
+         </property>
+         <property name="text">
+          <string>Event logger</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="evlogUpd_PB">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>70</y>
+           <width>80</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QPushButton" name="platReb_PB">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>0</y>
+          <width>80</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reboot</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="softReb_L">
+        <property name="geometry">
+         <rect>
+          <x>578</x>
+          <y>0</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Soft reboot</string>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="radar_TB">
@@ -889,8 +1063,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>751</width>
+         <height>249</height>
         </rect>
        </property>
        <attribute name="label">
@@ -921,6 +1095,12 @@ background-repeat:no-repeat;</string>
           <height>18</height>
          </rect>
         </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string extracomment="Priority inversion event: Module emitted a lower-priority event after prevoiusly emitting a higher priority one. This doesn't necessarily points to module malfunctioning but it be an indicator. Try to reboot the module.">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
 background-repeat:no-repeat;</string>
@@ -935,8 +1115,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>751</width>
+         <height>249</height>
         </rect>
        </property>
        <attribute name="label">
@@ -967,6 +1147,12 @@ background-repeat:no-repeat;</string>
           <height>18</height>
          </rect>
         </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string extracomment="Priority inversion event: Module emitted a lower-priority event after prevoiusly emitting a higher priority one. This doesn't necessarily points to module malfunctioning but it be an indicator. Try to reboot the module.">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Priority inversion event&lt;/p&gt;&lt;p&gt;Module emitted a lower-priority event after prevoiusly &lt;/p&gt;&lt;p&gt;emitting a higher priority one. This doesn't necessarily &lt;/p&gt;&lt;p&gt;point to module malfunctioning but it may be an &lt;/p&gt;&lt;p&gt;indicator. Try to reboot the module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
 background-repeat:no-repeat;</string>
@@ -991,21 +1177,11 @@ background-repeat:no-repeat;</string>
         <height>21</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color:#FF0000;</string>
+      </property>
       <property name="text">
        <string>Mission starting time T=                                ms</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="mUtime_L">
-      <property name="geometry">
-       <rect>
-        <x>470</x>
-        <y>10</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Current vehice time T=                            ms</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="mStart_LE">
@@ -1021,17 +1197,121 @@ background-repeat:no-repeat;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="mUtime_LE">
+     <widget class="QGroupBox" name="missionT_GB">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>40</y>
+        <width>741</width>
+        <height>311</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string>Mission tasks</string>
+      </property>
+      <widget class="QPushButton" name="addTask_PB">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>270</y>
+         <width>80</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Add task</string>
+       </property>
+      </widget>
+      <widget class="QScrollArea" name="missionScroll_SA">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>741</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>739</width>
+          <height>229</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="schedMiss_PB">
+       <property name="geometry">
+        <rect>
+         <x>620</x>
+         <y>260</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Schedule
+mission</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>270</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Create periodic mission</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="mUtime_L_2">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>10</y>
+        <width>291</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current vehice time T=                                 ms</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="mUtime_LE_2">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
-        <x>620</x>
+        <x>590</x>
         <y>10</y>
-        <width>91</width>
+        <width>111</width>
         <height>22</height>
        </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
@@ -1039,7 +1319,7 @@ background-repeat:no-repeat;</string>
    <widget class="QLabel" name="telemetry_L">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>580</x>
       <y>10</y>
       <width>71</width>
       <height>20</height>
@@ -1058,7 +1338,7 @@ background-repeat:no-repeat;</string>
    <widget class="QLabel" name="commands_L">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>660</x>
       <y>10</y>
       <width>71</width>
       <height>20</height>
@@ -1072,6 +1352,86 @@ background-repeat:no-repeat;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="commands_L_2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>10</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:transparent</string>
+    </property>
+    <property name="text">
+     <string> </string>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mUtime_L">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>10</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>T=</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="mUtime_LE">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>10</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="qos_L">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>10</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>QoS</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="qos_PrB">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>118</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="textVisible">
+     <bool>true</bool>
+    </property>
+    <property name="format">
+     <string extracomment="QoS">%p%</string>
     </property>
    </widget>
   </widget>

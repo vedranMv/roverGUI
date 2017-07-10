@@ -22,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     latencyGraph(50, 100),
     rollGraph(189, 400),
     pitchGraph(189, 400),
-    yawGraph(189, 400)
+    yawGraph(189, 400),
+    _sentReq(0), _ackReq(0)
 {
     ui->setupUi(this);
 
@@ -78,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     labInstruments[MPU_UID] = ui->inertial_L_2;
     labInstruments[DATAS_UID] = NULL;
     labInstruments[PLAT_UID] = ui->platform_L_2;
-    labInstruments[EVLOG_UID] = NULL;
+    labInstruments[EVLOG_UID] = ui->evlog_L_2;
     labInstruments[TASKSCHED_UID] = ui->ts_L_2;
 
     //  Put all warning images into a single list
@@ -88,13 +89,18 @@ MainWindow::MainWindow(QWidget *parent) :
     pinv[MPU_UID] = ui->inerPinv_GV;
     pinv[DATAS_UID] = NULL;
     pinv[PLAT_UID] = ui->platPinv_GV;
-    pinv[EVLOG_UID] = NULL;
+    pinv[EVLOG_UID] = ui->evlogPinv_GV;
     pinv[TASKSCHED_UID] = ui->tsPinv_GV;
 
     //  Hide warning images for priority inversion
     for (int i = 0; i < 8; i++)
         if (pinv[i] != NULL)
             pinv[i]->setVisible(false);
+
+    //  Configure scroll area for mission planning so that overflow after adding
+    //  new tasks results in creatin on scroll bar and not cutoff
+    ui->scrollAreaWidgetContents->setLayout(new QVBoxLayout(ui->scrollAreaWidgetContents));
+    ui->missionScroll_SA->setWidget(ui->scrollAreaWidgetContents);
 }
 
 MainWindow::~MainWindow()
@@ -127,6 +133,7 @@ bool MainWindow::SendCommand(char *command, uint16_t commandLen)
 
     tcpCliCommands->write(command,commandLen);
     LogLine("Sent command:> " + QString(command));
+    _sentReq++;
 
     return true;
 }
@@ -234,9 +241,36 @@ void MainWindow::LogLine(QString arg, QPlainTextEdit *holder)
     //  Add text to 'GUI log' if holder is NULL pointer
     //  Else add to the specified text field
     if (holder == NULL)
-        ui->log->setPlainText(ui->log->toPlainText() + arg + '\n');
-    else
-        holder->setPlainText(holder->toPlainText() + arg + '\n');
+        holder = ui->log;
+
+    //  To prevent stack smashing, reset logs once they reach 6000 characters
+    if ((holder->toPlainText().length()+arg.length()) >= 6000)
+        holder->setPlainText("");
+    //  Add new line to the log
+    holder->setPlainText(holder->toPlainText() + arg + '\n');
+}
+
+/**
+ * @brief Called every time a task has been deleted from mission, handles
+ * renumbering the tasks in case the task in the middle has been deleted
+ * (Mission planner->Mission tasks)
+ */
+void MainWindow::UpdateIDs()
+{
+    //  House keeping: Check all 'dead' (deleted) entries from mEntries vector
+    //  and remove them
+    for (uint8_t i = 0; i < mEntries.size(); i++)
+        if (mEntries[i]->dead)
+        {
+            //  Delete object from heap
+            //delete mEntries[i];
+            //  Delete entry from vector
+            mEntries.erase(mEntries.begin()+i);
+        }
+    std::cout<<"Deleted, updating labels\n";
+    //  After deleting do one more pass through entries to update their number
+    for (uint8_t i = 0; i < mEntries.size(); i++)
+        mEntries[i]->ChangeIndex(i);
 }
 
 ///-----------------------------------------------------------------------------
@@ -281,7 +315,7 @@ void MainWindow::on_updateTime_SB_editingFinished()
  * @brief Parse response on a give command (such as radar scan)
  * @param respStr Response from vehicle to a sent command
  */
-void MainWindow::ParseCommandResp(QString respStr)
+bool MainWindow::ParseCommandResp(QString respStr)
 {
     //  Setup graph background
     OCVGraph image(blank);
@@ -289,12 +323,14 @@ void MainWindow::ParseCommandResp(QString respStr)
     uint16_t it = 0;
 
     if(respStr.length() < 100)
-        return;
+        return false;
     for (uint16_t i = 10; i <170; i++)
         image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()));
 
     // Show the image
     ui->radarPlot->showImage( image.GetMatImg() );
+
+    return true;
 }
 
 /**
@@ -319,7 +355,17 @@ void MainWindow::ParseTelemetry(QString teleStr)
         tmpStr += teleStr[i++];
     //  Convert time in string to number (ms -> s)
     ui->utime_LE->setText(QString::number(tmpStr.toDouble()/1000));
-    ui->mUtime_LE->setText(ui->utime_LE->text());
+    ui->mUtime_LE_2->setText(QString::number(tmpStr.toDouble()/1000));
+    uint32_t dd, hh, mm;
+    double ss = tmpStr.toDouble()/1000;
+    mm = (ss/60);
+    ss -= ((double)mm)*60;
+    hh = mm / 60;
+    mm -= hh * 60;
+    dd = hh / 24;
+    hh -= dd * 24;
+    //  Updatime time on top of window
+    ui->mUtime_LE->setText(QString::number(dd)+"d, "+QString::number(hh)+":"+QString::number(mm)+":"+QString::number(ss));
     //  Calculate time since last received frame to estimate latency
     ui->deltams_LE->setText(QString::number(tmpStr.toDouble()/1000-oldTime));
     oldTime = tmpStr.toDouble()/1000;
@@ -428,6 +474,31 @@ void MainWindow::ParseEventLog(QString teleStr)
     }
 }
 
+/**
+ * @brief Parse a telemetry line containing task scheduler entries
+ * @param teleStr String containing event log entri(es)
+ */
+void MainWindow::ParseTaskEntry(QString teleStr)
+{
+    //  Find '3*' sequence, start of EventLog telemetry frame
+    QStringList entries = teleStr.split("3*");
+
+    //  Loop through all events in this list
+    for (QString X : entries)
+    {
+        QStringList parts = X.split(":", QString::SkipEmptyParts);
+        //  Skip broken/short frames
+        if (parts.length() < 4)
+            continue;
+
+        QString msg;
+        msg = parts[0] + ": " + QString(allTasks[parts[1].toInt()][parts[2].toInt()])
+              + ", period " + parts[3] +" ms";
+        LogLine(msg, ui->tsLog_TE);
+    }
+}
+
+
 ///-----------------------------------------------------------------------------
 ///         TCP telemetry stream                                     [TELEMETRY]
 ///-----------------------------------------------------------------------------
@@ -457,6 +528,8 @@ void MainWindow::readDataTelemetry(void)
     ParseTelemetry(QString(buffer+3));
   else if ((buffer[0] == '2') && (buffer[1] == '*'))
     ParseEventLog(QString(buffer)); //Leave leading 11:
+  else if ((buffer[0] == '3') && (buffer[1] == '*'))
+    ParseTaskEntry(QString(buffer));
 }
 /**
  * @brief Triggered when TCP socket is closed
@@ -491,7 +564,18 @@ void MainWindow::readDataCommands(void)
   char buffer[1024] = {0};
   tcpCliCommands->read(buffer, tcpCliCommands->bytesAvailable());
   LogLine("COMMANDS: " + QString(buffer));
-  ParseCommandResp(QString(buffer));
+
+  //    If there's no radar data embedded, it's only ACK/NACK response
+  if (!ParseCommandResp(QString(buffer)))
+  {
+      QString qsBuffer(buffer);
+      //    If string doesn't contain NACK, it's been acknowledged by vehicle
+      if (!qsBuffer.contains("NACK"))
+          _ackReq++;
+      //    Update quality of service
+      ui->qos_PrB->setValue(_ackReq*100/_sentReq);
+  }
+
 }
 
 /**
@@ -580,4 +664,100 @@ void MainWindow::on_scan_bt_clicked()
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
 
     SendCommand(command, commandLen);
+}
+
+/**
+ * @brief Only case of writing into a telemetry socket, when clicked attempts to
+ * reopen 'commands' stream from the vehcile's side
+ */
+void MainWindow::on_commands_L_2_clicked()
+{
+    //  Check if there ary any client connected
+    if (tcpCliTelemetry == NULL)
+        return;
+
+    tcpCliTelemetry->write("REOP\r\n",6);
+    LogLine("Sent command:> " + QString("REOP"));
+}
+/**
+ * @brief Adds another entry to the mission task list
+ * (Mission planner->Mission tasks)
+ */
+void MainWindow::on_addTask_PB_clicked()
+{
+    //  Create new entry
+    MissionEntry *tmp = new MissionEntry(mEntries.size(), ui->scrollAreaWidgetContents);
+    mEntries.push_back(tmp);
+    //  Connect 'Deleted' signal to 'UpdateIDs' slot so that we automatically
+    //  change IDs of all entries when signal is deleted
+    connect(mEntries.back(), SIGNAL(Deleted()), this, SLOT(UpdateIDs()));
+    //  Add mission entry to scrollable area
+    ui->scrollAreaWidgetContents->layout()->addWidget(mEntries.back()->Container());
+}
+
+/**
+ * @brief Sends command to clear and reset event logger
+ * (Instruments->Platform->Event log)
+ */
+void MainWindow::on_evlogReb_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[] = {"\x17"};
+
+    MakeRequest((uint8_t*)command, EVLOG_UID, EVLOG_REBOOT, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+/**
+ * @brief Request status update for all modules from the vehicle
+ * (Instruments->Platform->Event log)
+ */
+void MainWindow::on_evlogUpd_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[] = {"\x17"};
+
+    MakeRequest((uint8_t*)command, PLAT_UID, PLAT_EVLOG_DUMP, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+/**
+ * @brief Request print of all tasks currently in task scheduler
+ * (Instruments->Platform->Task scheduler)
+ */
+void MainWindow::on_tsUpd_PB_clicked()
+{
+    ui->tsLog_TE->setPlainText("");
+
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[] = {"\x0"};
+
+    MakeRequest((uint8_t*)command, PLAT_UID, PLAT_TS_DUMP, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+/**
+ * @brief MainWindow::on_schedMiss_PB_clicked
+ */
+void MainWindow::on_schedMiss_PB_clicked()
+{
+    for (auto X : mEntries)
+    {
+        uint16_t commandLen = 0;
+        char command[50] = {0};
+        char args[] = {"\x0"};
+
+        MakeRequest((uint8_t*)command, X->LibUID(), X->TaskID(), 0, 0);
+        AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+        LogLine(QString(command));
+    }
 }
