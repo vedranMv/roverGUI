@@ -1,10 +1,11 @@
 #include "roverinterface.h"
 #include <cstring>
 
-void MakeRequest(uint8_t *req, uint16_t uid, uint16_t task, int32_t time, int32_t repeats)
+void MakeRequest(uint8_t *req, uint16_t uid, uint16_t task, int32_t time,
+                 int32_t repeats, int32_t period)
 {
     std::stringstream ss;
-    ss<<DEVICE_ID<<":"<<uid<<":"<<task<<":"<<time<<":"<<repeats;
+    ss<<DEVICE_ID<<":"<<uid<<":"<<task<<":"<<time<<":"<<period<<":"<<repeats;
 
     memcpy(req, ss.str().c_str(), ss.str().length());
 }

@@ -11,6 +11,13 @@
 
 #include <QChar>
 #include <QDebug>
+#include <QTimer>
+
+//  Status of sending command
+#define COMMANDS_ACK    1
+#define COMMANDS_NACK   2
+#define COMMANDS_RESET  3
+uint8_t sendStatus = COMMANDS_RESET;
 
 ///-----------------------------------------------------------------------------
 ///        GUI constructor & destructor                                    [GUI]
@@ -18,14 +25,16 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    blank(200, 400),
-    latencyGraph(50, 100),
-    rollGraph(189, 400),
-    pitchGraph(189, 400),
-    yawGraph(189, 400),
+    blank(200, 400, cv::Scalar(0x45, 0x45, 0x45)),
+    latencyGraph(50, 100, cv::Scalar(0x45, 0x45, 0x45)),
+    rollGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
+    pitchGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
+    yawGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
     _sentReq(0), _ackReq(0)
 {
     ui->setupUi(this);
+
+    qApp->setStyleSheet("@import url(\"/styles/default.css\");");
 
     //  Allows execution of custom routine when new client connects to 'telemetry' socket
     connect(&tcpStelemetry, SIGNAL(newConnection()),
@@ -101,6 +110,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //  new tasks results in creatin on scroll bar and not cutoff
     ui->scrollAreaWidgetContents->setLayout(new QVBoxLayout(ui->scrollAreaWidgetContents));
     ui->missionScroll_SA->setWidget(ui->scrollAreaWidgetContents);
+
+    //  Initialize timer used to send batch of commands through 'commands' stream
+    sendTimer = new QTimer(this);
+    connect(sendTimer, SIGNAL(timeout()), this, SLOT(sendNext()));
+
+    ui->missPer_LE->setVisible(ui->missPer_CB->isChecked());
+    ui->missRep_LE->setVisible(ui->missPer_CB->isChecked());
+
+    ui->missionT_GB->setEnabled((ui->mStart_LE->text().length() > 0));
+    ui->missionT_GB->setVisible((ui->mStart_LE->text().length() > 0));
+
+    ui->warn_GV->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -125,7 +146,7 @@ MainWindow::~MainWindow()
  * @param commandLen
  * @return true if command was sent, false if not
  */
-bool MainWindow::SendCommand(char *command, uint16_t commandLen)
+bool MainWindow::SendCommand(const char *command, uint16_t commandLen)
 {
     //  Check if there ary any client connected
     if (tcpCliCommands == NULL)
@@ -135,7 +156,57 @@ bool MainWindow::SendCommand(char *command, uint16_t commandLen)
     LogLine("Sent command:> " + QString(command));
     _sentReq++;
 
+    //    Update quality of service
+    ui->qos_PrB->setValue(_ackReq*100/_sentReq);
+
     return true;
+}
+
+/**
+ * @brief sendTimer timout() event handler
+ * On each timout event this function sends one entry from mission planner. Once
+ * all mission tasks have been sent timer is stopped in here.
+ */
+void MainWindow::sendNext(void)
+{
+    static uint16_t counter = 0;
+    //  Count number of attempts at sending, if a command receives NACK 3 times
+    //  it's skipped
+    static int8_t attempts = 0;
+
+    //  Move to next entry if last sending resulted in ACK or we've reached max
+    //  number of sending attempts. Reset status.
+    if ((sendStatus == COMMANDS_ACK) || (attempts == 3))
+    {
+        counter++;
+        sendStatus == COMMANDS_RESET;
+        attempts = 0;
+    }
+
+    //  Check if there are any entries not sent
+    if (counter < mEntries.size())
+    {
+        uint16_t commandLen = 0;
+        char     command[50] = {0};
+
+        //  Adjust parameters in case mission is scheduled to be periodic and
+        //  construct request from current mission entry
+        if (ui->missPer_CB->isChecked())
+            mEntries[counter]->ToReq(command, commandLen,
+                                     ui->missRep_LE->text().toLong(),
+                                     ui->missPer_LE->text().toLongLong()*1000);
+        else
+            mEntries[counter]->ToReq(command, commandLen, 0, 0);
+
+        //  Send command over 'commands' stream
+        SendCommand(command, commandLen);
+        attempts++;
+    }
+    else
+    {
+        counter = 0;
+        sendTimer->stop();
+    }
 }
 
 ///-----------------------------------------------------------------------------
@@ -189,11 +260,13 @@ void MainWindow::EventUpdateGUI(Events event, uint8_t libUID)
         break;
     case EVENT_PRIOINV:
         {
+            styleSheet = "background-color:rgb(120, 120, 120);";
             if (pinv[libUID] != 0)
                 pinv[libUID]->setVisible(true);
         }
         break;
     }
+    styleSheet += "\ncolor:#454545;\nborder-radius:3px;";
 
     //  Update labels with new text and color
     if (labOverview[libUID] != 0)
@@ -213,15 +286,26 @@ void MainWindow::EventUpdateGUI(Events event, uint8_t libUID)
  */
 void MainWindow::AppendToGraph(OCVGraph &graph, double old, double val, CQtOpenCVViewerGl *renderer)
 {
-    //  Update latency plot with delta value
+    //  Update plot with delta value
     cv::Point2d endP(0, val);
-    graph.LineCartesian(endP, cv::Point2d(0, old));
+    graph.LineCartesian(endP, cv::Point2d(0, old), COLOR_WHITE);
 
     //  Shift data in latency plot one column to the left
     cv::Mat &shiftPlot = graph.GetMatImg();
     cv::Mat out(shiftPlot.size(), shiftPlot.type(), cv::Scalar::all(255));
     shiftPlot(cv::Rect(1,0, shiftPlot.cols-1,shiftPlot.rows)).copyTo(out(cv::Rect(0,0,shiftPlot.cols-1,shiftPlot.rows)));
     out.copyTo(shiftPlot);
+    //  Match color of background in shifted line with that of GUI background
+    for (uint16_t i = 0; i < shiftPlot.rows; i++)
+    {
+        cv::Vec3b &pix = shiftPlot.at<cv::Vec3b>(i, shiftPlot.cols-1);
+
+        if (pix.val[0] != 0xFF)
+            break;
+        pix.val[0] = 0x45;
+        pix.val[1] = 0x45;
+        pix.val[2] = 0x45;
+    }
 
     //  Copy graph into new holder to be able to apply axes
     OCVGraph temp(graph);
@@ -267,7 +351,7 @@ void MainWindow::UpdateIDs()
             //  Delete entry from vector
             mEntries.erase(mEntries.begin()+i);
         }
-    std::cout<<"Deleted, updating labels\n";
+    //std::cout<<"Deleted, updating labels\n";
     //  After deleting do one more pass through entries to update their number
     for (uint8_t i = 0; i < mEntries.size(); i++)
         mEntries[i]->ChangeIndex(i);
@@ -325,7 +409,7 @@ bool MainWindow::ParseCommandResp(QString respStr)
     if(respStr.length() < 100)
         return false;
     for (uint16_t i = 10; i <170; i++)
-        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()));
+        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()), cv::Point2d(0,0), COLOR_WHITE);
 
     // Show the image
     ui->radarPlot->showImage( image.GetMatImg() );
@@ -407,6 +491,17 @@ void MainWindow::ParseTelemetry(QString teleStr)
     cv::Mat out(lastPlot.size(), lastPlot.type(), cv::Scalar::all(255));
     lastPlot(cv::Rect(1,0, lastPlot.cols-1,lastPlot.rows)).copyTo(out(cv::Rect(0,0,lastPlot.cols-1,lastPlot.rows)));
     out.copyTo(lastPlot);
+    //  Match color of background in shifted line with that of GUI background
+    for (uint16_t i = 0; i < lastPlot.rows; i++)
+    {
+        cv::Vec3b &pix = lastPlot.at<cv::Vec3b>(i, lastPlot.cols-1);
+
+        if (pix.val[0] != 0xFF)
+            break;
+        pix.val[0] = 0x45;
+        pix.val[1] = 0x45;
+        pix.val[2] = 0x45;
+    }
 
     //  Copy graph into new holder to be able to apply axes
     OCVGraph temp(latencyGraph);
@@ -509,7 +604,7 @@ void MainWindow::acceptCliTelemetry(void)
 {
     tcpCliTelemetry = tcpStelemetry.nextPendingConnection();
     LogLine("Have client on telemetry: " + tcpCliTelemetry->peerAddress().toString());
-    ui->telemetry_L->setStyleSheet("background-color:rgb(0, 255, 29);");
+    ui->telemetry_L->setStyleSheet("background-color:rgb(0, 255, 29);\ncolor:#454545;\nborder-radius:3px;");
     connect(tcpCliTelemetry, SIGNAL(readyRead()),
             this, SLOT(readDataTelemetry()));
     connect(tcpCliTelemetry, SIGNAL(aboutToClose()), this, SLOT(sockTelClose()));
@@ -536,7 +631,7 @@ void MainWindow::readDataTelemetry(void)
  */
 void MainWindow::sockTelClose()
 {
-    ui->telemetry_L->setStyleSheet("background-color:rgb(255, 0, 4);");
+    ui->telemetry_L->setStyleSheet("background-color:rgb(255, 0, 4);\ncolor:#454545;\nborder-radius:3px;");
 }
 
 ///-----------------------------------------------------------------------------
@@ -549,7 +644,7 @@ void MainWindow::acceptCliCommands(void)
 {
     tcpCliCommands = tcpScommands.nextPendingConnection();
     LogLine("Have client on commands: " + tcpCliCommands->peerAddress().toString());
-    ui->commands_L->setStyleSheet("background-color:rgb(0, 255, 29);");
+    ui->commands_L->setStyleSheet("background-color:rgb(0, 255, 29);\ncolor:#454545;\nborder-radius:3px;");
     connect(tcpCliCommands, SIGNAL(readyRead()),
             this, SLOT(readDataCommands()));
     connect(tcpCliCommands, SIGNAL(aboutToClose()), this, SLOT(sockCommClose()));
@@ -571,7 +666,9 @@ void MainWindow::readDataCommands(void)
       QString qsBuffer(buffer);
       //    If string doesn't contain NACK, it's been acknowledged by vehicle
       if (!qsBuffer.contains("NACK"))
-          _ackReq++;
+          _ackReq++, sendStatus = COMMANDS_ACK;
+      else
+          sendStatus = COMMANDS_NACK;
       //    Update quality of service
       ui->qos_PrB->setValue(_ackReq*100/_sentReq);
   }
@@ -584,7 +681,7 @@ void MainWindow::readDataCommands(void)
 void MainWindow::sockCommClose()
 {
     LogLine("Comm closing");
-    ui->commands_L->setStyleSheet("background-color:rgb(255, 0, 4);");
+    ui->commands_L->setStyleSheet("background-color:rgb(255, 0, 4);\ncolor:#454545;\nborder-radius:3px;");
 }
 
 ///-----------------------------------------------------------------------------
@@ -630,7 +727,7 @@ void MainWindow::on_reboot_BT_clicked()
     char command[50] = {0};
     char args[2] = {REBOOT_CODE, 0};
 
-    MakeRequest((uint8_t*)command, PLAT_UID, PLAT_REBOOT, -3000, 0);
+    MakeRequest((uint8_t*)command, PLAT_UID, PLAT_REBOOT, 0, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
 
     SendCommand(command, commandLen);
@@ -660,7 +757,7 @@ void MainWindow::on_scan_bt_clicked()
     char command[50] = {0};
     char args[] = {"\x00"};
 
-    MakeRequest((uint8_t*)command, RADAR_UID, RADAR_SCAN, -3000, 0);
+    MakeRequest((uint8_t*)command, RADAR_UID, RADAR_SCAN, 0, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
 
     SendCommand(command, commandLen);
@@ -686,7 +783,7 @@ void MainWindow::on_commands_L_2_clicked()
 void MainWindow::on_addTask_PB_clicked()
 {
     //  Create new entry
-    MissionEntry *tmp = new MissionEntry(mEntries.size(), ui->scrollAreaWidgetContents);
+    MissionEntry *tmp = new MissionEntry(mEntries.size(), ui->scrollAreaWidgetContents, ui->mStart_LE);
     mEntries.push_back(tmp);
     //  Connect 'Deleted' signal to 'UpdateIDs' slot so that we automatically
     //  change IDs of all entries when signal is deleted
@@ -719,7 +816,7 @@ void MainWindow::on_evlogUpd_PB_clicked()
 {
     uint16_t commandLen = 0;
     char command[50] = {0};
-    char args[] = {"\x17"};
+    char args[] = {"\x00"};
 
     MakeRequest((uint8_t*)command, PLAT_UID, PLAT_EVLOG_DUMP, 0, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
@@ -737,7 +834,7 @@ void MainWindow::on_tsUpd_PB_clicked()
 
     uint16_t commandLen = 0;
     char command[50] = {0};
-    char args[] = {"\x0"};
+    char args[] = {"\x00"};
 
     MakeRequest((uint8_t*)command, PLAT_UID, PLAT_TS_DUMP, 0, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
@@ -750,14 +847,54 @@ void MainWindow::on_tsUpd_PB_clicked()
  */
 void MainWindow::on_schedMiss_PB_clicked()
 {
-    for (auto X : mEntries)
-    {
-        uint16_t commandLen = 0;
-        char command[50] = {0};
-        char args[] = {"\x0"};
+    //  Reset status
+    sendStatus = COMMANDS_RESET;
+    //  Start sending through timeout event
+    sendTimer->start(200);  //  send max 5 commands per second
+}
 
-        MakeRequest((uint8_t*)command, X->LibUID(), X->TaskID(), 0, 0);
-        AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
-        LogLine(QString(command));
-    }
+/**
+ * @brief Field evaluation triggered by changing content of mission time
+ * Function evaluates content of mission starting time text box in order to
+ * ensure that content of it always evaluates to a number
+ * @param arg1
+ */
+void MainWindow::on_mStart_LE_textChanged(const QString &arg1)
+{
+    //  Allow user to type in only digits and decimal comma
+    if (arg1.length() > 0)
+        if (!(arg1[arg1.length()-1].isDigit() || (arg1[arg1.length()-1] == '.')))
+        {
+            if (arg1.length() == 1)
+                ui->mStart_LE->setText("");
+            else
+                ui->mStart_LE->setText(arg1.left(arg1.length()-1));
+        }
+
+    ui->missionT_GB->setEnabled((arg1.length() > 0));
+    ui->missionT_GB->setVisible((arg1.length() > 0));
+
+    //  Display warning if mission is scheduled in past
+    if (ui->mStart_LE->text().toDouble() < ui->mUtime_LE_2->text().toDouble())
+        ui->warn_GV->setVisible(true);
+    else
+        ui->warn_GV->setVisible(false);
+}
+
+void MainWindow::on_engReb_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[] = {"\x17"};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_REBOOT, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_missPer_CB_clicked(bool checked)
+{
+    ui->missPer_LE->setVisible(checked);
+    ui->missRep_LE->setVisible(checked);
 }

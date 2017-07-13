@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Rover control</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:#454545;
+color:#DDDDDD;</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -82,7 +86,7 @@
         <rect>
          <x>110</x>
          <y>30</y>
-         <width>21</width>
+         <width>16</width>
          <height>21</height>
         </rect>
        </property>
@@ -95,7 +99,7 @@
         <rect>
          <x>110</x>
          <y>60</y>
-         <width>21</width>
+         <width>16</width>
          <height>21</height>
         </rect>
        </property>
@@ -115,6 +119,9 @@
          <height>22</height>
         </rect>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
       </widget>
       <widget class="QLineEdit" name="deltams_LE">
        <property name="enabled">
@@ -128,6 +135,9 @@
          <height>22</height>
         </rect>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
       </widget>
      </widget>
      <widget class="QGroupBox" name="orientation_GB">
@@ -135,7 +145,7 @@
        <rect>
         <x>0</x>
         <y>260</y>
-        <width>131</width>
+        <width>135</width>
         <height>91</height>
        </rect>
       </property>
@@ -152,18 +162,21 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>20</y>
+         <y>23</y>
          <width>101</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
       <widget class="QLabel" name="roll_L">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>59</width>
+         <y>23</y>
+         <width>15</width>
          <height>21</height>
         </rect>
        </property>
@@ -178,18 +191,21 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>40</y>
+         <y>43</y>
          <width>101</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
       <widget class="QLabel" name="pitch_L">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>40</y>
-         <width>59</width>
+         <y>43</y>
+         <width>15</width>
          <height>21</height>
         </rect>
        </property>
@@ -201,8 +217,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>60</y>
-         <width>59</width>
+         <y>63</y>
+         <width>15</width>
          <height>21</height>
         </rect>
        </property>
@@ -217,12 +233,21 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>60</y>
+         <y>63</y>
          <width>101</width>
          <height>22</height>
         </rect>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
       </widget>
+      <zorder>roll_L</zorder>
+      <zorder>pitch_L</zorder>
+      <zorder>yaw_L</zorder>
+      <zorder>yaw_LE</zorder>
+      <zorder>roll_LE</zorder>
+      <zorder>pitch_LE</zorder>
      </widget>
      <widget class="QGroupBox" name="status_GB">
       <property name="geometry">
@@ -249,7 +274,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Platform</string>
@@ -268,7 +295,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Engines</string>
@@ -287,7 +316,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Comm</string>
@@ -306,7 +337,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Radar</string>
@@ -325,7 +358,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Inertial</string>
@@ -344,7 +379,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(126, 189, 189);</string>
+        <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
        </property>
        <property name="text">
         <string>Hardware</string>
@@ -450,6 +487,9 @@
         <height>261</height>
        </rect>
       </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -526,7 +566,7 @@
        <rect>
         <x>290</x>
         <y>260</y>
-        <width>101</width>
+        <width>104</width>
         <height>91</height>
        </rect>
       </property>
@@ -539,8 +579,8 @@
       <widget class="CQtOpenCVViewerGl" name="latencyPlot" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>20</y>
+         <x>2</x>
+         <y>30</y>
          <width>100</width>
          <height>50</height>
         </rect>
@@ -594,7 +634,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="inertial_TB">
        <property name="geometry">
@@ -618,10 +658,15 @@
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgb(126, 189, 189);</string>
+         <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
         </property>
         <property name="text">
          <string>Inertial</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
        <widget class="QPushButton" name="inReb_PB">
@@ -760,10 +805,15 @@ background-repeat:no-repeat;</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgb(126, 189, 189);</string>
+         <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
         </property>
         <property name="text">
          <string>Platform</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
        <widget class="QGraphicsView" name="platPinv_GV">
@@ -856,10 +906,15 @@ background-repeat:no-repeat;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:rgb(126, 189, 189);</string>
+          <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
          </property>
          <property name="text">
           <string>Communication</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </widget>
@@ -927,10 +982,15 @@ background-repeat:no-repeat;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:rgb(126, 189, 189);</string>
+          <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
          </property>
          <property name="text">
           <string>Task scheduler</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
         <widget class="QPlainTextEdit" name="tsLog_TE">
@@ -1011,10 +1071,15 @@ background-repeat:no-repeat;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:rgb(126, 189, 189);</string>
+          <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
          </property>
          <property name="text">
           <string>Event logger</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
         <widget class="QPushButton" name="evlogUpd_PB">
@@ -1080,10 +1145,15 @@ background-repeat:no-repeat;</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgb(126, 189, 189);</string>
+         <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
         </property>
         <property name="text">
          <string>Radar</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
        <widget class="QGraphicsView" name="radPinv_GV">
@@ -1132,10 +1202,15 @@ background-repeat:no-repeat;</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgb(126, 189, 189);</string>
+         <string notr="true">background-color:rgb(126, 189, 189);
+color:#454545;
+border-radius:3px;</string>
         </property>
         <property name="text">
          <string>Engines</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
        <widget class="QGraphicsView" name="engPinv_GV">
@@ -1161,6 +1236,19 @@ background-repeat:no-repeat;</string>
          <enum>QFrame::NoFrame</enum>
         </property>
        </widget>
+       <widget class="QPushButton" name="engReb_PB">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>0</y>
+          <width>80</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reboot</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -1173,7 +1261,7 @@ background-repeat:no-repeat;</string>
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>311</width>
+        <width>281</width>
         <height>21</height>
        </rect>
       </property>
@@ -1181,7 +1269,7 @@ background-repeat:no-repeat;</string>
        <string notr="true">color:#FF0000;</string>
       </property>
       <property name="text">
-       <string>Mission starting time T=                                ms</string>
+       <string>Mission starting time T=                                s</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="mStart_LE">
@@ -1198,6 +1286,9 @@ background-repeat:no-repeat;</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="missionT_GB">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -1271,10 +1362,10 @@ background-repeat:no-repeat;</string>
 mission</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="missPer_CB">
        <property name="geometry">
         <rect>
-         <x>260</x>
+         <x>250</x>
          <y>270</y>
          <width>171</width>
          <height>20</height>
@@ -1282,6 +1373,38 @@ mission</string>
        </property>
        <property name="text">
         <string>Create periodic mission</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="missPer_LE">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>270</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Period [s]</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="missRep_LE">
+       <property name="geometry">
+        <rect>
+         <x>510</x>
+         <y>270</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of times to repeat the mission&lt;/p&gt;&lt;p&gt;Set to -1 for infinite number of repeats&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Repeats</string>
        </property>
       </widget>
      </widget>
@@ -1295,7 +1418,7 @@ mission</string>
        </rect>
       </property>
       <property name="text">
-       <string>Current vehice time T=                                 ms</string>
+       <string>Current vehice time T=                                 s</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="mUtime_LE_2">
@@ -1310,68 +1433,37 @@ mission</string>
         <height>22</height>
        </rect>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="text">
        <string/>
       </property>
      </widget>
+     <widget class="QGraphicsView" name="warn_GV">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>10</y>
+        <width>18</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="toolTip">
+       <string extracomment="Priority inversion event: Module emitted a lower-priority event after prevoiusly emitting a higher priority one. This doesn't necessarily points to module malfunctioning but it be an indicator. Try to reboot the module.">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;WARNING&lt;/p&gt;&lt;p&gt;Mission is scheduled in past according to vehicle's&lt;/p&gt;&lt;p&gt;internal timer. This means that all tasks will be &lt;/p&gt;&lt;p&gt;executed as soon as they arrive at vehicle.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-image:url(:/new/prefix1/imgs/danger.png);
+background-repeat:no-repeat;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QLabel" name="telemetry_L">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>10</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgb(255, 0, 4);</string>
-    </property>
-    <property name="text">
-     <string>Telemetry</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="commands_L">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>10</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgb(255, 0, 4);</string>
-    </property>
-    <property name="text">
-     <string>Commands</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="commands_L_2">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>10</y>
-      <width>80</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:transparent</string>
-    </property>
-    <property name="text">
-     <string> </string>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
    </widget>
    <widget class="QLabel" name="mUtime_L">
     <property name="geometry">
@@ -1397,6 +1489,9 @@ mission</string>
       <width>111</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string/>
@@ -1433,6 +1528,106 @@ mission</string>
     <property name="format">
      <string extracomment="QoS">%p%</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>10</y>
+      <width>171</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox::title
+{
+subcontrol-origin: margin;
+subcontrol-position:bottom center;
+}
+QGroupBox
+{
+margin-top: -2.5ex;
+border:1px solid gray;
+border-radius:5px;
+} 
+</string>
+    </property>
+    <property name="title">
+     <string>Streams</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QLabel" name="telemetry_L">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255, 0, 4);
+color:#454545;
+border-radius:3px;</string>
+     </property>
+     <property name="text">
+      <string>Telemetry</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="commands_L_2">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>71</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Click to reset communication module</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:transparent</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="commands_L">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255, 0, 4);
+color:#454545;
+border-radius:3px;</string>
+     </property>
+     <property name="text">
+      <string>Commands</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <zorder>commands_L</zorder>
+    <zorder>telemetry_L</zorder>
+    <zorder>commands_L_2</zorder>
    </widget>
   </widget>
  </widget>

@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     cqtopencvviewergl.cpp \
     ocvgraph.cpp \
-    roverinterface.cpp
+    roverinterface.cpp \
+    missionentry.cpp
 
 HEADERS  += mainwindow.h \
     roverinterface.h \
     cqtopencvviewergl.h \
-    ocvgraph.h
+    ocvgraph.h \
+    missionentry.h
 
 FORMS    += mainwindow.ui
 

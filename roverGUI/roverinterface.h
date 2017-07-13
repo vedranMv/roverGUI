@@ -52,7 +52,7 @@ const char allTasks[10][10][30] =
     {
         {"Radar scan"},
         {"Set horizontal angle"},
-        {"Set vertical anglet"}
+        {"Set vertical angle"}
     },
     {
         {"Drive direction"},
@@ -75,7 +75,8 @@ const char allTasks[10][10][30] =
         {"Dump scheduled tasks"}
     },
     {
-        {"Drop log"}
+        {"Drop log"},
+        {"Reboot"}
     }
 };
 
@@ -125,17 +126,17 @@ const char espTasks[][20] =
 #define RADAR_SCAN          0
 //  Set horizontal angle for radar
 //  Args: angle(4B)
-#define RADAR_SETH          2
+#define RADAR_SETH          1
 //  Set vertical angle of radar
 //  Args: angle(4B)
-#define RADAR_SETV          3
+#define RADAR_SETV          2
 
 //  Readable names of tasks above
 const char radarTasks[][30] =
 {
     {"Radar scan"},
     {"Set horizontal angle"},
-    {"Set vertical anglet"}
+    {"Set vertical angle"}
 };
 
 ///-----------------------------------------------------------------------------
@@ -146,12 +147,15 @@ const char radarTasks[][30] =
 /// Definitions of ServiceID for service offered by this module
 //  Move rover in a basic direction for a given distance or angle
 //  Args: direction(uint8_t)|length-or-angle(4B float)|blocking(1B)
-#define ENG_MOVE_ENG        0
+#define ENG_T_MOVE_ENG        0
 //  Move rover along a circular path given by
 //  Args: distance(4B float)|angle(4B float)|small-radius(4B float)
-#define ENG_MOVE_ARC        1
+#define ENG_T_MOVE_ARC        1
 //  Args: direction(uint8_t)|leftPercent(4B float)|rightPercent(4B float)
-#define ENG_MOVE_PERC       2
+#define ENG_T_MOVE_PERC       2
+//  Reboot engines module
+//  Args: 0x17 reboot code
+#define ENG_T_REBOOT        3
 
 //  Readable names of tasks above
 const char engineTasks[][30] =
@@ -160,6 +164,23 @@ const char engineTasks[][30] =
     {"Drive arc"},
     {"Drive at % wheel speed"}
 };
+
+/**     Movement direction definitions for H-bridge - Direction macros  */
+#define ENG_DIR_FW 	0x0A	//  Move forward H-bridge configuration  1010
+#define ENG_DIR_BW 	0x05	//  Move backward H-bridge configuration 0101
+#define ENG_DIR_L 	0x09	//  Turn left H-bridge configuration     1001
+#define ENG_DIR_R 	0x06	//  Turn right H-bridge configuration    0110
+//  Readable names of direction
+const char engineDirN[5][20] =
+{
+    {"Forward"},
+    {"Backward"},
+    {"Left"},
+    {"Right"}
+};
+
+//  Relating value index to name index
+const uint8_t engineDirV[5] = {0x0A, 0x05, 0x09, 0x06, 0x00};
 
 ///-----------------------------------------------------------------------------
 ///         Inertial unit(MPU9250) task IDs
@@ -218,13 +239,16 @@ const char platTasks[][30] =
 /// Definitions of ServiceID for service offered by this module
 //  Drop all data in the event log, but keep higest-prio. event, last occurred
 //  event and existence of priority inversion
+//  Arg:timestamp(4B) before all data is dropped
 #define EVLOG_DROP          0
-#define EVLOG_REBOOT        1   //  Reset event log; clear EVERYTHING
+//  Reset event log; clear EVERYTHING
+#define EVLOG_REBOOT        1
 
 //  Readable names of tasks above
 const char evlogTasks[][20] =
 {
-    {"Drop log"}
+    {"Drop log"},
+    {"Reboot"}
 };
 
 ///-----------------------------------------------------------------------------
@@ -269,7 +293,8 @@ const char events[][30] =
  * @param time
  * @param repeats
  */
-void MakeRequest(uint8_t *req, uint16_t uid, uint16_t task, int32_t time, int32_t repeats);
+void MakeRequest(uint8_t *req, uint16_t uid, uint16_t task, int32_t time,
+                 int32_t repeats, int32_t period = 0);
 /**
  * @brief Append arguments to the previously constructed request
  * @note Has to be called even if there are no arguments (argLen=0)

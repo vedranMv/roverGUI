@@ -116,6 +116,7 @@ public:
     QWidget *engines_TB;
     QLabel *engines_L_2;
     QGraphicsView *engPinv_GV;
+    QPushButton *engReb_PB;
     QWidget *tab_3;
     QLabel *mStart_L;
     QLineEdit *mStart_LE;
@@ -124,16 +125,20 @@ public:
     QScrollArea *missionScroll_SA;
     QWidget *scrollAreaWidgetContents;
     QPushButton *schedMiss_PB;
-    QCheckBox *checkBox;
+    QCheckBox *missPer_CB;
+    QLineEdit *missPer_LE;
+    QLineEdit *missRep_LE;
     QLabel *mUtime_L_2;
     QLineEdit *mUtime_LE_2;
-    QLabel *telemetry_L;
-    QLabel *commands_L;
-    QPushButton *commands_L_2;
+    QGraphicsView *warn_GV;
     QLabel *mUtime_L;
     QLineEdit *mUtime_LE;
     QLabel *qos_L;
     QProgressBar *qos_PrB;
+    QGroupBox *groupBox;
+    QLabel *telemetry_L;
+    QPushButton *commands_L_2;
+    QLabel *commands_L;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -141,6 +146,8 @@ public:
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(751, 428);
         MainWindow->setMouseTracking(true);
+        MainWindow->setStyleSheet(QLatin1String("background-color:#454545;\n"
+"color:#DDDDDD;"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
@@ -161,43 +168,54 @@ public:
         deltams_L->setGeometry(QRect(10, 60, 16, 21));
         ms_L = new QLabel(uptime_GB);
         ms_L->setObjectName(QStringLiteral("ms_L"));
-        ms_L->setGeometry(QRect(110, 30, 21, 21));
+        ms_L->setGeometry(QRect(110, 30, 16, 21));
         ms_L_2 = new QLabel(uptime_GB);
         ms_L_2->setObjectName(QStringLiteral("ms_L_2"));
-        ms_L_2->setGeometry(QRect(110, 60, 21, 21));
+        ms_L_2->setGeometry(QRect(110, 60, 16, 21));
         utime_LE = new QLineEdit(uptime_GB);
         utime_LE->setObjectName(QStringLiteral("utime_LE"));
         utime_LE->setEnabled(true);
         utime_LE->setGeometry(QRect(20, 30, 81, 22));
+        utime_LE->setFocusPolicy(Qt::NoFocus);
         deltams_LE = new QLineEdit(uptime_GB);
         deltams_LE->setObjectName(QStringLiteral("deltams_LE"));
         deltams_LE->setEnabled(true);
         deltams_LE->setGeometry(QRect(20, 60, 81, 22));
+        deltams_LE->setFocusPolicy(Qt::NoFocus);
         orientation_GB = new QGroupBox(tab);
         orientation_GB->setObjectName(QStringLiteral("orientation_GB"));
-        orientation_GB->setGeometry(QRect(0, 260, 131, 91));
+        orientation_GB->setGeometry(QRect(0, 260, 135, 91));
         orientation_GB->setAlignment(Qt::AlignCenter);
         roll_LE = new QLineEdit(orientation_GB);
         roll_LE->setObjectName(QStringLiteral("roll_LE"));
         roll_LE->setEnabled(true);
-        roll_LE->setGeometry(QRect(30, 20, 101, 22));
+        roll_LE->setGeometry(QRect(30, 23, 101, 22));
+        roll_LE->setFocusPolicy(Qt::NoFocus);
         roll_L = new QLabel(orientation_GB);
         roll_L->setObjectName(QStringLiteral("roll_L"));
-        roll_L->setGeometry(QRect(10, 20, 59, 21));
+        roll_L->setGeometry(QRect(10, 23, 15, 21));
         pitch_LE = new QLineEdit(orientation_GB);
         pitch_LE->setObjectName(QStringLiteral("pitch_LE"));
         pitch_LE->setEnabled(true);
-        pitch_LE->setGeometry(QRect(30, 40, 101, 22));
+        pitch_LE->setGeometry(QRect(30, 43, 101, 22));
+        pitch_LE->setFocusPolicy(Qt::NoFocus);
         pitch_L = new QLabel(orientation_GB);
         pitch_L->setObjectName(QStringLiteral("pitch_L"));
-        pitch_L->setGeometry(QRect(10, 40, 59, 21));
+        pitch_L->setGeometry(QRect(10, 43, 15, 21));
         yaw_L = new QLabel(orientation_GB);
         yaw_L->setObjectName(QStringLiteral("yaw_L"));
-        yaw_L->setGeometry(QRect(10, 60, 59, 21));
+        yaw_L->setGeometry(QRect(10, 63, 15, 21));
         yaw_LE = new QLineEdit(orientation_GB);
         yaw_LE->setObjectName(QStringLiteral("yaw_LE"));
         yaw_LE->setEnabled(true);
-        yaw_LE->setGeometry(QRect(30, 60, 101, 22));
+        yaw_LE->setGeometry(QRect(30, 63, 101, 22));
+        yaw_LE->setFocusPolicy(Qt::NoFocus);
+        roll_L->raise();
+        pitch_L->raise();
+        yaw_L->raise();
+        yaw_LE->raise();
+        roll_LE->raise();
+        pitch_LE->raise();
         status_GB = new QGroupBox(tab);
         status_GB->setObjectName(QStringLiteral("status_GB"));
         status_GB->setGeometry(QRect(420, 0, 151, 91));
@@ -205,32 +223,44 @@ public:
         platform_L = new QLabel(status_GB);
         platform_L->setObjectName(QStringLiteral("platform_L"));
         platform_L->setGeometry(QRect(10, 30, 59, 14));
-        platform_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        platform_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         platform_L->setAlignment(Qt::AlignCenter);
         engines_L = new QLabel(status_GB);
         engines_L->setObjectName(QStringLiteral("engines_L"));
         engines_L->setGeometry(QRect(10, 50, 59, 14));
-        engines_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        engines_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         engines_L->setAlignment(Qt::AlignCenter);
         comm_L = new QLabel(status_GB);
         comm_L->setObjectName(QStringLiteral("comm_L"));
         comm_L->setGeometry(QRect(10, 70, 59, 14));
-        comm_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        comm_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         comm_L->setAlignment(Qt::AlignCenter);
         radar_L = new QLabel(status_GB);
         radar_L->setObjectName(QStringLiteral("radar_L"));
         radar_L->setGeometry(QRect(80, 30, 59, 14));
-        radar_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        radar_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         radar_L->setAlignment(Qt::AlignCenter);
         inertial_L = new QLabel(status_GB);
         inertial_L->setObjectName(QStringLiteral("inertial_L"));
         inertial_L->setGeometry(QRect(80, 50, 59, 14));
-        inertial_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        inertial_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         inertial_L->setAlignment(Qt::AlignCenter);
         hardware_L = new QLabel(status_GB);
         hardware_L->setObjectName(QStringLiteral("hardware_L"));
         hardware_L->setGeometry(QRect(80, 70, 59, 14));
-        hardware_L->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        hardware_L->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
         hardware_L->setAlignment(Qt::AlignCenter);
         scan_bt = new QPushButton(tab);
         scan_bt->setObjectName(QStringLiteral("scan_bt"));
@@ -257,6 +287,7 @@ public:
         log_TW = new QTabWidget(tab);
         log_TW->setObjectName(QStringLiteral("log_TW"));
         log_TW->setGeometry(QRect(410, 100, 331, 261));
+        log_TW->setTabShape(QTabWidget::Rounded);
         guilog_TAB = new QWidget();
         guilog_TAB->setObjectName(QStringLiteral("guilog_TAB"));
         clrLog = new QPushButton(guilog_TAB);
@@ -282,11 +313,11 @@ public:
         log_TW->addTab(vel_TAB, QString());
         latency_GB = new QGroupBox(tab);
         latency_GB->setObjectName(QStringLiteral("latency_GB"));
-        latency_GB->setGeometry(QRect(290, 260, 101, 91));
+        latency_GB->setGeometry(QRect(290, 260, 104, 91));
         latency_GB->setAlignment(Qt::AlignCenter);
         latencyPlot = new CQtOpenCVViewerGl(latency_GB);
         latencyPlot->setObjectName(QStringLiteral("latencyPlot"));
-        latencyPlot->setGeometry(QRect(0, 20, 100, 50));
+        latencyPlot->setGeometry(QRect(2, 30, 100, 50));
         updateTime_SB = new QDoubleSpinBox(tab);
         updateTime_SB->setObjectName(QStringLiteral("updateTime_SB"));
         updateTime_SB->setGeometry(QRect(340, 0, 71, 23));
@@ -308,7 +339,10 @@ public:
         inertial_L_2 = new QLabel(inertial_TB);
         inertial_L_2->setObjectName(QStringLiteral("inertial_L_2"));
         inertial_L_2->setGeometry(QRect(20, 2, 150, 14));
-        inertial_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        inertial_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        inertial_L_2->setAlignment(Qt::AlignCenter);
         inReb_PB = new QPushButton(inertial_TB);
         inReb_PB->setObjectName(QStringLiteral("inReb_PB"));
         inReb_PB->setGeometry(QRect(660, 0, 80, 22));
@@ -352,7 +386,10 @@ public:
         platform_L_2 = new QLabel(platform_TB);
         platform_L_2->setObjectName(QStringLiteral("platform_L_2"));
         platform_L_2->setGeometry(QRect(20, 2, 150, 14));
-        platform_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        platform_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        platform_L_2->setAlignment(Qt::AlignCenter);
         platPinv_GV = new QGraphicsView(platform_TB);
         platPinv_GV->setObjectName(QStringLiteral("platPinv_GV"));
         platPinv_GV->setGeometry(QRect(0, 0, 18, 18));
@@ -379,7 +416,10 @@ public:
         comm_L_2 = new QLabel(commI_GB);
         comm_L_2->setObjectName(QStringLiteral("comm_L_2"));
         comm_L_2->setGeometry(QRect(30, 22, 150, 14));
-        comm_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        comm_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        comm_L_2->setAlignment(Qt::AlignCenter);
         tsI_GB = new QGroupBox(platform_TB);
         tsI_GB->setObjectName(QStringLiteral("tsI_GB"));
         tsI_GB->setGeometry(QRect(210, 30, 331, 211));
@@ -398,7 +438,10 @@ public:
         ts_L_2 = new QLabel(tsI_GB);
         ts_L_2->setObjectName(QStringLiteral("ts_L_2"));
         ts_L_2->setGeometry(QRect(30, 22, 150, 14));
-        ts_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        ts_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        ts_L_2->setAlignment(Qt::AlignCenter);
         tsLog_TE = new QPlainTextEdit(tsI_GB);
         tsLog_TE->setObjectName(QStringLiteral("tsLog_TE"));
         tsLog_TE->setGeometry(QRect(0, 50, 331, 161));
@@ -421,7 +464,10 @@ public:
         evlog_L_2 = new QLabel(evlog_GB);
         evlog_L_2->setObjectName(QStringLiteral("evlog_L_2"));
         evlog_L_2->setGeometry(QRect(30, 22, 150, 14));
-        evlog_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        evlog_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        evlog_L_2->setAlignment(Qt::AlignCenter);
         evlogUpd_PB = new QPushButton(evlog_GB);
         evlogUpd_PB->setObjectName(QStringLiteral("evlogUpd_PB"));
         evlogUpd_PB->setGeometry(QRect(90, 70, 80, 22));
@@ -438,7 +484,10 @@ public:
         radar_L_2 = new QLabel(radar_TB);
         radar_L_2->setObjectName(QStringLiteral("radar_L_2"));
         radar_L_2->setGeometry(QRect(20, 2, 150, 14));
-        radar_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        radar_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        radar_L_2->setAlignment(Qt::AlignCenter);
         radPinv_GV = new QGraphicsView(radar_TB);
         radPinv_GV->setObjectName(QStringLiteral("radPinv_GV"));
         radPinv_GV->setGeometry(QRect(0, 0, 18, 18));
@@ -453,7 +502,10 @@ public:
         engines_L_2 = new QLabel(engines_TB);
         engines_L_2->setObjectName(QStringLiteral("engines_L_2"));
         engines_L_2->setGeometry(QRect(20, 2, 150, 14));
-        engines_L_2->setStyleSheet(QStringLiteral("background-color:rgb(126, 189, 189);"));
+        engines_L_2->setStyleSheet(QLatin1String("background-color:rgb(126, 189, 189);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        engines_L_2->setAlignment(Qt::AlignCenter);
         engPinv_GV = new QGraphicsView(engines_TB);
         engPinv_GV->setObjectName(QStringLiteral("engPinv_GV"));
         engPinv_GV->setGeometry(QRect(0, 0, 18, 18));
@@ -461,13 +513,16 @@ public:
         engPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         engPinv_GV->setFrameShape(QFrame::NoFrame);
+        engReb_PB = new QPushButton(engines_TB);
+        engReb_PB->setObjectName(QStringLiteral("engReb_PB"));
+        engReb_PB->setGeometry(QRect(660, 0, 80, 22));
         toolBox->addItem(engines_TB, QStringLiteral("Engines"));
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
         mStart_L = new QLabel(tab_3);
         mStart_L->setObjectName(QStringLiteral("mStart_L"));
-        mStart_L->setGeometry(QRect(10, 10, 311, 21));
+        mStart_L->setGeometry(QRect(10, 10, 281, 21));
         mStart_L->setStyleSheet(QStringLiteral("color:#FF0000;"));
         mStart_LE = new QLineEdit(tab_3);
         mStart_LE->setObjectName(QStringLiteral("mStart_LE"));
@@ -475,6 +530,7 @@ public:
         mStart_LE->setGeometry(QRect(160, 10, 113, 22));
         missionT_GB = new QGroupBox(tab_3);
         missionT_GB->setObjectName(QStringLiteral("missionT_GB"));
+        missionT_GB->setEnabled(false);
         missionT_GB->setGeometry(QRect(0, 40, 741, 311));
         missionT_GB->setStyleSheet(QStringLiteral(""));
         addTask_PB = new QPushButton(missionT_GB);
@@ -497,9 +553,15 @@ public:
         schedMiss_PB = new QPushButton(missionT_GB);
         schedMiss_PB->setObjectName(QStringLiteral("schedMiss_PB"));
         schedMiss_PB->setGeometry(QRect(620, 260, 111, 41));
-        checkBox = new QCheckBox(missionT_GB);
-        checkBox->setObjectName(QStringLiteral("checkBox"));
-        checkBox->setGeometry(QRect(260, 270, 171, 20));
+        missPer_CB = new QCheckBox(missionT_GB);
+        missPer_CB->setObjectName(QStringLiteral("missPer_CB"));
+        missPer_CB->setGeometry(QRect(250, 270, 171, 20));
+        missPer_LE = new QLineEdit(missionT_GB);
+        missPer_LE->setObjectName(QStringLiteral("missPer_LE"));
+        missPer_LE->setGeometry(QRect(420, 270, 81, 22));
+        missRep_LE = new QLineEdit(missionT_GB);
+        missRep_LE->setObjectName(QStringLiteral("missRep_LE"));
+        missRep_LE->setGeometry(QRect(510, 270, 81, 22));
         mUtime_L_2 = new QLabel(tab_3);
         mUtime_L_2->setObjectName(QStringLiteral("mUtime_L_2"));
         mUtime_L_2->setGeometry(QRect(440, 10, 291, 21));
@@ -507,22 +569,15 @@ public:
         mUtime_LE_2->setObjectName(QStringLiteral("mUtime_LE_2"));
         mUtime_LE_2->setEnabled(true);
         mUtime_LE_2->setGeometry(QRect(590, 10, 111, 22));
+        mUtime_LE_2->setFocusPolicy(Qt::NoFocus);
+        warn_GV = new QGraphicsView(tab_3);
+        warn_GV->setObjectName(QStringLiteral("warn_GV"));
+        warn_GV->setGeometry(QRect(300, 10, 18, 18));
+        warn_GV->setMouseTracking(true);
+        warn_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
+"background-repeat:no-repeat;"));
+        warn_GV->setFrameShape(QFrame::NoFrame);
         tabWidget->addTab(tab_3, QString());
-        telemetry_L = new QLabel(centralWidget);
-        telemetry_L->setObjectName(QStringLiteral("telemetry_L"));
-        telemetry_L->setGeometry(QRect(580, 10, 71, 20));
-        telemetry_L->setStyleSheet(QStringLiteral("background-color:rgb(255, 0, 4);"));
-        telemetry_L->setAlignment(Qt::AlignCenter);
-        commands_L = new QLabel(centralWidget);
-        commands_L->setObjectName(QStringLiteral("commands_L"));
-        commands_L->setGeometry(QRect(660, 10, 71, 20));
-        commands_L->setStyleSheet(QStringLiteral("background-color:rgb(255, 0, 4);"));
-        commands_L->setAlignment(Qt::AlignCenter);
-        commands_L_2 = new QPushButton(centralWidget);
-        commands_L_2->setObjectName(QStringLiteral("commands_L_2"));
-        commands_L_2->setGeometry(QRect(660, 10, 80, 22));
-        commands_L_2->setStyleSheet(QStringLiteral("background-color:transparent"));
-        commands_L_2->setFlat(true);
         mUtime_L = new QLabel(centralWidget);
         mUtime_L->setObjectName(QStringLiteral("mUtime_L"));
         mUtime_L->setGeometry(QRect(420, 10, 21, 21));
@@ -530,6 +585,7 @@ public:
         mUtime_LE->setObjectName(QStringLiteral("mUtime_LE"));
         mUtime_LE->setEnabled(true);
         mUtime_LE->setGeometry(QRect(440, 10, 111, 22));
+        mUtime_LE->setFocusPolicy(Qt::NoFocus);
         qos_L = new QLabel(centralWidget);
         qos_L->setObjectName(QStringLiteral("qos_L"));
         qos_L->setGeometry(QRect(250, 10, 31, 21));
@@ -538,13 +594,52 @@ public:
         qos_PrB->setGeometry(QRect(280, 10, 118, 23));
         qos_PrB->setValue(0);
         qos_PrB->setTextVisible(true);
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setGeometry(QRect(570, 10, 171, 45));
+        groupBox->setLayoutDirection(Qt::LeftToRight);
+        groupBox->setStyleSheet(QLatin1String("QGroupBox::title\n"
+"{\n"
+"subcontrol-origin: margin;\n"
+"subcontrol-position:bottom center;\n"
+"}\n"
+"QGroupBox\n"
+"{\n"
+"margin-top: -2.5ex;\n"
+"border:1px solid gray;\n"
+"border-radius:5px;\n"
+"} \n"
+""));
+        groupBox->setFlat(false);
+        telemetry_L = new QLabel(groupBox);
+        telemetry_L->setObjectName(QStringLiteral("telemetry_L"));
+        telemetry_L->setGeometry(QRect(10, 10, 71, 20));
+        telemetry_L->setStyleSheet(QLatin1String("background-color:rgb(255, 0, 4);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        telemetry_L->setAlignment(Qt::AlignCenter);
+        commands_L_2 = new QPushButton(groupBox);
+        commands_L_2->setObjectName(QStringLiteral("commands_L_2"));
+        commands_L_2->setGeometry(QRect(90, 10, 71, 22));
+        commands_L_2->setStyleSheet(QStringLiteral("background-color:transparent"));
+        commands_L_2->setFlat(true);
+        commands_L = new QLabel(groupBox);
+        commands_L->setObjectName(QStringLiteral("commands_L"));
+        commands_L->setGeometry(QRect(90, 10, 71, 20));
+        commands_L->setStyleSheet(QLatin1String("background-color:rgb(255, 0, 4);\n"
+"color:#454545;\n"
+"border-radius:3px;"));
+        commands_L->setAlignment(Qt::AlignCenter);
+        commands_L->raise();
+        telemetry_L->raise();
+        commands_L_2->raise();
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
 
         tabWidget->setCurrentIndex(2);
         log_TW->setCurrentIndex(0);
-        toolBox->setCurrentIndex(3);
+        toolBox->setCurrentIndex(1);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -627,24 +722,38 @@ public:
 #ifndef QT_NO_TOOLTIP
         engPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
+        engReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
         toolBox->setItemText(toolBox->indexOf(engines_TB), QApplication::translate("MainWindow", "Engines", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Instruments", 0));
-        mStart_L->setText(QApplication::translate("MainWindow", "Mission starting time T=                                ms", 0));
+        mStart_L->setText(QApplication::translate("MainWindow", "Mission starting time T=                                s", 0));
         missionT_GB->setTitle(QApplication::translate("MainWindow", "Mission tasks", 0));
         addTask_PB->setText(QApplication::translate("MainWindow", "Add task", 0));
         schedMiss_PB->setText(QApplication::translate("MainWindow", "Schedule\n"
 "mission", 0));
-        checkBox->setText(QApplication::translate("MainWindow", "Create periodic mission", 0));
-        mUtime_L_2->setText(QApplication::translate("MainWindow", "Current vehice time T=                                 ms", 0));
+        missPer_CB->setText(QApplication::translate("MainWindow", "Create periodic mission", 0));
+        missPer_LE->setPlaceholderText(QApplication::translate("MainWindow", "Period [s]", 0));
+#ifndef QT_NO_TOOLTIP
+        missRep_LE->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Number of times to repeat the mission</p><p>Set to -1 for infinite number of repeats</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        missRep_LE->setText(QString());
+        missRep_LE->setPlaceholderText(QApplication::translate("MainWindow", "Repeats", 0));
+        mUtime_L_2->setText(QApplication::translate("MainWindow", "Current vehice time T=                                 s", 0));
         mUtime_LE_2->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        warn_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>WARNING</p><p>Mission is scheduled in past according to vehicle's</p><p>internal timer. This means that all tasks will be </p><p>executed as soon as they arrive at vehicle.</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Mission planner", 0));
-        telemetry_L->setText(QApplication::translate("MainWindow", "Telemetry", 0));
-        commands_L->setText(QApplication::translate("MainWindow", "Commands", 0));
-        commands_L_2->setText(QString());
         mUtime_L->setText(QApplication::translate("MainWindow", "T=", 0));
         mUtime_LE->setText(QString());
         qos_L->setText(QApplication::translate("MainWindow", "QoS", 0));
         qos_PrB->setFormat(QApplication::translate("MainWindow", "%p%", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Streams", 0));
+        telemetry_L->setText(QApplication::translate("MainWindow", "Telemetry", 0));
+#ifndef QT_NO_TOOLTIP
+        commands_L_2->setToolTip(QApplication::translate("MainWindow", "Click to reset communication module", 0));
+#endif // QT_NO_TOOLTIP
+        commands_L_2->setText(QString());
+        commands_L->setText(QApplication::translate("MainWindow", "Commands", 0));
     } // retranslateUi
 
 };

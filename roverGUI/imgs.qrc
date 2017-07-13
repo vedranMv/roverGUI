@@ -2,4 +2,9 @@
     <qresource prefix="/new/prefix1">
         <file>imgs/danger.png</file>
     </qresource>
+    <qresource prefix="/themes/dark">
+        <file>themes/dark/labels.css</file>
+        <file>themes/dark/socketConn.css</file>
+        <file>themes/dark/socketDisconn.css</file>
+    </qresource>
 </RCC>
