@@ -14,7 +14,7 @@ GUI is still in development but some of the screen shots can be seen below:
 
 
 'Instruments' tab showing individual platform modules
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr.png)
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiPlat.png)
 
 
 'Mission planner' tab (in development)
