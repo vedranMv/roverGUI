@@ -5,7 +5,7 @@ Project contains QT-based application written to control a small homemade rover.
 GUI is still in development but some of the screen shots can be seen below:
 
 
-'Overview' tab
+'Overview' tab giving most important info
 ![alt tag](https://hsr.duckdns.org/images/roverGUI/guiOver.png)
 
 
@@ -13,8 +13,12 @@ GUI is still in development but some of the screen shots can be seen below:
 ![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr.png)
 
 
+'Instruments' tab showing individual platform modules
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr.png)
+
+
 'Mission planner' tab (in development)
 ![alt tag](https://hsr.duckdns.org/images/roverGUI/guiMiss.png)
 
 
-Note: This is mostly educational project, so some parts of the code might be considered "reinventing he wheel" but were made in order to get a better understanding of coding principles and practices :)
+Note: This is mostly educational project, so some parts of the code might be considered "reinventing the wheel" but were made in order to get a better understanding of coding principles and practices :)
