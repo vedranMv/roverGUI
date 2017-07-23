@@ -409,7 +409,7 @@ bool MainWindow::ParseCommandResp(QString respStr)
     if(respStr.length() < 100)
         return false;
     for (uint16_t i = 10; i <170; i++)
-        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()), cv::Point2d(0,0), COLOR_WHITE);
+        image.LinePolar((double)i, (double)((int)respStr.at(i-10+it).toAscii()/2), cv::Point2d(0,0), COLOR_WHITE);
 
     // Show the image
     ui->radarPlot->showImage( image.GetMatImg() );
@@ -897,4 +897,123 @@ void MainWindow::on_missPer_CB_clicked(bool checked)
 {
     ui->missPer_LE->setVisible(checked);
     ui->missRep_LE->setVisible(checked);
+}
+
+///-----------------------------------------------------------------------------
+///         Steering buttons (pressed & released events)               [CLICKED]
+///-----------------------------------------------------------------------------
+/**
+ * @brief Called by steering buttons when they are released, immidiately halts
+ * all running engines
+ */
+void MainWindow::HaltEngines()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    const float perc = 0.0;
+    char args[8] = {0};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_MOVE_PERC, 0, 0);
+    //  Assemble arguments
+    args[0] = ENG_DIR_FW;
+    memcpy((void*)(args+1), &perc, sizeof(float));
+    memcpy((void*)(args+1+sizeof(float)), &perc, sizeof(float));
+
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_fwd_PB_pressed()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    const float perc = 100.0;
+    char args[8] = {0};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_MOVE_PERC, 0, 0);
+    //  Assemble arguments
+    args[0] = ENG_DIR_FW;
+    memcpy((void*)(args+1), &perc, sizeof(float));
+    memcpy((void*)(args+1+sizeof(float)), &perc, sizeof(float));
+
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_bck_PB_pressed()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    const float perc = 100.0;
+    char args[8] = {0};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_MOVE_PERC, 0, 0);
+    //  Assemble arguments
+    args[0] = ENG_DIR_BW;
+    memcpy((void*)(args+1), &perc, sizeof(float));
+    memcpy((void*)(args+1+sizeof(float)), &perc, sizeof(float));
+
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_right_PB_pressed()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    float perc = 100.0;
+    char args[8] = {0};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_MOVE_PERC, 0, 0);
+    //  Assemble arguments
+    args[0] = ENG_DIR_FW;
+    memcpy((void*)(args+1), &perc, sizeof(float));
+    perc = 0.0;
+    memcpy((void*)(args+1+sizeof(float)), &perc, sizeof(float));
+
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_left_PB_pressed()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    float perc = 0.0;
+    char args[8] = {0};
+
+    MakeRequest((uint8_t*)command, ENGINES_UID, ENG_T_MOVE_PERC, 0, 0);
+    //  Assemble arguments
+    args[0] = ENG_DIR_FW;
+    memcpy((void*)(args+1), &perc, sizeof(float));
+    perc = 100.0;
+    memcpy((void*)(args+1+sizeof(float)), &perc, sizeof(float));
+
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_fwd_PB_released()
+{
+    HaltEngines();
+}
+
+void MainWindow::on_right_PB_released()
+{
+    HaltEngines();
+}
+
+void MainWindow::on_left_PB_released()
+{
+    HaltEngines();
+}
+
+void MainWindow::on_bck_PB_released()
+{
+    HaltEngines();
 }

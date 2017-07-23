@@ -34,7 +34,7 @@ color:#DDDDDD;</string>
      <bool>true</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -417,7 +417,7 @@ border-radius:3px;</string>
      <widget class="QGroupBox" name="steering">
       <property name="geometry">
        <rect>
-        <x>580</x>
+        <x>590</x>
         <y>0</y>
         <width>141</width>
         <height>91</height>
@@ -429,49 +429,65 @@ border-radius:3px;</string>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="fwd_PB">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>55</x>
          <y>30</y>
          <width>31</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>^</string>
+        <string>↑</string>
        </property>
        <property name="flat">
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="left_PB">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>15</x>
          <y>60</y>
          <width>31</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>&lt;</string>
+        <string>←</string>
        </property>
        <property name="flat">
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="right_PB">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>95</x>
          <y>60</y>
          <width>31</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>&gt;</string>
+        <string>→</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bck_PB">
+       <property name="geometry">
+        <rect>
+         <x>55</x>
+         <y>60</y>
+         <width>31</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>↓</string>
        </property>
        <property name="flat">
         <bool>false</bool>
@@ -1128,8 +1144,8 @@ border-radius:3px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>249</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1185,8 +1201,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>249</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">

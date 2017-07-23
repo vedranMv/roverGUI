@@ -54,6 +54,7 @@ private slots:
     void readDataCommands(void);
     void on_clrLog_clicked();
     void sendNext(void);
+    void HaltEngines();
 
     void on_reboot_BT_clicked();
 
@@ -91,6 +92,22 @@ private slots:
     void on_engReb_PB_clicked();
 
     void on_missPer_CB_clicked(bool checked);
+
+    void on_fwd_PB_pressed();
+
+    void on_fwd_PB_released();
+
+    void on_left_PB_pressed();
+
+    void on_right_PB_pressed();
+
+    void on_right_PB_released();
+
+    void on_left_PB_released();
+
+    void on_bck_PB_pressed();
+
+    void on_bck_PB_released();
 
 private:
     Ui::MainWindow *ui;
