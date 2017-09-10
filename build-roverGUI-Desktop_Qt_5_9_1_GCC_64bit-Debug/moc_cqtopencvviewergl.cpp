@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cqtopencvviewergl.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.7.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,12 +12,14 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'cqtopencvviewergl.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.7.0. It"
+#error "This file was generated using the moc from 5.9.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CQtOpenCVViewerGl_t {
     QByteArrayData data[9];
     char stringdata0[79];
@@ -84,9 +86,9 @@ void CQtOpenCVViewerGl::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         switch (_id) {
         case 0: _t->imageSizeChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 1: { bool _r = _t->showImage((*reinterpret_cast< const cv::Mat(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         case 2: { cv::Mat _r = _t->getImage();
-            if (_a[0]) *reinterpret_cast< cv::Mat*>(_a[0]) = _r; }  break;
+            if (_a[0]) *reinterpret_cast< cv::Mat*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -104,7 +106,7 @@ void CQtOpenCVViewerGl::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 
 const QMetaObject CQtOpenCVViewerGl::staticMetaObject = {
     { &QOpenGLWidget::staticMetaObject, qt_meta_stringdata_CQtOpenCVViewerGl.data,
-      qt_meta_data_CQtOpenCVViewerGl,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+      qt_meta_data_CQtOpenCVViewerGl,  qt_static_metacall, nullptr, nullptr}
 };
 
 
@@ -115,7 +117,7 @@ const QMetaObject *CQtOpenCVViewerGl::metaObject() const
 
 void *CQtOpenCVViewerGl::qt_metacast(const char *_clname)
 {
-    if (!_clname) return Q_NULLPTR;
+    if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_CQtOpenCVViewerGl.stringdata0))
         return static_cast<void*>(const_cast< CQtOpenCVViewerGl*>(this));
     if (!strcmp(_clname, "QOpenGLFunctions_2_0"))
@@ -143,7 +145,8 @@ int CQtOpenCVViewerGl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void CQtOpenCVViewerGl::imageSizeChanged(int _t1, int _t2)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
+QT_WARNING_POP
 QT_END_MOC_NAMESPACE

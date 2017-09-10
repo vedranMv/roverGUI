@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.0
+** Created by: Qt User Interface Compiler version 5.9.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGroupBox>
@@ -60,6 +61,7 @@ public:
     QLabel *radar_L;
     QLabel *inertial_L;
     QLabel *hardware_L;
+    QPushButton *clearStat_PB;
     QPushButton *scan_bt;
     CQtOpenCVViewerGl *radarPlot;
     QGroupBox *steering;
@@ -74,6 +76,7 @@ public:
     QWidget *vel_TAB;
     QPlainTextEdit *vel_TE;
     QPushButton *clrVel_PB;
+    QComboBox *filter_CB;
     QGroupBox *latency_GB;
     CQtOpenCVViewerGl *latencyPlot;
     QDoubleSpinBox *updateTime_SB;
@@ -92,6 +95,8 @@ public:
     CQtOpenCVViewerGl *yawPlot;
     QCheckBox *imuSamp_CB;
     QGraphicsView *inerPinv_GV;
+    QPushButton *inSofReb_PB;
+    CQtOpenCVViewerGl *rpPlot;
     QWidget *platform_TB;
     QLabel *platform_L_2;
     QGraphicsView *platPinv_GV;
@@ -155,6 +160,8 @@ public:
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tabWidget->setGeometry(QRect(0, 40, 751, 391));
         tabWidget->setMouseTracking(true);
+        tabWidget->setFocusPolicy(Qt::NoFocus);
+        tabWidget->setUsesScrollButtons(false);
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         reboot_BT = new QPushButton(tab);
@@ -178,11 +185,13 @@ public:
         utime_LE->setEnabled(true);
         utime_LE->setGeometry(QRect(20, 30, 81, 22));
         utime_LE->setFocusPolicy(Qt::NoFocus);
+        utime_LE->setReadOnly(true);
         deltams_LE = new QLineEdit(uptime_GB);
         deltams_LE->setObjectName(QStringLiteral("deltams_LE"));
         deltams_LE->setEnabled(true);
         deltams_LE->setGeometry(QRect(20, 60, 81, 22));
         deltams_LE->setFocusPolicy(Qt::NoFocus);
+        deltams_LE->setReadOnly(true);
         orientation_GB = new QGroupBox(tab);
         orientation_GB->setObjectName(QStringLiteral("orientation_GB"));
         orientation_GB->setGeometry(QRect(0, 260, 135, 91));
@@ -192,6 +201,7 @@ public:
         roll_LE->setEnabled(true);
         roll_LE->setGeometry(QRect(30, 23, 101, 22));
         roll_LE->setFocusPolicy(Qt::NoFocus);
+        roll_LE->setReadOnly(true);
         roll_L = new QLabel(orientation_GB);
         roll_L->setObjectName(QStringLiteral("roll_L"));
         roll_L->setGeometry(QRect(10, 23, 15, 21));
@@ -200,6 +210,7 @@ public:
         pitch_LE->setEnabled(true);
         pitch_LE->setGeometry(QRect(30, 43, 101, 22));
         pitch_LE->setFocusPolicy(Qt::NoFocus);
+        pitch_LE->setReadOnly(true);
         pitch_L = new QLabel(orientation_GB);
         pitch_L->setObjectName(QStringLiteral("pitch_L"));
         pitch_L->setGeometry(QRect(10, 43, 15, 21));
@@ -211,6 +222,7 @@ public:
         yaw_LE->setEnabled(true);
         yaw_LE->setGeometry(QRect(30, 63, 101, 22));
         yaw_LE->setFocusPolicy(Qt::NoFocus);
+        yaw_LE->setReadOnly(true);
         roll_L->raise();
         pitch_L->raise();
         yaw_L->raise();
@@ -263,6 +275,9 @@ public:
 "color:#454545;\n"
 "border-radius:3px;"));
         hardware_L->setAlignment(Qt::AlignCenter);
+        clearStat_PB = new QPushButton(status_GB);
+        clearStat_PB->setObjectName(QStringLiteral("clearStat_PB"));
+        clearStat_PB->setGeometry(QRect(80, 70, 61, 16));
         scan_bt = new QPushButton(tab);
         scan_bt->setObjectName(QStringLiteral("scan_bt"));
         scan_bt->setGeometry(QRect(0, 0, 80, 22));
@@ -276,22 +291,27 @@ public:
         fwd_PB = new QPushButton(steering);
         fwd_PB->setObjectName(QStringLiteral("fwd_PB"));
         fwd_PB->setGeometry(QRect(55, 30, 31, 22));
+        fwd_PB->setFocusPolicy(Qt::NoFocus);
         fwd_PB->setFlat(false);
         left_PB = new QPushButton(steering);
         left_PB->setObjectName(QStringLiteral("left_PB"));
         left_PB->setGeometry(QRect(15, 60, 31, 22));
+        left_PB->setFocusPolicy(Qt::NoFocus);
         left_PB->setFlat(false);
         right_PB = new QPushButton(steering);
         right_PB->setObjectName(QStringLiteral("right_PB"));
         right_PB->setGeometry(QRect(95, 60, 31, 22));
+        right_PB->setFocusPolicy(Qt::NoFocus);
         right_PB->setFlat(false);
         bck_PB = new QPushButton(steering);
         bck_PB->setObjectName(QStringLiteral("bck_PB"));
         bck_PB->setGeometry(QRect(55, 60, 31, 22));
+        bck_PB->setFocusPolicy(Qt::NoFocus);
         bck_PB->setFlat(false);
         log_TW = new QTabWidget(tab);
         log_TW->setObjectName(QStringLiteral("log_TW"));
         log_TW->setGeometry(QRect(410, 100, 331, 261));
+        log_TW->setFocusPolicy(Qt::NoFocus);
         log_TW->setTabShape(QTabWidget::Rounded);
         guilog_TAB = new QWidget();
         guilog_TAB->setObjectName(QStringLiteral("guilog_TAB"));
@@ -312,9 +332,14 @@ public:
         vel_TE = new QPlainTextEdit(vel_TAB);
         vel_TE->setObjectName(QStringLiteral("vel_TE"));
         vel_TE->setGeometry(QRect(0, 0, 331, 231));
+        vel_TE->setReadOnly(true);
         clrVel_PB = new QPushButton(vel_TAB);
         clrVel_PB->setObjectName(QStringLiteral("clrVel_PB"));
         clrVel_PB->setGeometry(QRect(250, 0, 80, 22));
+        clrVel_PB->setFocusPolicy(Qt::NoFocus);
+        filter_CB = new QComboBox(vel_TAB);
+        filter_CB->setObjectName(QStringLiteral("filter_CB"));
+        filter_CB->setGeometry(QRect(260, 210, 71, 22));
         log_TW->addTab(vel_TAB, QString());
         latency_GB = new QGroupBox(tab);
         latency_GB->setObjectName(QStringLiteral("latency_GB"));
@@ -326,6 +351,7 @@ public:
         updateTime_SB = new QDoubleSpinBox(tab);
         updateTime_SB->setObjectName(QStringLiteral("updateTime_SB"));
         updateTime_SB->setGeometry(QRect(340, 0, 71, 23));
+        updateTime_SB->setFocusPolicy(Qt::NoFocus);
         updateTime_SB->setMinimum(0.5);
         updateTime_SB->setValue(1.5);
         updateTime_L = new QLabel(tab);
@@ -340,7 +366,7 @@ public:
         toolBox->setMouseTracking(true);
         inertial_TB = new QWidget();
         inertial_TB->setObjectName(QStringLiteral("inertial_TB"));
-        inertial_TB->setGeometry(QRect(0, 0, 751, 249));
+        inertial_TB->setGeometry(QRect(0, 0, 751, 253));
         inertial_L_2 = new QLabel(inertial_TB);
         inertial_L_2->setObjectName(QStringLiteral("inertial_L_2"));
         inertial_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -384,10 +410,17 @@ public:
         inerPinv_GV->setStyleSheet(QLatin1String("background-image:url(:/new/prefix1/imgs/danger.png);\n"
 "background-repeat:no-repeat;"));
         inerPinv_GV->setFrameShape(QFrame::NoFrame);
+        inSofReb_PB = new QPushButton(inertial_TB);
+        inSofReb_PB->setObjectName(QStringLiteral("inSofReb_PB"));
+        inSofReb_PB->setGeometry(QRect(660, 30, 80, 22));
+        rpPlot = new CQtOpenCVViewerGl(inertial_TB);
+        rpPlot->setObjectName(QStringLiteral("rpPlot"));
+        rpPlot->setGeometry(QRect(420, 40, 200, 200));
+        rpPlot->setStyleSheet(QStringLiteral("border: 2px solid #333333;"));
         toolBox->addItem(inertial_TB, QStringLiteral("MPU9250"));
         platform_TB = new QWidget();
         platform_TB->setObjectName(QStringLiteral("platform_TB"));
-        platform_TB->setGeometry(QRect(0, 0, 751, 249));
+        platform_TB->setGeometry(QRect(0, 0, 100, 30));
         platform_L_2 = new QLabel(platform_TB);
         platform_L_2->setObjectName(QStringLiteral("platform_L_2"));
         platform_L_2->setGeometry(QRect(20, 2, 150, 14));
@@ -591,6 +624,7 @@ public:
         mUtime_LE->setEnabled(true);
         mUtime_LE->setGeometry(QRect(440, 10, 111, 22));
         mUtime_LE->setFocusPolicy(Qt::NoFocus);
+        mUtime_LE->setReadOnly(true);
         qos_L = new QLabel(centralWidget);
         qos_L->setObjectName(QStringLiteral("qos_L"));
         qos_L->setGeometry(QRect(250, 10, 31, 21));
@@ -626,6 +660,7 @@ public:
         commands_L_2 = new QPushButton(groupBox);
         commands_L_2->setObjectName(QStringLiteral("commands_L_2"));
         commands_L_2->setGeometry(QRect(90, 10, 71, 22));
+        commands_L_2->setFocusPolicy(Qt::NoFocus);
         commands_L_2->setStyleSheet(QStringLiteral("background-color:transparent"));
         commands_L_2->setFlat(true);
         commands_L = new QLabel(groupBox);
@@ -643,8 +678,8 @@ public:
         retranslateUi(MainWindow);
 
         tabWidget->setCurrentIndex(0);
-        log_TW->setCurrentIndex(0);
-        toolBox->setCurrentIndex(1);
+        log_TW->setCurrentIndex(1);
+        toolBox->setCurrentIndex(0);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -653,113 +688,144 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Rover control", 0));
-        reboot_BT->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        uptime_GB->setTitle(QApplication::translate("MainWindow", "Up-time", 0));
-        deltams_L->setText(QApplication::translate("MainWindow", "\316\224 ", 0));
-        ms_L->setText(QApplication::translate("MainWindow", "s", 0));
-        ms_L_2->setText(QApplication::translate("MainWindow", "s", 0));
-        orientation_GB->setTitle(QApplication::translate("MainWindow", "Orienatation", 0));
-        roll_L->setText(QApplication::translate("MainWindow", "R", 0));
-        pitch_L->setText(QApplication::translate("MainWindow", "P", 0));
-        yaw_L->setText(QApplication::translate("MainWindow", "Y", 0));
-        status_GB->setTitle(QApplication::translate("MainWindow", "Status", 0));
-        platform_L->setText(QApplication::translate("MainWindow", "Platform", 0));
-        engines_L->setText(QApplication::translate("MainWindow", "Engines", 0));
-        comm_L->setText(QApplication::translate("MainWindow", "Comm", 0));
-        radar_L->setText(QApplication::translate("MainWindow", "Radar", 0));
-        inertial_L->setText(QApplication::translate("MainWindow", "Inertial", 0));
-        hardware_L->setText(QApplication::translate("MainWindow", "Hardware", 0));
-        scan_bt->setText(QApplication::translate("MainWindow", "Scan", 0));
-        steering->setTitle(QApplication::translate("MainWindow", "Steering", 0));
-        fwd_PB->setText(QApplication::translate("MainWindow", "\342\206\221", 0));
-        left_PB->setText(QApplication::translate("MainWindow", "\342\206\220", 0));
-        right_PB->setText(QApplication::translate("MainWindow", "\342\206\222", 0));
-        bck_PB->setText(QApplication::translate("MainWindow", "\342\206\223", 0));
-        clrLog->setText(QApplication::translate("MainWindow", "Clear", 0));
-        log_TW->setTabText(log_TW->indexOf(guilog_TAB), QApplication::translate("MainWindow", "GUI log", 0));
-        clrVel_PB->setText(QApplication::translate("MainWindow", "Clear", 0));
-        log_TW->setTabText(log_TW->indexOf(vel_TAB), QApplication::translate("MainWindow", "Vehicle event log", 0));
-        latency_GB->setTitle(QApplication::translate("MainWindow", "Latency (ms)", 0));
-        updateTime_L->setText(QApplication::translate("MainWindow", "Refresh rate(s)", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Overview", 0));
-        inertial_L_2->setText(QApplication::translate("MainWindow", "Inertial", 0));
-        inReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "Roll", 0));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_5), QApplication::translate("MainWindow", "Pitch", 0));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_6), QApplication::translate("MainWindow", "Yaw", 0));
-        imuSamp_CB->setText(QApplication::translate("MainWindow", "Enable sampling", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Rover control", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        inerPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        reboot_BT->setToolTip(QApplication::translate("MainWindow", "Hard reboot of rover", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        toolBox->setItemText(toolBox->indexOf(inertial_TB), QApplication::translate("MainWindow", "MPU9250", 0));
-        platform_L_2->setText(QApplication::translate("MainWindow", "Platform", 0));
+        reboot_BT->setText(QApplication::translate("MainWindow", "Reboot", Q_NULLPTR));
+        uptime_GB->setTitle(QApplication::translate("MainWindow", "Up-time", Q_NULLPTR));
+        deltams_L->setText(QApplication::translate("MainWindow", "\316\224 ", Q_NULLPTR));
+        ms_L->setText(QApplication::translate("MainWindow", "s", Q_NULLPTR));
+        ms_L_2->setText(QApplication::translate("MainWindow", "s", Q_NULLPTR));
+        orientation_GB->setTitle(QApplication::translate("MainWindow", "Orienatation", Q_NULLPTR));
+        roll_L->setText(QApplication::translate("MainWindow", "R", Q_NULLPTR));
+        pitch_L->setText(QApplication::translate("MainWindow", "P", Q_NULLPTR));
+        yaw_L->setText(QApplication::translate("MainWindow", "Y", Q_NULLPTR));
+        status_GB->setTitle(QApplication::translate("MainWindow", "Status", Q_NULLPTR));
+        platform_L->setText(QApplication::translate("MainWindow", "Platform", Q_NULLPTR));
+        engines_L->setText(QApplication::translate("MainWindow", "Engines", Q_NULLPTR));
+        comm_L->setText(QApplication::translate("MainWindow", "Comm", Q_NULLPTR));
+        radar_L->setText(QApplication::translate("MainWindow", "Radar", Q_NULLPTR));
+        inertial_L->setText(QApplication::translate("MainWindow", "Inertial", Q_NULLPTR));
+        hardware_L->setText(QApplication::translate("MainWindow", "Hardware", Q_NULLPTR));
+        clearStat_PB->setText(QApplication::translate("MainWindow", "Clear", Q_NULLPTR));
+        scan_bt->setText(QApplication::translate("MainWindow", "Scan", Q_NULLPTR));
+        steering->setTitle(QApplication::translate("MainWindow", "Steering", Q_NULLPTR));
+        fwd_PB->setText(QApplication::translate("MainWindow", "\342\206\221", Q_NULLPTR));
+        left_PB->setText(QApplication::translate("MainWindow", "\342\206\220", Q_NULLPTR));
+        right_PB->setText(QApplication::translate("MainWindow", "\342\206\222", Q_NULLPTR));
+        bck_PB->setText(QApplication::translate("MainWindow", "\342\206\223", Q_NULLPTR));
+        clrLog->setText(QApplication::translate("MainWindow", "Clear", Q_NULLPTR));
+        log_TW->setTabText(log_TW->indexOf(guilog_TAB), QApplication::translate("MainWindow", "GUI log", Q_NULLPTR));
+        clrVel_PB->setText(QApplication::translate("MainWindow", "Clear", Q_NULLPTR));
+        filter_CB->clear();
+        filter_CB->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "All", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "ERROR", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "HANG", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "INIT", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "OK", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "PRIOINV", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "STARTUP", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "UNINIT", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "ESP8266", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Radar", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "MPU9250", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Engines", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Platform", Q_NULLPTR)
+        );
+        log_TW->setTabText(log_TW->indexOf(vel_TAB), QApplication::translate("MainWindow", "Vehicle event log", Q_NULLPTR));
+        latency_GB->setTitle(QApplication::translate("MainWindow", "Latency (ms)", Q_NULLPTR));
+        updateTime_L->setText(QApplication::translate("MainWindow", "Refresh rate(s)", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Overview", Q_NULLPTR));
+        inertial_L_2->setText(QApplication::translate("MainWindow", "Inertial", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        platPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        inReb_PB->setToolTip(QApplication::translate("MainWindow", "<html><head/><body style=\"p {padding:0px; margin:0px;}\"><p>Hard reboot of Inertial unit</p><p>Triggers software reboot of MPU9250,</p><p>Reuploads DMP firmware,</p><p>Configures sampling &amp; interrupt</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        commI_GB->setTitle(QApplication::translate("MainWindow", "Communication", 0));
-        commReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+        inReb_PB->setText(QApplication::translate("MainWindow", "Hard reboot", Q_NULLPTR));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "Roll", Q_NULLPTR));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_5), QApplication::translate("MainWindow", "Pitch", Q_NULLPTR));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_6), QApplication::translate("MainWindow", "Yaw", Q_NULLPTR));
+        imuSamp_CB->setText(QApplication::translate("MainWindow", "Enable sampling", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        commPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        inerPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        comm_L_2->setText(QApplication::translate("MainWindow", "Communication", 0));
-        tsI_GB->setTitle(QApplication::translate("MainWindow", "Task scheduler", 0));
-        tsUpd_PB->setText(QApplication::translate("MainWindow", "Update", 0));
 #ifndef QT_NO_TOOLTIP
-        tsPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        inSofReb_PB->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Soft reboot of Inertial unit</p><p>resets only event logger status</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        ts_L_2->setText(QApplication::translate("MainWindow", "Task scheduler", 0));
-        evlog_GB->setTitle(QApplication::translate("MainWindow", "Event logger", 0));
-        evlogReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
+        inSofReb_PB->setText(QApplication::translate("MainWindow", "Soft reboot", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(inertial_TB), QApplication::translate("MainWindow", "MPU9250", Q_NULLPTR));
+        platform_L_2->setText(QApplication::translate("MainWindow", "Platform", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        evlogPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        platPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        evlog_L_2->setText(QApplication::translate("MainWindow", "Event logger", 0));
-        evlogUpd_PB->setText(QApplication::translate("MainWindow", "Update", 0));
-        platReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        softReb_L->setText(QApplication::translate("MainWindow", "Soft reboot", 0));
-        toolBox->setItemText(toolBox->indexOf(platform_TB), QApplication::translate("MainWindow", "Platform", 0));
-        radar_L_2->setText(QApplication::translate("MainWindow", "Radar", 0));
+        commI_GB->setTitle(QApplication::translate("MainWindow", "Communication", Q_NULLPTR));
+        commReb_PB->setText(QApplication::translate("MainWindow", "Reboot", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        radPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        commPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        toolBox->setItemText(toolBox->indexOf(radar_TB), QApplication::translate("MainWindow", "Radar", 0));
-        engines_L_2->setText(QApplication::translate("MainWindow", "Engines", 0));
+        comm_L_2->setText(QApplication::translate("MainWindow", "Communication", Q_NULLPTR));
+        tsI_GB->setTitle(QApplication::translate("MainWindow", "Task scheduler", Q_NULLPTR));
+        tsUpd_PB->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        engPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", 0));
+        tsPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        engReb_PB->setText(QApplication::translate("MainWindow", "Reboot", 0));
-        toolBox->setItemText(toolBox->indexOf(engines_TB), QApplication::translate("MainWindow", "Engines", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Instruments", 0));
-        mStart_L->setText(QApplication::translate("MainWindow", "Mission starting time T=                                s", 0));
-        missionT_GB->setTitle(QApplication::translate("MainWindow", "Mission tasks", 0));
-        addTask_PB->setText(QApplication::translate("MainWindow", "Add task", 0));
+        ts_L_2->setText(QApplication::translate("MainWindow", "Task scheduler", Q_NULLPTR));
+        evlog_GB->setTitle(QApplication::translate("MainWindow", "Event logger", Q_NULLPTR));
+        evlogReb_PB->setText(QApplication::translate("MainWindow", "Reboot", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        evlogPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        evlog_L_2->setText(QApplication::translate("MainWindow", "Event logger", Q_NULLPTR));
+        evlogUpd_PB->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        platReb_PB->setToolTip(QApplication::translate("MainWindow", "Soft rebot only resets status", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        platReb_PB->setText(QApplication::translate("MainWindow", "Reboot", Q_NULLPTR));
+        softReb_L->setText(QApplication::translate("MainWindow", "Soft reboot", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(platform_TB), QApplication::translate("MainWindow", "Platform", Q_NULLPTR));
+        radar_L_2->setText(QApplication::translate("MainWindow", "Radar", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        radPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        toolBox->setItemText(toolBox->indexOf(radar_TB), QApplication::translate("MainWindow", "Radar", Q_NULLPTR));
+        engines_L_2->setText(QApplication::translate("MainWindow", "Engines", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        engPinv_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Priority inversion event</p><p>Module emitted a lower-priority event after prevoiusly </p><p>emitting a higher priority one. This doesn't necessarily </p><p>point to module malfunctioning but it may be an </p><p>indicator. Try to reboot the module.</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        engReb_PB->setText(QApplication::translate("MainWindow", "Reboot", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(engines_TB), QApplication::translate("MainWindow", "Engines", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Instruments", Q_NULLPTR));
+        mStart_L->setText(QApplication::translate("MainWindow", "Mission starting time T=                                s", Q_NULLPTR));
+        mStart_LE->setPlaceholderText(QApplication::translate("MainWindow", "[ms]", Q_NULLPTR));
+        missionT_GB->setTitle(QApplication::translate("MainWindow", "Mission tasks", Q_NULLPTR));
+        addTask_PB->setText(QApplication::translate("MainWindow", "Add task", Q_NULLPTR));
         schedMiss_PB->setText(QApplication::translate("MainWindow", "Schedule\n"
-"mission", 0));
-        missPer_CB->setText(QApplication::translate("MainWindow", "Create periodic mission", 0));
-        missPer_LE->setPlaceholderText(QApplication::translate("MainWindow", "Period [s]", 0));
+"mission", Q_NULLPTR));
+        missPer_CB->setText(QApplication::translate("MainWindow", "Create periodic mission", Q_NULLPTR));
+        missPer_LE->setPlaceholderText(QApplication::translate("MainWindow", "Period [ms]", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        missRep_LE->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Number of times to repeat the mission</p><p>Set to -1 for infinite number of repeats</p></body></html>", 0));
+        missRep_LE->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Number of times to repeat the mission</p><p>Set to -1 for infinite number of repeats</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         missRep_LE->setText(QString());
-        missRep_LE->setPlaceholderText(QApplication::translate("MainWindow", "Repeats", 0));
-        mUtime_L_2->setText(QApplication::translate("MainWindow", "Current vehice time T=                                 s", 0));
+        missRep_LE->setPlaceholderText(QApplication::translate("MainWindow", "Repeats", Q_NULLPTR));
+        mUtime_L_2->setText(QApplication::translate("MainWindow", "Current vehice time T=                                 s", Q_NULLPTR));
         mUtime_LE_2->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        warn_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>WARNING</p><p>Mission is scheduled in past according to vehicle's</p><p>internal timer. This means that all tasks will be </p><p>executed as soon as they arrive at vehicle.</p></body></html>", 0));
+        warn_GV->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>WARNING</p><p>Mission is scheduled in past according to vehicle's</p><p>internal timer. This means that all tasks will be </p><p>executed as soon as they arrive at vehicle.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Mission planner", 0));
-        mUtime_L->setText(QApplication::translate("MainWindow", "T=", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Mission planner", Q_NULLPTR));
+        mUtime_L->setText(QApplication::translate("MainWindow", "T=", Q_NULLPTR));
         mUtime_LE->setText(QString());
-        qos_L->setText(QApplication::translate("MainWindow", "QoS", 0));
-        qos_PrB->setFormat(QApplication::translate("MainWindow", "%p%", 0));
-        groupBox->setTitle(QApplication::translate("MainWindow", "Streams", 0));
-        telemetry_L->setText(QApplication::translate("MainWindow", "Telemetry", 0));
+        qos_L->setText(QApplication::translate("MainWindow", "QoS", Q_NULLPTR));
+        qos_PrB->setFormat(QApplication::translate("MainWindow", "%p%", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Streams", Q_NULLPTR));
+        telemetry_L->setText(QApplication::translate("MainWindow", "Telemetry", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        commands_L_2->setToolTip(QApplication::translate("MainWindow", "Click to reset communication module", 0));
+        commands_L_2->setToolTip(QApplication::translate("MainWindow", "Click to reset communication module", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         commands_L_2->setText(QString());
-        commands_L->setText(QApplication::translate("MainWindow", "Commands", 0));
+        commands_L->setText(QApplication::translate("MainWindow", "Commands", Q_NULLPTR));
     } // retranslateUi
 
 };

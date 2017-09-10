@@ -62,7 +62,8 @@ const char allTasks[10][10][30] =
     {
         {"Listen for IMU data"},
         {"Read IMU data"},
-        {"Reboot IMU"}
+        {"Reboot IMU"},
+        {"Soft-reboot IMU"}
     },
     {
         {"Keep socket alive"}
@@ -76,7 +77,8 @@ const char allTasks[10][10][30] =
     },
     {
         {"Drop log"},
-        {"Reboot"}
+        {"Reboot"},
+        {"Module soft reboot"}
     }
 };
 
@@ -190,13 +192,15 @@ const uint8_t engineDirV[5] = {0x0A, 0x05, 0x09, 0x06, 0x00};
 #define MPU_LISTEN          0   //  Enable interrupt to receive new sensor data
 #define MPU_GET_DATA        1   //  Pass sensor data to user-defined hook
 #define MPU_REBOOT          2   //  Reboot sensor moudle
+#define MPU_SOFT_REBOOT     3   //  Soft-reboot (reset event-log status)
 
 //  Readable names of tasks above
 const char mpuTasks[][20] =
 {
     {"Listen for data"},
     {"Read data"},
-    {"Reboot IMU"}
+    {"Reboot IMU"},
+    {"Soft-reboot IMU"}
 };
 
 ///-----------------------------------------------------------------------------
@@ -243,12 +247,17 @@ const char platTasks[][30] =
 #define EVLOG_DROP          0
 //  Reset event log; clear EVERYTHING
 #define EVLOG_REBOOT        1
+//  Soft reset of any module, by its libUID
+#define EVLOG_SOFT_REBOOT    2
 
+const uint8_t resetCode = 0x17;
+const uint8_t softRebCode = 0xCF;
 //  Readable names of tasks above
 const char evlogTasks[][20] =
 {
     {"Drop log"},
-    {"Reboot"}
+    {"Reboot"},
+    {"Module soft reboot"}
 };
 
 ///-----------------------------------------------------------------------------

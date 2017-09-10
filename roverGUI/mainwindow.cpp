@@ -12,12 +12,14 @@
 #include <QChar>
 #include <QDebug>
 #include <QTimer>
+#include <QTextStream>
 
 //  Status of sending command
 #define COMMANDS_ACK    1
 #define COMMANDS_NACK   2
 #define COMMANDS_RESET  3
 uint8_t sendStatus = COMMANDS_RESET;
+
 
 ///-----------------------------------------------------------------------------
 ///        GUI constructor & destructor                                    [GUI]
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rollGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
     pitchGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
     yawGraph(189, 400, cv::Scalar(0x45, 0x45, 0x45)),
+    rpDef(200, 200, cv::Scalar(0x45, 0x45, 0x45)),
     _sentReq(0), _ackReq(0)
 {
     ui->setupUi(this);
@@ -70,6 +73,16 @@ MainWindow::MainWindow(QWidget *parent) :
     rollGraph.SetXRangeKeepAspectR(-359, 40, true);
     pitchGraph.SetXRangeKeepAspectR(-359, 40, true);
     yawGraph.SetXRangeKeepAspectR(-359, 40, true);
+
+    //  Make default rp plot
+    rpDef.SetRange(-100, 100, -100, 100);
+    rpDef.LineCartesian(cv::Point2d(-70, 0), cv::Point2d(-20, 0), COLOR_WHITE);
+    rpDef.LineCartesian(cv::Point2d( 70, 0), cv::Point2d( 20, 0), COLOR_WHITE);
+    rpDef.LineCartesian(cv::Point2d(-20, -20), cv::Point2d(-40, 0), COLOR_WHITE);
+    rpDef.LineCartesian(cv::Point2d( 20, -20), cv::Point2d( 40, 0), COLOR_WHITE);
+    rpDef.LineCartesian(cv::Point2d(-20, -20), cv::Point2d(-10, -20), COLOR_WHITE);
+    rpDef.LineCartesian(cv::Point2d( 20, -20), cv::Point2d(10, -20), COLOR_WHITE);
+    rpDef.Circle(5, cv::Point2d(0,0), COLOR_WHITE);
 
     //  Put all labels from 'Overview' tab to a single list, indexed by kernel module ID
     labOverview[ESP_UID] = ui->comm_L;
@@ -122,6 +135,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->missionT_GB->setVisible((ui->mStart_LE->text().length() > 0));
 
     ui->warn_GV->setVisible(false);
+
+    this->installEventFilter(this);
+    ui->tabWidget->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -179,7 +195,7 @@ void MainWindow::sendNext(void)
     if ((sendStatus == COMMANDS_ACK) || (attempts == 3))
     {
         counter++;
-        sendStatus == COMMANDS_RESET;
+        sendStatus = COMMANDS_RESET;
         attempts = 0;
     }
 
@@ -194,7 +210,7 @@ void MainWindow::sendNext(void)
         if (ui->missPer_CB->isChecked())
             mEntries[counter]->ToReq(command, commandLen,
                                      ui->missRep_LE->text().toLong(),
-                                     ui->missPer_LE->text().toLongLong()*1000);
+                                     ui->missPer_LE->text().toLongLong());
         else
             mEntries[counter]->ToReq(command, commandLen, 0, 0);
 
@@ -207,6 +223,39 @@ void MainWindow::sendNext(void)
         counter = 0;
         sendTimer->stop();
     }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    //  While holding key QT emits multiple events, use this to filter them out
+    if (event->isAutoRepeat())
+        return;
+
+    if (event->key() == Qt::Key_W)
+        on_fwd_PB_pressed();
+    if (event->key() == Qt::Key_A)
+        on_left_PB_pressed();
+    if (event->key() == Qt::Key_S)
+        on_bck_PB_pressed();
+    if (event->key() == Qt::Key_D)
+        on_right_PB_pressed();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    //  While holding key QT emits multiple events, use this to filter them out
+    if (event->isAutoRepeat())
+        return;
+
+    if (event->key() == Qt::Key_W)
+        on_fwd_PB_released();
+    if (event->key() == Qt::Key_A)
+        on_left_PB_released();
+    if (event->key() == Qt::Key_S)
+        on_bck_PB_released();
+    if (event->key() == Qt::Key_D)
+        on_right_PB_released();
+
 }
 
 ///-----------------------------------------------------------------------------
@@ -315,6 +364,31 @@ void MainWindow::AppendToGraph(OCVGraph &graph, double old, double val, CQtOpenC
 
     renderer->showImage( temp.GetMatImg() );
 }
+
+void MainWindow::UpdateRPPlot(double roll, double pitch)
+{
+    //  Rotation of crosshair (roll)
+    cv::Mat tmp;
+    rpDef.GetMatImg().copyTo(tmp);
+    cv::Mat rot_mat = cv::getRotationMatrix2D( cv::Point2d(100, 100), -roll , 1);
+
+    cv::warpAffine(rpDef.GetMatImg(), tmp, rot_mat, tmp.size(), CV_INTER_LINEAR, 0, cv::Scalar(0x45,0x45,0x45));
+
+    //  Add axes to visualize pitch
+    OCVGraph ne(tmp);
+    ne.SetRange(-100, 100, -100+pitch, 100-pitch);
+    ne.SetCenter(100, 100-pitch);
+    ne.AddAxes(100, 10, 1, 2);
+
+    //  Add perspective lines
+    ne.LineCartesian(cv::Point2d(-80, -20), cv::Point2d(-20,0), COLOR_50GREY);
+    ne.LineCartesian(cv::Point2d( 80, -20), cv::Point2d( 20,0), COLOR_50GREY);
+
+    ne.LineCartesian(cv::Point2d(-80, -40), cv::Point2d(-20,-20), COLOR_50GREY);
+    ne.LineCartesian(cv::Point2d( 80, -40), cv::Point2d( 20,-20), COLOR_50GREY);
+    ui->rpPlot->showImage(ne.GetMatImg());
+}
+
 /**
  * @brief Add line of text to one of log text fields in GUI
  * @param arg Line of text to add
@@ -330,6 +404,32 @@ void MainWindow::LogLine(QString arg, QPlainTextEdit *holder)
     //  To prevent stack smashing, reset logs once they reach 6000 characters
     if ((holder->toPlainText().length()+arg.length()) >= 6000)
         holder->setPlainText("");
+
+    //  Allow using filter on vehicle log
+    if (holder == ui->vel_TE)
+    {
+        //  To prevent stack smashing, reset logs once they reach 6000 characters
+        if ((vhLog.length()+arg.length()) >= 6000)
+            vhLog = "";
+
+        vhLog += arg + '\n';
+
+        //  Check filtering setting
+        if (ui->filter_CB->currentText() == "All")
+            holder->setPlainText(vhLog);
+        else
+        {
+            QStringList source = vhLog.split("\n");
+            holder->setPlainText("");
+
+            for (QString line : source)
+            {
+                if (line.contains(ui->filter_CB->currentText(), Qt::CaseSensitive))
+                    holder->setPlainText(holder->toPlainText()+line+'\n');
+            }
+        }
+    }
+    else
     //  Add new line to the log
     holder->setPlainText(holder->toPlainText() + arg + '\n');
 }
@@ -481,6 +581,9 @@ void MainWindow::ParseTelemetry(QString teleStr)
     AppendToGraph(yawGraph, oldYaw, tmpStr.toDouble(), ui->yawPlot);
     oldYaw = tmpStr.toDouble();
     tmpStr = "";
+
+    //  Update Roll-pitch graph
+    UpdateRPPlot(ui->roll_LE->text().toDouble(), ui->pitch_LE->text().toDouble());
 
     //  Update latency plot with delta value
     cv::Point2d endP(98, (ui->deltams_LE->text().toDouble()-1.5)*1000.0);
@@ -716,6 +819,7 @@ void MainWindow::on_clrLog_clicked()
 void MainWindow::on_clrVel_PB_clicked()
 {
     ui->vel_TE->setPlainText("");
+    vhLog = "";
 }
 
 /**
@@ -743,6 +847,18 @@ void MainWindow::on_inReb_PB_clicked()
     char args[2] = {REBOOT_CODE, 0};
 
     MakeRequest((uint8_t*)command, MPU_UID, MPU_REBOOT, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+void MainWindow::on_inSofReb_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[2] = {REBOOT_CODE, 0};
+
+    MakeRequest((uint8_t*)command, MPU_UID, MPU_SOFT_REBOOT, 0, 0);
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
 
     SendCommand(command, commandLen);
@@ -899,6 +1015,19 @@ void MainWindow::on_missPer_CB_clicked(bool checked)
     ui->missRep_LE->setVisible(checked);
 }
 
+void MainWindow::on_platReb_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[] = {"\x17"};
+
+    MakeRequest((uint8_t*)command, PLAT_UID, PLAT_SOFT_REBOOT, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 1);
+
+    SendCommand(command, commandLen);
+}
+
+
 ///-----------------------------------------------------------------------------
 ///         Steering buttons (pressed & released events)               [CLICKED]
 ///-----------------------------------------------------------------------------
@@ -940,6 +1069,7 @@ void MainWindow::on_fwd_PB_pressed()
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
 
     SendCommand(command, commandLen);
+    ui->fwd_PB->setStyleSheet("background-color:#00FF00;");
 }
 
 void MainWindow::on_bck_PB_pressed()
@@ -958,6 +1088,7 @@ void MainWindow::on_bck_PB_pressed()
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
 
     SendCommand(command, commandLen);
+    ui->bck_PB->setStyleSheet("background-color:#00FF00;");
 }
 
 void MainWindow::on_right_PB_pressed()
@@ -977,6 +1108,7 @@ void MainWindow::on_right_PB_pressed()
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
 
     SendCommand(command, commandLen);
+    ui->right_PB->setStyleSheet("background-color:#00FF00;");
 }
 
 void MainWindow::on_left_PB_pressed()
@@ -996,24 +1128,66 @@ void MainWindow::on_left_PB_pressed()
     AppendArgs((uint8_t*)command, &commandLen, (void*)args, 9);
 
     SendCommand(command, commandLen);
+    ui->left_PB->setStyleSheet("background-color:#00FF00;");
 }
 
 void MainWindow::on_fwd_PB_released()
 {
     HaltEngines();
-}
-
-void MainWindow::on_right_PB_released()
-{
-    HaltEngines();
-}
-
-void MainWindow::on_left_PB_released()
-{
-    HaltEngines();
+    ui->fwd_PB->setStyleSheet("background-color:#454545;");
 }
 
 void MainWindow::on_bck_PB_released()
 {
     HaltEngines();
+    ui->bck_PB->setStyleSheet("background-color:#454545;");
 }
+
+void MainWindow::on_right_PB_released()
+{
+    HaltEngines();
+    ui->right_PB->setStyleSheet("background-color:#454545;");
+}
+
+void MainWindow::on_left_PB_released()
+{
+    HaltEngines();
+    ui->left_PB->setStyleSheet("background-color:#454545;");
+}
+
+
+void MainWindow::on_clearStat_PB_clicked()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (pinv[i] != NULL)
+            pinv[i]->setVisible(false);
+        if (labOverview[i] != 0)
+            labOverview[i]->setStyleSheet("background-color:rgb(126, 189, 189);\ncolor:#454545;\nborder-radius:3px;");
+        if (labInstruments[i] != 0)
+        {
+            labInstruments[i]->setStyleSheet("background-color:rgb(126, 189, 189);\ncolor:#454545;\nborder-radius:3px;");
+            labInstruments[i]->setText(events[0]);
+        }
+    }
+}
+
+void MainWindow::on_filter_CB_currentTextChanged(const QString &arg1)
+{
+    //  Check filtering setting
+    if (ui->filter_CB->currentText() == "All")
+        ui->vel_TE->setPlainText(vhLog);
+    else
+    {
+        QStringList source = vhLog.split("\n");
+        ui->vel_TE->setPlainText("");
+
+        for (QString line : source)
+        {
+            if (line.contains(ui->filter_CB->currentText(), Qt::CaseSensitive))
+                ui->vel_TE->setPlainText(ui->vel_TE->toPlainText()+line+'\n');
+        }
+    }
+}
+
+

@@ -42,10 +42,14 @@ public:
     void ParseEventLog(QString teleStr);
     void ParseTaskEntry(QString teleStr);
     bool ParseCommandResp(QString respStr);
+    void UpdateRPPlot(double roll, double pitch);
     void EventUpdateGUI(Events events, uint8_t libUID);
     void AppendToGraph(OCVGraph &graph, double old, double val, CQtOpenCVViewerGl *renderer);
     bool SendCommand(const char *command, uint16_t commandLen);
-
+protected:
+    //bool eventFilter(QObject *watched, QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 private slots:
     void on_scan_bt_clicked();
     void acceptCliTelemetry(void);
@@ -109,6 +113,14 @@ private slots:
 
     void on_bck_PB_released();
 
+    void on_platReb_PB_clicked();
+
+    void on_clearStat_PB_clicked();
+
+    void on_filter_CB_currentTextChanged(const QString &arg1);
+
+    void on_inSofReb_PB_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *socketTimer;
@@ -118,13 +130,15 @@ private:
     QTcpSocket* tcpCliCommands;
     QTcpSocket *tcpServerConnection;
     QTimer *sendTimer;
+    QString vhLog;
 
     //  Setting up graph plotting in openCV
     OCVGraph blank,
              latencyGraph,
              rollGraph,
              pitchGraph,
-             yawGraph;
+             yawGraph,
+             rpDef;
 
     QGraphicsView   *pinv[10];
     QLabel          *labOverview[10];

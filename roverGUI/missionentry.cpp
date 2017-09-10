@@ -337,6 +337,13 @@ void MissionEntry::UpdateArguments(int index)
             tmp->setText("23");
             args.push_back(tmp);
         }
+        else if (TaskID() == EVLOG_SOFT_REBOOT)
+        {
+            tmp->show();
+            tmp->setPlaceholderText("LibUID");
+            tmp->setText("0");
+            args.push_back(tmp);
+        }
     }
     else if (LibUID() == TASKSCHED_UID)
     {
@@ -391,6 +398,10 @@ void MissionEntry::ToReq(char *command, uint16_t &commandLen, int32_t repeats, i
         argCnt++;
     }
 
+    if (TaskID() == EVLOG_SOFT_REBOOT)
+        memcpy((void*)(reqArgs+argCnt++), (void*)&(softRebCode), 1);
+
+
     for (auto X : args)
     {
         if ((LibUID() == ENGINES_UID))
@@ -404,6 +415,12 @@ void MissionEntry::ToReq(char *command, uint16_t &commandLen, int32_t repeats, i
             uint32_t argUL = X->text().toULong();
             memcpy((void*)(reqArgs+argCnt), &argUL, 4);
             argCnt += 4;
+        }
+        else if (TaskID() == EVLOG_SOFT_REBOOT)
+        {
+            uint8_t argUS = X->text().toUShort();
+            memcpy((void*)(reqArgs+argCnt), &argUS, 1);
+            argCnt += 1;
         }
         else
         {
