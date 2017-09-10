@@ -6,19 +6,19 @@ GUI is now in integration-testing phase (with the rover) and some of the screen 
 
 
 'Overview' tab giving most important info
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiOver1.png)
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiOver.png)
 
 
 'Instruments' tab showing plot of IMU sensor data
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr1.png)
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr.png)
 
 
 'Instruments' tab showing individual platform modules
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiPlat1.png)
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiPlat.png)
 
 
 'Mission planner' tab
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiMiss1.png)
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiMiss.png)
 
 
 Note: This is mostly educational project, so some parts of the code might be considered "reinventing the wheel" but were made in order to get a better understanding of coding principles and practices :)
