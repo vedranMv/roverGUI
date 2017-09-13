@@ -79,6 +79,10 @@ const char allTasks[10][10][30] =
         {"Drop log"},
         {"Reboot"},
         {"Module soft reboot"}
+    },
+    {
+        {"Enable TS"},
+        {"Kill task by PID"}
     }
 };
 
@@ -264,7 +268,20 @@ const char evlogTasks[][20] =
 ///         Task scheduler task IDs
 ///-----------------------------------------------------------------------------
 #define TASKSCHED_UID       7
+///  Definitions of ServiceID for service offered by this module
+//  Enable/disable time ticking on internal timer
+//  args[] = enable(bool)
+#define TASKSCHED_T_ENABLE      0
+//  Delete task by its PID
+//  args[] = taskPID(uint16_t)
+#define TASKSCHED_T_KILL        1
 
+//  Readable names of tasks above
+const char tsTasks[][20] =
+{
+    {"Enable TS"},
+    {"Kill task by PID"}
+};
 
 /**
  * Events that modules can transmit

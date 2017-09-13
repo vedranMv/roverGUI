@@ -678,7 +678,7 @@ void MainWindow::ParseEventLog(QString teleStr)
  */
 void MainWindow::ParseTaskEntry(QString teleStr)
 {
-    //  Find '3*' sequence, start of EventLog telemetry frame
+    //  Find '3*' sequence, start of TaskScheudler telemetry frame
     QStringList entries = teleStr.split("3*");
 
     //  Loop through all events in this list
@@ -686,11 +686,11 @@ void MainWindow::ParseTaskEntry(QString teleStr)
     {
         QStringList parts = X.split(":", QString::SkipEmptyParts);
         //  Skip broken/short frames
-        if (parts.length() < 4)
+        if (parts.length() < 5)
             continue;
 
         QString msg;
-        msg = parts[0] + ": " + QString(allTasks[parts[1].toInt()][parts[2].toInt()])
+        msg = parts[0] + "-|" + parts[4] + "|: " + QString(allTasks[parts[1].toInt()][parts[2].toInt()])
               + ", period " + parts[3] +" ms";
         LogLine(msg, ui->tsLog_TE);
     }

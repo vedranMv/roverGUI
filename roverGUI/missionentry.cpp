@@ -278,7 +278,7 @@ void MissionEntry::UpdateArguments(int index)
             //  Doesn't use premade LineEdit
             tmp->hide();
             tmp->deleteLater();
-            validTask = false;
+            //validTask = false;
         }
         else
         {
@@ -339,18 +339,45 @@ void MissionEntry::UpdateArguments(int index)
         }
         else if (TaskID() == EVLOG_SOFT_REBOOT)
         {
-            tmp->show();
-            tmp->setPlaceholderText("LibUID");
-            tmp->setText("0");
-            args.push_back(tmp);
+//            tmp->show();
+//            tmp->setPlaceholderText("LibUID");
+//            tmp->setText("0");
+//            args.push_back(tmp);
+
+            //  Doesn't use premade LineEdit
+            tmp->hide();
+            tmp->deleteLater();
+
+            argCB = new QComboBox(taskF);
+            argCB->move(430, 10);
+            argCB->resize(100, 22);
+            argCB->show();
+            for (uint8_t i = 0; i < 8; i++)
+                argCB->addItem(QString(libName[i]));
         }
     }
     else if (LibUID() == TASKSCHED_UID)
     {
-        validTask = false;
-        //  No task here uses premade LineEdit
-        tmp->hide();
-        tmp->deleteLater();
+        if (TaskID() == TASKSCHED_T_ENABLE)
+        {
+            //  Doesn't use premade LineEdit
+            tmp->hide();
+            tmp->deleteLater();
+
+            argCB = new QComboBox(taskF);
+            argCB->move(430, 10);
+            argCB->resize(100, 22);
+            argCB->show();
+            //  Listen takes one argument, false(0) or true(1)
+            argCB->addItem(QString("Disable"));
+            argCB->addItem(QString("Enable"));
+        }
+        else if (TaskID() == TASKSCHED_T_KILL)
+        {
+            tmp->show();
+            tmp->setPlaceholderText("Enter PID to kill");
+            args.push_back(tmp);
+        }
     }
 
     Validate();
@@ -385,21 +412,21 @@ void MissionEntry::ToReq(char *command, uint16_t &commandLen, int32_t repeats, i
     MakeRequest((uint8_t*)command, LibUID(), TaskID(),
                 (taskLE->text().toInt()+sTime->text().toLongLong())*1000, repeats, period);
 
+    if (TaskID() == EVLOG_SOFT_REBOOT)
+        memcpy((void*)(reqArgs+argCnt++), (void*)&(softRebCode), 1);
+
     if (argCB != 0)
     {
         uint8_t argCBInt = 0;
 
         if (LibUID() == ENGINES_UID)
             argCBInt = engineDirV[argCB->currentIndex()];
-        else if (LibUID() == MPU_UID)
+        else if ((LibUID() == MPU_UID) || (LibUID() == EVLOG_UID) || (LibUID() == TASKSCHED_UID))
             argCBInt = argCB->currentIndex();
 
         memcpy((void*)(reqArgs+argCnt), (void*)&(argCBInt), 1);
         argCnt++;
     }
-
-    if (TaskID() == EVLOG_SOFT_REBOOT)
-        memcpy((void*)(reqArgs+argCnt++), (void*)&(softRebCode), 1);
 
 
     for (auto X : args)
