@@ -15,16 +15,22 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    cqtopencvviewergl.cpp \
-    ocvgraph.cpp \
-    roverinterface.cpp \
-    missionentry.cpp
+        cqtopencvviewergl.cpp \
+        ocvgraph.cpp \
+        roverinterface.cpp \
+        missionentry.cpp \
+        parsers/MainWindowParsers.cpp \
+    parsers/netsocketevents.cpp \
+    parsers/guiupdates.cpp \
+    tabs/taboverview.cpp \
+    tabs/tabinstruments.cpp \
+    tabs/tabmission.cpp
 
 HEADERS  += mainwindow.h \
-    roverinterface.h \
-    cqtopencvviewergl.h \
-    ocvgraph.h \
-    missionentry.h
+        cqtopencvviewergl.h \
+        ocvgraph.h \
+        missionentry.h \
+        roverinterface.h
 
 FORMS    += mainwindow.ui
 

@@ -10,6 +10,12 @@
 #include <QGraphicsView>
 #include <QLabel>
 #include <QLineEdit>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "ui_mainwindow.h"
+#include <cstdlib>
+#include <iostream>
+
 #include <QComboBox>
 #include <QPushButton>
 #include <QFrame>
@@ -22,6 +28,11 @@
 #include "QPlainTextEdit"
 #include "roverinterface.h"
 #include "missionentry.h"
+
+//  Status of sending command
+#define COMMANDS_ACK    1
+#define COMMANDS_NACK   2
+#define COMMANDS_RESET  3
 
 
 namespace Ui {
@@ -147,6 +158,7 @@ private:
     //  Quality of service (QoS)parameters
     uint32_t _sentReq;
     uint32_t _ackReq;
+    uint8_t sendStatus;
 
     //  Dynamicall created GUI objects for mission planning
     std::vector<MissionEntry*> mEntries;

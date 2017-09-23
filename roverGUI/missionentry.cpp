@@ -412,7 +412,7 @@ void MissionEntry::ToReq(char *command, uint16_t &commandLen, int32_t repeats, i
     MakeRequest((uint8_t*)command, LibUID(), TaskID(),
                 (taskLE->text().toInt()+sTime->text().toLongLong())*1000, repeats, period);
 
-    if (TaskID() == EVLOG_SOFT_REBOOT)
+    if ((TaskID() == EVLOG_SOFT_REBOOT) && (LibUID() == EVLOG_UID))
         memcpy((void*)(reqArgs+argCnt++), (void*)&(softRebCode), 1);
 
     if (argCB != 0)
@@ -437,23 +437,29 @@ void MissionEntry::ToReq(char *command, uint16_t &commandLen, int32_t repeats, i
             memcpy((void*)(reqArgs+argCnt), &argF, 4);
             argCnt += 4;
         }
-        else if (TaskID() == EVLOG_DROP)
+        else if ((LibUID() == EVLOG_UID) && (TaskID() == EVLOG_DROP))
         {
             uint32_t argUL = X->text().toULong();
             memcpy((void*)(reqArgs+argCnt), &argUL, 4);
             argCnt += 4;
         }
-        else if (TaskID() == EVLOG_SOFT_REBOOT)
+        else if ((LibUID() == EVLOG_UID) && (TaskID() == EVLOG_SOFT_REBOOT))
         {
             uint8_t argUS = X->text().toUShort();
             memcpy((void*)(reqArgs+argCnt), &argUS, 1);
             argCnt += 1;
         }
+        else if ((LibUID() == TASKSCHED_UID) && (TaskID() == TASKSCHED_T_KILL))
+        {
+            uint16_t argUL = X->text().toULong();
+            memcpy((void*)(reqArgs+argCnt), &argUL, 2);
+            argCnt += 2;
+        }
         else
         {
             uint8_t argUL = X->text().toUShort();
             memcpy((void*)(reqArgs+argCnt), &argUL, 1);
-            argCnt += 4;
+            argCnt += 1;
         }
 
     }

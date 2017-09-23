@@ -751,8 +751,11 @@ border-radius:3px;</string>
       <property name="minimum">
        <double>0.500000000000000</double>
       </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
       <property name="value">
-       <double>1.500000000000000</double>
+       <double>1.000000000000000</double>
       </property>
      </widget>
      <widget class="QLabel" name="updateTime_L">
@@ -786,15 +789,15 @@ border-radius:3px;</string>
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="inertial_TB">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>253</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1372,8 +1375,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>751</width>
+         <height>253</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1435,6 +1438,286 @@ background-repeat:no-repeat;</string>
         <property name="text">
          <string>Reboot</string>
         </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>40</y>
+          <width>171</width>
+          <height>161</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QGroupBox::title
+{
+subcontrol-origin: margin;
+subcontrol-position:bottom right;
+}
+QGroupBox
+{
+margin-top:-10px;
+margin-bottom:8px;
+}</string>
+        </property>
+        <property name="title">
+         <string>Left wheel</string>
+        </property>
+        <widget class="QLabel" name="cmps_L">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>50</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>cm/s</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="enLDist_LE">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>113</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Distance traveled</string>
+         </property>
+        </widget>
+        <widget class="QProgressBar" name="maxSpeedL_PB">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>80</y>
+           <width>118</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="cm_L">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>20</y>
+           <width>21</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>cm</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="enLSpeed_LE">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>113</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Current speed</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>40</y>
+          <width>171</width>
+          <height>161</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QGroupBox::title
+{
+subcontrol-origin: margin;
+subcontrol-position:bottom left;
+}
+QGroupBox
+{
+margin-top:-10px;
+margin-bottom:8px;
+}</string>
+        </property>
+        <property name="title">
+         <string>Right wheel</string>
+        </property>
+        <widget class="QLabel" name="cm_L_2">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>20</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>cm</string>
+         </property>
+        </widget>
+        <widget class="QProgressBar" name="maxSpeedR_PB">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>80</y>
+           <width>118</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="cmps_L_2">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>50</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>cm/s</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="enRDist_LE">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>113</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Distance traveled</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="enRSpeed_LE">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>113</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Current speed</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>60</y>
+          <width>131</width>
+          <height>131</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QGroupBox::title
+{
+subcontrol-origin: margin;
+subcontrol-position:bottom center;
+}
+QGroupBox
+{
+margin-top:-10px;
+margin-bottom:8px;
+}</string>
+        </property>
+        <property name="title">
+         <string>Acceleration</string>
+        </property>
+        <widget class="QLineEdit" name="accelZ_LE">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>70</y>
+           <width>91</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="accelY_LE">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>40</y>
+           <width>91</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="accelX_LE">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>10</y>
+           <width>91</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>21</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>X</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>40</y>
+           <width>21</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>70</y>
+           <width>21</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Z</string>
+         </property>
+        </widget>
+        <zorder>label_3</zorder>
+        <zorder>label_2</zorder>
+        <zorder>label</zorder>
+        <zorder>accelZ_LE</zorder>
+        <zorder>accelY_LE</zorder>
+        <zorder>accelX_LE</zorder>
        </widget>
       </widget>
      </widget>

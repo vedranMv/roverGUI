@@ -57,7 +57,9 @@ const char allTasks[10][10][30] =
     {
         {"Drive direction"},
         {"Drive arc"},
-        {"Drive at % wheel speed"}
+        {"Drive at % wheel speed"},
+        {"Reboot engines"},
+        {"Engine speed loop"}
     },
     {
         {"Listen for IMU data"},
@@ -161,14 +163,18 @@ const char radarTasks[][30] =
 #define ENG_T_MOVE_PERC       2
 //  Reboot engines module
 //  Args: 0x17 reboot code
-#define ENG_T_REBOOT        3
+#define ENG_T_REBOOT          3
+//  Sample motor parameters to calculate speed and traveled distance
+#define ENG_T_SPEEDLOOP       4
 
 //  Readable names of tasks above
 const char engineTasks[][30] =
 {
     {"Drive direction"},
     {"Drive arc"},
-    {"Drive at % wheel speed"}
+    {"Drive at % wheel speed"},
+    {"Reboot engines"},
+    {"Engine speed loop"}
 };
 
 /**     Movement direction definitions for H-bridge - Direction macros  */
