@@ -121,8 +121,20 @@ void MainWindow::ParseTelemetry(QString teleStr)
         ui->enRDist_LE->setText(parts[5]);
         ui->enLSpeed_LE->setText(parts[6]);
         ui->enRSpeed_LE->setText(parts[7]);
-        ui->maxSpeedL_PB->setValue(abs(100.0*(parts[6].toDouble()/21.0)));
-        ui->maxSpeedR_PB->setValue(abs(100.0*(parts[7].toDouble()/21.0)));
+
+        uint8_t val = abs(100.0*(parts[6].toDouble()/25.0));
+        ui->maxSpeedL_PB->setValue((val>100)?100:val);
+        val = abs(100.0*(parts[7].toDouble()/25.0));
+        ui->maxSpeedR_PB->setValue((val>100)?100:val);
+
+        if ((ui->maxSpeedL_PB->value() > 0) && (ui->maxSpeedR_PB->value() > 0))
+            ui->engActive_GV->setStyleSheet("background-image:url(:/new/prefix1/imgs/backBoth.png);");
+        else if (ui->maxSpeedL_PB->value() > 0)
+            ui->engActive_GV->setStyleSheet("background-image:url(:/new/prefix1/imgs/backLeft.png);");
+        else if (ui->maxSpeedR_PB->value() > 0)
+            ui->engActive_GV->setStyleSheet("background-image:url(:/new/prefix1/imgs/backRight.png);");
+        else
+            ui->engActive_GV->setStyleSheet("background-image:url(:/new/prefix1/imgs/back.png);");
 
         ///EXTRACT acceleration data
         ui->accelX_LE->setText(parts[8]);

@@ -20,5 +20,13 @@ GUI is now in integration-testing phase (with the rover) and some of the screen 
 'Mission planner' tab
 ![alt tag](https://hsr.duckdns.org/images/roverGUI/guiMiss.png)
 
+'Engines data' tab
+![alt tag](https://hsr.duckdns.org/images/roverGUI/guiEng.png)
+
 
 Note: This is mostly educational project, so some parts of the code might be considered "reinventing the wheel" but were made in order to get a better understanding of coding principles and practices :)
+
+### Credits
+This project relies on following freely available libraries available on github:
+ * [QtOpenCVViewerGl](https://github.com/Myzhar/QtOpenCVViewerGl) - QT Widget used for rendering OpenCV images (renders all graphs and visualizations seen in the UI)
+ * [ocvGraph](https://github.com/vedranMv/ocvGraph) - OpenCV library wrote specifically for plotting graphs; developed as a part of this project

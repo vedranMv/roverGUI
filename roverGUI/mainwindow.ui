@@ -789,15 +789,15 @@ border-radius:3px;</string>
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="inertial_TB">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>751</width>
+         <height>253</height>
         </rect>
        </property>
        <attribute name="label">
@@ -975,8 +975,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>751</width>
+         <height>253</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1184,15 +1184,33 @@ border-radius:3px;</string>
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>50</y>
+           <y>60</y>
            <width>331</width>
-           <height>161</height>
+           <height>151</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color:transparent;</string>
          </property>
         </widget>
+        <widget class="QLabel" name="tsExplanation_L">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>40</y>
+           <width>271</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>[Next execution time]-|PID|: Task name, period</string>
+         </property>
+        </widget>
+        <zorder>tsExplanation_L</zorder>
+        <zorder>tsUpd_PB</zorder>
+        <zorder>tsPinv_GV</zorder>
+        <zorder>ts_L_2</zorder>
+        <zorder>tsLog_TE</zorder>
        </widget>
        <widget class="QGroupBox" name="evlog_GB">
         <property name="geometry">
@@ -1439,7 +1457,7 @@ background-repeat:no-repeat;</string>
          <string>Reboot</string>
         </property>
        </widget>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="enLeftWheel_GB">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -1529,10 +1547,10 @@ margin-bottom:8px;
          </property>
         </widget>
        </widget>
-       <widget class="QGroupBox" name="groupBox_3">
+       <widget class="QGroupBox" name="enRightWheel_GB">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>370</x>
           <y>40</y>
           <width>171</width>
           <height>161</height>
@@ -1619,11 +1637,11 @@ margin-bottom:8px;
          </property>
         </widget>
        </widget>
-       <widget class="QGroupBox" name="groupBox_4">
+       <widget class="QGroupBox" name="accel_GB">
         <property name="geometry">
          <rect>
-          <x>480</x>
-          <y>60</y>
+          <x>600</x>
+          <y>50</y>
           <width>131</width>
           <height>131</height>
          </rect>
@@ -1673,7 +1691,7 @@ margin-bottom:8px;
           </rect>
          </property>
         </widget>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="accelX_L">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1686,7 +1704,7 @@ margin-bottom:8px;
           <string>X</string>
          </property>
         </widget>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="accelY_L">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1699,7 +1717,7 @@ margin-bottom:8px;
           <string>Y</string>
          </property>
         </widget>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="accelZ_L">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1712,13 +1730,42 @@ margin-bottom:8px;
           <string>Z</string>
          </property>
         </widget>
-        <zorder>label_3</zorder>
-        <zorder>label_2</zorder>
-        <zorder>label</zorder>
+        <zorder>accelZ_L</zorder>
+        <zorder>accelY_L</zorder>
+        <zorder>accelX_L</zorder>
         <zorder>accelZ_LE</zorder>
         <zorder>accelY_LE</zorder>
         <zorder>accelX_LE</zorder>
        </widget>
+       <widget class="QGraphicsView" name="engActive_GV">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>40</y>
+          <width>191</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image:url(:/new/prefix1/imgs/back.png);</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
+       <zorder>engActive_GV</zorder>
+       <zorder>engines_L_2</zorder>
+       <zorder>engPinv_GV</zorder>
+       <zorder>engReb_PB</zorder>
+       <zorder>enLeftWheel_GB</zorder>
+       <zorder>enRightWheel_GB</zorder>
+       <zorder>accel_GB</zorder>
       </widget>
      </widget>
     </widget>
