@@ -37,7 +37,7 @@ color:#DDDDDD;</string>
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -907,8 +907,11 @@ border-radius:3px;</string>
           <height>16</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When checked, MPU is powered up. Once unchecked,&lt;/p&gt;&lt;p&gt;on-board MOSFET cuts MPUs' power supply&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string>Enable sampling</string>
+         <string>Powered</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -959,7 +962,7 @@ background-repeat:no-repeat;</string>
        <widget class="CQtOpenCVViewerGl" name="rpPlot" native="true">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>410</x>
           <y>40</y>
           <width>200</width>
           <height>200</height>
@@ -968,6 +971,100 @@ background-repeat:no-repeat;</string>
         <property name="styleSheet">
          <string notr="true">border: 2px solid #333333;</string>
         </property>
+       </widget>
+       <widget class="QGroupBox" name="mahAHRS_GB">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>70</y>
+          <width>121</width>
+          <height>161</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Mahoney AHRS</string>
+        </property>
+        <widget class="QLineEdit" name="ahrsKi_LE">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>60</y>
+           <width>61</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>0.0</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="ahrsKp_LE">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>30</y>
+           <width>61</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>0.9</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="magEn_CB">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>90</y>
+           <width>111</width>
+           <height>19</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Magnetometer</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="ahrsKp_L">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>21</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Kp</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="ahrsKi_L">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>60</y>
+           <width>21</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Kp</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="ahrsUpdate_PB">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>120</y>
+           <width>80</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="platform_TB">
@@ -1109,9 +1206,9 @@ border-radius:3px;</string>
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>30</y>
+          <y>0</y>
           <width>331</width>
-          <height>211</height>
+          <height>251</height>
          </rect>
         </property>
         <property name="title">
@@ -1186,7 +1283,7 @@ border-radius:3px;</string>
            <x>0</x>
            <y>60</y>
            <width>331</width>
-           <height>151</height>
+           <height>191</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1393,8 +1490,8 @@ background-repeat:no-repeat;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>751</width>
-         <height>253</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">

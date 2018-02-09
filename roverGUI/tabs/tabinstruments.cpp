@@ -49,6 +49,30 @@ void MainWindow::on_inSofReb_PB_clicked()
 
     SendCommand(command, commandLen);
 }
+
+/**
+ * @brief Update parameters of AHRS (Instruments->MPU9250)
+ */
+void MainWindow::on_ahrsUpdate_PB_clicked()
+{
+    uint16_t commandLen = 0;
+    char command[50] = {0};
+    char args[10] = {0};
+
+    float tmp = ui->ahrsKp_LE->text().toFloat();
+    memcpy((void*)args, &tmp, sizeof(float));
+
+    tmp = ui->ahrsKi_LE->text().toFloat();
+    memcpy((void*)(args+sizeof(float)), &tmp, sizeof(float));
+
+    bool mag = ui->magEn_CB->isChecked();
+    memcpy((void*)(args+2*sizeof(float)), &mag, 1);
+
+    MakeRequest((uint8_t*)command, MPU_UID, 4, 0, 0);
+    AppendArgs((uint8_t*)command, &commandLen, (void*)args, 2*sizeof(float)+1);
+
+    SendCommand(command, commandLen);
+}
 ///-----------------------------------------------------------------------------
 ///         Platform group                                            [PLATFORM]
 ///-----------------------------------------------------------------------------

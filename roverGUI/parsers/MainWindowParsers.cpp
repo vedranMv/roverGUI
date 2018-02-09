@@ -211,12 +211,20 @@ void MainWindow::ParseTaskEntry(QString teleStr)
     {
         QStringList parts = X.split(":", QString::SkipEmptyParts);
         //  Skip broken/short frames
-        if (parts.length() < 5)
+        if (parts.length() < 11)
             continue;
 
         QString msg;
+        double avgMiss = (parts[7].toDouble())/(parts[6].toDouble());
         msg = parts[0] + "-|" + parts[4] + "|: " + QString(allTasks[parts[1].toInt()][parts[2].toInt()])
-              + ", period " + parts[3] +" ms";
+              + ", " + parts[3] +" ms \n";
+        msg += "    "+parts[6]+"("+QString::number(avgMiss)+")"+"/"+parts[5];
+        if (parts[5].toInt() != 0.0)
+            //  parts[9] is run-time accumulator in seconds, convert to ms first!
+            msg += "    <avg: "+QString::number((parts[8].toDouble()+1000.0*parts[9].toDouble())/parts[5].toDouble())+", max: "+parts[10]+">";
+        else
+            msg += "    <avg: 0, max: "+parts[10]+">";
+
         LogLine(msg, ui->tsLog_TE);
     }
 }

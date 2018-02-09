@@ -132,6 +132,8 @@ private slots:
 
     void on_inSofReb_PB_clicked();
 
+    void on_ahrsUpdate_PB_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *socketTimer;
@@ -166,3 +168,5 @@ private:
 };
 
 #endif // MAINWINDOW_H
+
+
