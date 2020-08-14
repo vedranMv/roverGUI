@@ -5,22 +5,22 @@ Project contains QT-based application written to control a small homemade rover.
 GUI is now in integration-testing phase (with the rover) and some of the screen shots can be seen below:
 
 
-'Overview' tab giving most important info
+'Overview' tab giving most important info<br/>
 ![alt tag](https://vedran.ml/public/images/roverGUI/guiOver.png)
 
 
-'Instruments' tab showing plot of IMU sensor data
+'Instruments' tab showing plot of IMU sensor data<br/>
 ![alt tag](https://vedran.ml/public/images/roverGUI/guiInstr.png)
 
 
-'Instruments' tab showing individual platform modules
+'Instruments' tab showing individual platform modules<br/>
 ![alt tag](https://vedran.ml/public/images/roverGUI/guiPlat.png)
 
 
-'Mission planner' tab
+'Mission planner' tab<br/>
 ![alt tag](https://vedran.ml/public/images/roverGUI/guiMiss.png)
 
-'Engines data' tab
+'Engines data' tab<br/>
 ![alt tag](https://vedran.ml/public/images/roverGUI/guiEng.png)
 
 
