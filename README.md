@@ -6,22 +6,22 @@ GUI is now in integration-testing phase (with the rover) and some of the screen 
 
 
 'Overview' tab giving most important info
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiOver.png)
+![alt tag](https://vedran.ml/public/images/roverGUI/guiOver.png)
 
 
 'Instruments' tab showing plot of IMU sensor data
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiInstr.png)
+![alt tag](https://vedran.ml/public/images/roverGUI/guiInstr.png)
 
 
 'Instruments' tab showing individual platform modules
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiPlat.png)
+![alt tag](https://vedran.ml/public/images/roverGUI/guiPlat.png)
 
 
 'Mission planner' tab
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiMiss.png)
+![alt tag](https://vedran.ml/public/images/roverGUI/guiMiss.png)
 
 'Engines data' tab
-![alt tag](https://hsr.duckdns.org/images/roverGUI/guiEng.png)
+![alt tag](https://vedran.ml/public/images/roverGUI/guiEng.png)
 
 
 Note: This is mostly educational project, so some parts of the code might be considered "reinventing the wheel" but were made in order to get a better understanding of coding principles and practices :)
